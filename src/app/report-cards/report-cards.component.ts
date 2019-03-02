@@ -1,40 +1,11 @@
 
 import { DataService } from '../data.service';
-import {Component, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {Observable, Observer} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-import { AnimationKeyframesSequenceMetadata } from '@angular/animations';
-
-interface User {
-  id: number,
-  avatar: string,
-  first_name: string,
-  last_name: string  
-}
-
-interface Api {
-  data: User[],
-  page: number,
-  per_page: number,
-  total: number,
-  total_pages: number
-}
-
-interface Level {
-  name: string,
-  events: Event[]
-}
-
-interface Event {
-  name: string,
-  skills: Skill[]
-}
-
-interface Skill {
-  name: string,
-  rank: string
-}
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { Api } from '../interfaces/api';
+import { Level } from '../interfaces/level';
 
 @Component({
   selector: 'app-report-cards',
