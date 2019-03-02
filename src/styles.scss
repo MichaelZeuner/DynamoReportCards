@@ -8,3 +8,11 @@ body {
 .w-100 {
     width: 100%;
 }
+
+.m-0 {
+    margin: 0;
+}
+
+.fill-remaining-space {
+    flex: 1 1 auto;
+}

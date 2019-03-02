@@ -2,7 +2,8 @@
   <mat-sidenav #drawer fixedInViewport="true"
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="!(isHandset$ | async)">
+      [opened]="!(isHandset$ | async)"
+      class="sidenav">
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
       <a (click)="closeNav()" mat-list-item routerLink="">
@@ -11,7 +12,7 @@
       </a>
       <a (click)="closeNav()" mat-list-item routerLink="approve">
           <mat-icon>check</mat-icon>  
-        &nbsp;Approve Report Cards
+        <span matBadge="4" matBadgeOverlap="false">&nbsp;Approve Report Cards</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>

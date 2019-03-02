@@ -10,7 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatAutocompleteModule, MatFormFieldModule, MatOptionModule, MatInputModule, MatCardModule, MatExpansionModule, MatGridListModule, MatButtonToggleModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatAutocompleteModule, MatFormFieldModule, MatOptionModule, MatInputModule, MatCardModule, MatExpansionModule, MatGridListModule, MatButtonToggleModule, MatDividerModule, MatBadgeModule } from '@angular/material';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
@@ -43,6 +43,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatExpansionModule,
     MatGridListModule,
     MatButtonToggleModule,
+    MatDividerModule,
+    MatBadgeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

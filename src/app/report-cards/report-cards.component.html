@@ -1,6 +1,4 @@
-
 <form class="w-100">
-  
   <mat-card>
     <mat-card-title>Report Cards</mat-card-title>
     <mat-card-subtitle>Fill in report card</mat-card-subtitle>
@@ -13,30 +11,26 @@
             {{athlete}}
           </mat-option>
         </mat-autocomplete>
-      </mat-form-field>
-        
-      <button mat-raised-button>Submit for Approval</button>
 
-      <h3 *ngIf="levels">{{levels[0].name}}</h3>
+        <button matSuffix mat-stroked-button>Submit for Approval</button>
+      </mat-form-field>
       
-      <mat-accordion *ngIf="levels">
-        <mat-expansion-panel *ngFor="let event of levels[0].events">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <b>{{event.name}}</b>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <p *ngFor="let skill of event.skills">
-            {{skill.name}}
-            <mat-button-toggle-group name="skillAbility" aria-label="Skill Ability">
-              <mat-button-toggle value="L" checked="{{skill.rank === 'L'}}">Learning</mat-button-toggle>
-              <mat-button-toggle value="M" checked="{{skill.rank === 'M'}}">Mastered</mat-button-toggle>
-            </mat-button-toggle-group>
-          </p>
-        </mat-expansion-panel>
-      </mat-accordion>
+      <h2 *ngIf="levels" class="m-0">{{levels[0].name}}</h2>
+
+      <mat-list *ngIf="levels">
+        <div *ngFor="let event of levels[0].events">
+          <mat-divider></mat-divider>
+          <h3 class="eventTitle">{{event.name}}</h3>
+          <mat-list-item *ngFor="let skill of event.skills">
+              <span>{{skill.name}}</span>
+              <span class="fill-remaining-space"></span>
+              <mat-button-toggle-group name="skillAbility" aria-label="Skill Ability">
+                <mat-button-toggle value="L" class="btnToggle" checked="{{skill.rank === 'L'}}">Learning</mat-button-toggle>
+                <mat-button-toggle value="M" class="btnToggle" checked="{{skill.rank === 'M'}}">Mastered</mat-button-toggle>
+              </mat-button-toggle-group>
+          </mat-list-item>
+        </div>
+      </mat-list>
     </mat-card-content>
   </mat-card>
-
-  
 </form>
