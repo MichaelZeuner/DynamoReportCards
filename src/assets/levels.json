@@ -1,0 +1,55 @@
+[
+    {
+        "name": "Kinder Level 1",
+        "events": [
+            {
+                "name": "Vault",
+                "skills": [
+                    {
+                        "name": "20m Sprint",
+                        "rank": "M"
+                    }
+                ]
+            },
+            {
+                "name": "Trampoline",
+                "skills": [
+                    {
+                        "name": "Tuck Jumps",
+                        "rank": "M"
+                    },
+                    {
+                        "name": "Straddle Jumps",
+                        "rank": "L"
+                    }
+                ]
+            },
+            {
+                "name": "Floor",
+                "skills": [
+                    {
+                        "name": "Round Off",
+                        "rank": "M"
+                    },
+                    {
+                        "name": "Front Roll",
+                        "rank": "L"
+                    }
+                ]
+            },
+            {
+                "name": "Bars",
+                "skills": [
+                    {
+                        "name": "Skin the Cat",
+                        "rank": "L"
+                    },
+                    {
+                        "name": "Swings",
+                        "rank": "L"
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,34 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer fixedInViewport="true"
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="!(isHandset$ | async)">
+    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-nav-list>
+      <a (click)="closeNav()" mat-list-item routerLink="">
+        <mat-icon>assignment</mat-icon>
+        &nbsp;Report Cards
+      </a>
+      <a (click)="closeNav()" mat-list-item routerLink="approve">
+          <mat-icon>check</mat-icon>  
+        &nbsp;Approve Report Cards
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span>Dynamo Report Cards</span>
+    </mat-toolbar>
+    
+    <ng-content></ng-content>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
