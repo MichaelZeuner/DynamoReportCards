@@ -6,7 +6,19 @@
                 "name": "Vault",
                 "skills": [
                     {
-                        "name": "20m Sprint",
+                        "name": "20m Sprint 1",
+                        "rank": "M"
+                    },
+                    {
+                        "name": "20m Sprint 2",
+                        "rank": "M"
+                    },
+                    {
+                        "name": "20m Sprint 3",
+                        "rank": "M"
+                    },
+                    {
+                        "name": "20m Sprint 4",
                         "rank": "M"
                     }
                 ]

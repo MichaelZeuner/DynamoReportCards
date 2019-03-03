@@ -1,36 +1,53 @@
 <form class="w-100">
-  <mat-card>
+  <mat-card class="card">
     <mat-card-title>Report Cards</mat-card-title>
-    <mat-card-subtitle>Fill in report card</mat-card-subtitle>
+    <mat-card-subtitle class="mb-0">Select athlete to continue</mat-card-subtitle>
     <mat-card-content>
       
-      <mat-form-field class="w-100">
+      <mat-form-field class="w-100 input-headline">
         <input type="text" placeholder="Select Athlete" aria-label="Athletes Name" matInput [formControl]="myControl" [matAutocomplete]="auto">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
           <mat-option *ngFor="let athlete of filteredAthletes | async" [value]="athlete">
             {{athlete}}
           </mat-option>
         </mat-autocomplete>
-
-        <button matSuffix mat-stroked-button>Submit for Approval</button>
       </mat-form-field>
-      
-      <h2 *ngIf="levels" class="m-0">{{levels[0].name}}</h2>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-content>
+      <mat-card-title *ngIf="levels" class="eventsCard">
+        <span>{{levels[0].name}}</span>
+        <span class="fill-remaining-space"></span>
+        <button mat-raised-button color="accent">View Previous Report ard</button>
+      </mat-card-title>
+      <mat-card-subtitle class="mb-0">Click level to change</mat-card-subtitle>
 
       <mat-list *ngIf="levels">
         <div *ngFor="let event of levels[0].events">
           <mat-divider></mat-divider>
           <h3 class="eventTitle">{{event.name}}</h3>
           <mat-list-item *ngFor="let skill of event.skills">
-              <span>{{skill.name}}</span>
-              <span class="fill-remaining-space"></span>
-              <mat-button-toggle-group name="skillAbility" aria-label="Skill Ability">
-                <mat-button-toggle value="L" class="btnToggle" checked="{{skill.rank === 'L'}}">Learning</mat-button-toggle>
-                <mat-button-toggle value="M" class="btnToggle" checked="{{skill.rank === 'M'}}">Mastered</mat-button-toggle>
-              </mat-button-toggle-group>
+            <span>{{skill.name}}</span>
+            <span class="fill-remaining-space"></span>
+            <mat-button-toggle-group name="skillAbility" aria-label="Skill Ability">
+              <mat-button-toggle value="L" class="btnToggle" checked="{{skill.rank === 'L'}}">Learning</mat-button-toggle>
+              <mat-button-toggle value="M" class="btnToggle" checked="{{skill.rank === 'M'}}">Mastered</mat-button-toggle>
+            </mat-button-toggle-group>
           </mat-list-item>
         </div>
       </mat-list>
     </mat-card-content>
   </mat-card>
+
+  <mat-card class="spacingForButton">
+    <mat-card-content>
+      <mat-form-field class="w-100">
+        <textarea matInput rows="10" placeholder="Leave a comment"></textarea>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <button mat-raised-button color="primary" class="submitButton">Submit for Approval</button>
 </form>

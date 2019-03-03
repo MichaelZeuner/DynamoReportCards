@@ -6,3 +6,31 @@
 .btnToggle {
     color: black;
 }
+
+.submitButton {
+    position: fixed;
+    bottom: 10px;
+
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.input-headline {
+    font-size: 28px;
+    line-height: 32px;
+    font-weight: 400;
+}
+
+.spacingForButton{
+    margin-bottom: 55px;
+}
+
+mat-card {
+    margin-bottom: 10px;
+}
+
+.eventsCard {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
