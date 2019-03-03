@@ -2,3 +2,21 @@
 .center {
     transform: translateX(32%);
 }
+
+.rank {
+    flex-grow: 1;
+}
+
+.eventsCard {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.mat-list-panel mat-list.mat-list {
+    height: unset;
+  }
+
+ .mat-option-text.mat-option-text {
+    white-space: normal;
+  }

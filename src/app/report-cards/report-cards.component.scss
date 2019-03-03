@@ -29,6 +29,8 @@ mat-card {
     margin-bottom: 10px;
 }
 
-.rank {
-    flex-grow: 1;
+.eventsCard {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
 }

@@ -14,8 +14,7 @@
                 <mat-divider></mat-divider>
                 <h3 class="eventTitle">{{event.name}}</h3>
                 <mat-list-option *ngFor="let skill of event.skills">
-                    <span>{{skill.name}}</span>
-                    <span class="rank">{{skill.rank}}</span>
+                    <span>{{skill.name}} ({{skill.rank}})</span>
                 </mat-list-option>
             </div>
 
