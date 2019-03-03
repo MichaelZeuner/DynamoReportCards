@@ -1,1 +1,48 @@
-<h2>No Report Cards Require Approval!</h2>
+<mat-accordion>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            Michael Zeuner
+        </mat-panel-title>
+        <mat-panel-description>
+            Kinder Level One
+        </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-selection-list *ngIf="levels">
+            <div *ngFor="let event of levels[0].events">
+                <mat-divider></mat-divider>
+                <h3 class="eventTitle">{{event.name}}</h3>
+                <mat-list-option *ngFor="let skill of event.skills">
+                    <span>{{skill.name}}</span>
+                    <span class="rank">{{skill.rank}}</span>
+                </mat-list-option>
+            </div>
+
+            <mat-divider></mat-divider>
+            <h3>Comment</h3>
+            <p>
+                Lorem ipsum sollicitudin torquent sapien maecenas habitant egestas, ut scelerisque tincidunt auctor amet venenatis, elit hac imperdiet tristique dapibus ipsum bibendum praesent consectetur fermentum purus metus per massa lobortis, commodo ad turpis arcu inceptos mollis elementum ligula viverra himenaeos nisi pulvinar laoreet arcu platea aliquet morbi, tincidunt orci nostra sed in hac massa eu et, tempus elit convallis vehicula auctor donec vulputate aliquam.
+            </p>
+
+            <div class="center">
+                <button mat-raised-button color="accent" class="mr-1">Complete Report Card</button>
+                <button mat-raised-button color="warn">Modification Required</button>
+            </div>
+            
+        </mat-selection-list>
+
+    </mat-expansion-panel>
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                            (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            Self aware panel
+        </mat-panel-title>
+        <mat-panel-description>
+            Currently I am {{panelOpenState ? 'open' : 'closed'}}
+        </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>I'm visible because I am open</p>
+    </mat-expansion-panel>
+</mat-accordion>

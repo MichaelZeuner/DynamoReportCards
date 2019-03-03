@@ -20,7 +20,7 @@
       <mat-card-title *ngIf="levels" class="eventsCard">
         <span>{{levels[0].name}}</span>
         <span class="fill-remaining-space"></span>
-        <button mat-raised-button color="accent">View Previous Report ard</button>
+        <button mat-raised-button color="accent">View Previous Report Card</button>
       </mat-card-title>
       <mat-card-subtitle class="mb-0">Click level to change</mat-card-subtitle>
 
@@ -32,8 +32,8 @@
             <span>{{skill.name}}</span>
             <span class="fill-remaining-space"></span>
             <mat-button-toggle-group name="skillAbility" aria-label="Skill Ability">
-              <mat-button-toggle value="L" class="btnToggle" checked="{{skill.rank === 'L'}}">Learning</mat-button-toggle>
-              <mat-button-toggle value="M" class="btnToggle" checked="{{skill.rank === 'M'}}">Mastered</mat-button-toggle>
+              <mat-button-toggle value="Learning" class="btnToggle" checked="{{skill.rank === 'Learning'}}">Learning</mat-button-toggle>
+              <mat-button-toggle value="Mastered" class="btnToggle" checked="{{skill.rank === 'Mastered'}}">Mastered</mat-button-toggle>
             </mat-button-toggle-group>
           </mat-list-item>
         </div>
@@ -49,5 +49,5 @@
     </mat-card-content>
   </mat-card>
 
-  <button mat-raised-button color="primary" class="submitButton">Submit for Approval</button>
+  <button mat-raised-button color="accent" class="submitButton">Submit for Approval</button>
 </form>
