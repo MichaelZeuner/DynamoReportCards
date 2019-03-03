@@ -9,7 +9,7 @@
         </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <mat-selection-list *ngIf="levels">
+        <mat-selection-list *ngIf="levels" #skills>
             <div *ngFor="let event of levels[0].events">
                 <mat-divider></mat-divider>
                 <h3 class="eventTitle">{{event.name}}</h3>
@@ -24,9 +24,12 @@
                 Lorem ipsum sollicitudin torquent sapien maecenas habitant egestas, ut scelerisque tincidunt auctor amet venenatis, elit hac imperdiet tristique dapibus ipsum bibendum praesent consectetur fermentum purus metus per massa lobortis, commodo ad turpis arcu inceptos mollis elementum ligula viverra himenaeos nisi pulvinar laoreet arcu platea aliquet morbi, tincidunt orci nostra sed in hac massa eu et, tempus elit convallis vehicula auctor donec vulputate aliquam.
             </p>
 
+            <p *ngIf="modifications !== ''"><i>{{modifications}}</i></p>
+
             <div class="center">
-                <button mat-raised-button color="accent" class="mr-1">Complete Report Card</button>
-                <button mat-raised-button color="warn">Modification Required</button>
+                    <button *ngIf="modifications === '' && skills.selectedOptions.selected.length === 0" mat-raised-button color="accent" class="mr-1">Complete Report Card</button>
+                    <button *ngIf="modifications !== '' || skills.selectedOptions.selected.length > 0" mat-raised-button color="warn" class="mr-1">Send Report Card Back</button>
+                <button mat-raised-button (click)="openDialog()">Modification Required</button>
             </div>
             
         </mat-selection-list>

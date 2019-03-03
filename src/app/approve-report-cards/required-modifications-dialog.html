@@ -1,0 +1,10 @@
+<div mat-dialog-content>
+  <p>{{data.comment}}</p>
+  <mat-form-field class="w-100">
+      <textarea matInput rows="10" placeholder="Enter modification notes" [(ngModel)]="data.modifications"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="warn" (click)="onNoClick()">Clear Comments</button>
+  <button mat-raised-button color="accent" [mat-dialog-close]="data.modifications" cdkFocusInitial>Submit Comments</button>
+</div>
