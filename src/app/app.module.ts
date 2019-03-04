@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ReportCardsComponent } from './report-cards/report-cards.component';
+import { ReportCardsComponent, LevelSelectDialog } from './report-cards/report-cards.component';
 import { ApproveReportCardsComponent, RequiredModificationsDialog } from './approve-report-cards/approve-report-cards.component';
 import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -21,7 +21,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     ApproveReportCardsComponent,
     LoginComponent,
     MainNavComponent,
-    RequiredModificationsDialog
+    RequiredModificationsDialog,
+    LevelSelectDialog
   ],
   imports: [
     BrowserModule,
@@ -48,7 +49,10 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatBadgeModule,
     MatDialogModule
   ],
-  entryComponents: [RequiredModificationsDialog],
+  entryComponents: [
+    RequiredModificationsDialog,
+    LevelSelectDialog
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

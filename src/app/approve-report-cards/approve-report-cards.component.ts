@@ -3,11 +3,6 @@ import { Level } from '../interfaces/level';
 import { DataService } from '../data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-export interface DialogData {
-  comment: string;
-  modifications: string;
-}
-
 @Component({
   selector: 'app-approve-report-cards',
   templateUrl: './approve-report-cards.component.html',
@@ -49,6 +44,10 @@ export class ApproveReportCardsComponent implements OnInit {
 
 }
 
+export interface DialogData {
+  comment: string;
+  modifications: string;
+}
 
 @Component({
   selector: 'app-required-modifications-dialog',

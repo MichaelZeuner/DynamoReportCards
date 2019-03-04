@@ -1,11 +1,12 @@
 
 import { DataService } from '../data.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Api } from '../interfaces/api';
 import { Level } from '../interfaces/level';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-report-cards',
@@ -23,7 +24,7 @@ export class ReportCardsComponent implements OnInit {
   levels: Level[];
   level: string;
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, public dialog: MatDialog) { }
 
   ngOnInit() {
 
@@ -54,8 +55,43 @@ export class ReportCardsComponent implements OnInit {
     return this.athletes.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
+  openLevelSelectDialog(): void {
+    const dialogRef = this.dialog.open(LevelSelectDialog, {
+      width: '500px',
+      data: { levels: this.levels, selectedLevel: this.level }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
   submitForApproval() {
     console.log("SUBMITTED");
+  }
+
+}
+
+export interface LevelDialogData {
+  levels: Level[];
+  selectedLevel: Level;
+}
+
+@Component({
+  selector: 'app-level-select-dialog',
+  templateUrl: './level-select-dialog.html',
+})
+export class LevelSelectDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<LevelSelectDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: LevelDialogData
+  ) {
+    console.log(data.levels);
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }
