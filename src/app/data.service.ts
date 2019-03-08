@@ -9,11 +9,11 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers() {
-    return this.http.get('https://reqres.in/api/users');
+  getAthletes() {
+    return this.http.get('http://localhost:8080/api/athletes');
   }
 
   getLevels() {
-    return this.http.get('assets/levels.json');
+    return this.http.get('http://localhost:8080/api/levels');
   }
 }

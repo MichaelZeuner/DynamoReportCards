@@ -7,8 +7,8 @@
       <mat-form-field class="w-100 input-headline">
         <input type="text" placeholder="Select Athlete" aria-label="Athletes Name" matInput [formControl]="myControl" [matAutocomplete]="auto">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-          <mat-option *ngFor="let athlete of filteredAthletes | async" [value]="athlete">
-            {{athlete}}
+          <mat-option *ngFor="let athlete of filteredAthletes | async" [value]="athlete.first_name + ' ' + athlete.last_name">
+            {{athlete.first_name}} {{athlete.last_name}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

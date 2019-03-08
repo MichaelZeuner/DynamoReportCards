@@ -4,7 +4,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Api } from '../interfaces/api';
+import { Athlete } from '../interfaces/athlete';
 import { Level } from '../interfaces/level';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -17,10 +17,9 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 export class ReportCardsComponent implements OnInit {
 
   myControl = new FormControl();
-  athletes: string[] = [];
-  filteredAthletes: Observable<string[]>;
+  filteredAthletes: Observable<Athlete[]>;
 
-  apiValue: Api;
+  athletes: Athlete[];
   levels: Level[];
   level: string;
 
@@ -36,11 +35,10 @@ export class ReportCardsComponent implements OnInit {
       this.level = this.levels[0].name;
     });
 
-    this.data.getUsers().subscribe((data : Api) => {
-      this.apiValue = data;
-      for(let i=0; i<this.apiValue.data.length;i++) {
-        this.athletes.push(this.apiValue.data[i].first_name + ' ' + this.apiValue.data[i].last_name);
-      }
+    this.data.getAthletes().subscribe((data : Athlete[]) => {
+      this.athletes = data;
+
+      console.log(this.athletes);
 
       this.filteredAthletes = this.myControl.valueChanges.pipe(
         startWith(''),
@@ -49,10 +47,10 @@ export class ReportCardsComponent implements OnInit {
     });
   }
 
-  private _filter(value: string): string[] {
+  private _filter(value: string): Athlete[] {
     const filterValue = value.toLowerCase();
 
-    return this.athletes.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+    return this.athletes.filter(option => option.first_name.toLowerCase().indexOf(filterValue) === 0 || option.last_name.toLowerCase().indexOf(filterValue) === 0);
   }
 
   openLevelSelectDialog(): void {
