@@ -81,6 +81,7 @@ export interface LevelDialogData {
 })
 export class LevelSelectDialog {
 
+  selectedLevel: Level;
   constructor(
     public dialogRef: MatDialogRef<LevelSelectDialog>,
     @Inject(MAT_DIALOG_DATA) public data: LevelDialogData

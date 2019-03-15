@@ -15,6 +15,7 @@ export class ApproveReportCardsComponent implements OnInit {
   levels: Level[];
   modifications: string = '';
   comment: string = 'Lorem ipsum sollicitudin torquent sapien maecenas habitant egestas, ut scelerisque tincidunt auctor amet venenatis, elit hac imperdiet tristique dapibus ipsum bibendum praesent consectetur fermentum purus metus per massa lobortis, commodo ad turpis arcu inceptos mollis elementum ligula viverra himenaeos nisi pulvinar laoreet arcu platea aliquet morbi, tincidunt orci nostra sed in hac massa eu et, tempus elit convallis vehicula auctor donec vulputate aliquam.';
+  panelOpenState: boolean;
 
   ngOnInit() {
     this.data.getLevels().subscribe((data : Level[]) => {

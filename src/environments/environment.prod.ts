@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  baseUrl: 'http://dynamogymnastics.ca/dynamo-report-cards-api'
 };
