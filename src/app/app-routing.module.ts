@@ -3,11 +3,28 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportCardsComponent } from './report-cards/report-cards.component';
 import { LoginComponent } from './login/login.component';
 import { ApproveReportCardsComponent } from './approve-report-cards/approve-report-cards.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { LoginLayoutComponent } from './layouts/login-layout/login-layout.component';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: '', component: ReportCardsComponent },
-  { path: 'approve', component: ApproveReportCardsComponent }
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', component: ReportCardsComponent },
+      { path: 'approve', component: ApproveReportCardsComponent }
+    ]
+  },
+  {
+    path: '',
+    component: LoginLayoutComponent,
+    children: [
+      { path: 'login', component: LoginComponent }
+    ]
+  },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
