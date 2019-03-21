@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-main-layout',
-  templateUrl: './main-layout.component.html',
-  styleUrls: ['./main-layout.component.scss']
+  template: `<app-main-nav>
+              <router-outlet></router-outlet>
+            </app-main-nav>`,
+  styles: ['']
 })
 export class MainLayoutComponent implements OnInit {
 

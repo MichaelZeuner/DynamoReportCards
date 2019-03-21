@@ -3,16 +3,7 @@
     <mat-card-title>Report Cards</mat-card-title>
     <mat-card-subtitle class="mb-0">Select athlete to continue</mat-card-subtitle>
     <mat-card-content>
-      
-      <mat-form-field class="w-100 input-headline">
-        <input type="text" placeholder="Select Athlete" aria-label="Athletes Name" matInput [formControl]="myControl" [matAutocomplete]="auto" 
-            (input)="onAthleteChange($event.target.value)">
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='onAthleteChange($event.option.value)'>
-          <mat-option *ngFor="let athlete of filteredAthletes | async" [value]="athlete.first_name + ' ' + athlete.last_name">
-            {{athlete.first_name}} {{athlete.last_name}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+      <app-athlete-select (selectedAthleteChange)="myCrazyCallback($event)" ></app-athlete-select>
     </mat-card-content>
   </mat-card>
 

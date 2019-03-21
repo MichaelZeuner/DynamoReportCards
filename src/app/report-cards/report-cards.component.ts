@@ -1,13 +1,9 @@
 
 import { DataService } from '../data.service';
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 import { Athlete } from '../interfaces/athlete';
 import { Level } from '../interfaces/level';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-report-cards',
@@ -17,14 +13,10 @@ import { forEach } from '@angular/router/src/utils/collection';
 
 export class ReportCardsComponent implements OnInit {
 
-  myControl = new FormControl();
-  filteredAthletes: Observable<Athlete[]>;
-
-  athletes: Athlete[];
   levels: Level[];
   level: string;
 
-  selectedAthlete: Athlete;
+  public selectedAthlete: Athlete;
   test: string;
 
   constructor(private data: DataService, public dialog: MatDialog) { }
@@ -39,40 +31,11 @@ export class ReportCardsComponent implements OnInit {
       this.level = this.levels[0].name;
     });
 
-    this.data.getAthletes().subscribe((data : Athlete[]) => {
-      this.athletes = data;
-
-      console.log(this.athletes);
-
-      this.filteredAthletes = this.myControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
-    });
-  }
-
-  private _filter(value: string): Athlete[] {
-    const filterValue = value.toLowerCase();
-
-    return this.athletes.filter(option => option.first_name.toLowerCase().indexOf(filterValue) === 0 || option.last_name.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  onAthleteChange(searchValue : string ) {  
-    for(let i=0; i<this.athletes.length; i++) {
-      const athlete = this.athletes[i];
-      if(athlete.first_name + ' ' + athlete.last_name === searchValue) {
-        console.log('SETTING ATHLETE');
-        this.selectedAthlete = athlete;
-        return;
-      } else {
-        console.log('clear athlete');
-        this.selectedAthlete = null;
-      }
-    }
-    
   }
 
   openLevelSelectDialog(): void {
+    console.log(this.selectedAthlete);
+
     const dialogRef = this.dialog.open(LevelSelectDialog, {
       width: '500px',
       data: { levels: this.levels, selectedLevel: this.level }
@@ -87,6 +50,10 @@ export class ReportCardsComponent implements OnInit {
     console.log("SUBMITTED");
   }
 
+  myCrazyCallback(newAthlete: Athlete) {
+    console.log(newAthlete);
+    this.selectedAthlete = newAthlete;
+  }
 }
 
 export interface LevelDialogData {

@@ -13,10 +13,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatAutocompleteModule, MatFormFieldModule, MatOptionModule, MatInputModule, MatCardModule, MatExpansionModule, MatGridListModule, MatButtonToggleModule, MatDividerModule, MatBadgeModule, MatDialogModule } from '@angular/material';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
-import { LoginLayoutComponent } from './layouts/login-layout/login-layout.component';
+import { MainLayoutComponent } from './layouts/main-layout.component';
+import { LoginLayoutComponent } from './layouts/login-layout.component';
 import { AuthService } from './auth/auth.service';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { AthletesSelectComponent } from './report-cards/athlete-select.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     RequiredModificationsDialog,
     LevelSelectDialog,
     MainLayoutComponent,
-    LoginLayoutComponent
+    LoginLayoutComponent,
+    AthletesSelectComponent
   ],
   imports: [
     BrowserModule,
