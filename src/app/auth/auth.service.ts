@@ -14,6 +14,7 @@ export class AuthService {
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public storageLocation: string = 'creds';
 
+  
   get isLoggedIn() {
     return this.loggedIn.asObservable();
   }
@@ -34,7 +35,7 @@ export class AuthService {
         this.loggedIn.next(true);
         this.router.navigate(['/']);
       },
-      (err: Error) => {
+      (err: ErrorApi) => {
         console.error(err);
         if(err.error !== undefined) {
           console.log(err.error.message);
@@ -55,4 +56,12 @@ export class AuthService {
     this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }
+}
+
+interface ErrorApi extends Error {
+  error: APIMessage;
+}
+
+interface APIMessage {
+  message: string;
 }

@@ -7,6 +7,7 @@ import { map, startWith } from 'rxjs/operators';
 import { Athlete } from '../interfaces/athlete';
 import { Level } from '../interfaces/level';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-report-cards',
@@ -22,6 +23,9 @@ export class ReportCardsComponent implements OnInit {
   athletes: Athlete[];
   levels: Level[];
   level: string;
+
+  selectedAthlete: Athlete;
+  test: string;
 
   constructor(private data: DataService, public dialog: MatDialog) { }
 
@@ -51,6 +55,21 @@ export class ReportCardsComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.athletes.filter(option => option.first_name.toLowerCase().indexOf(filterValue) === 0 || option.last_name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  onAthleteChange(searchValue : string ) {  
+    for(let i=0; i<this.athletes.length; i++) {
+      const athlete = this.athletes[i];
+      if(athlete.first_name + ' ' + athlete.last_name === searchValue) {
+        console.log('SETTING ATHLETE');
+        this.selectedAthlete = athlete;
+        return;
+      } else {
+        console.log('clear athlete');
+        this.selectedAthlete = null;
+      }
+    }
+    
   }
 
   openLevelSelectDialog(): void {

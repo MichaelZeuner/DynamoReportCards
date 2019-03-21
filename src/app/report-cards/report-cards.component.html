@@ -5,8 +5,9 @@
     <mat-card-content>
       
       <mat-form-field class="w-100 input-headline">
-        <input type="text" placeholder="Select Athlete" aria-label="Athletes Name" matInput [formControl]="myControl" [matAutocomplete]="auto">
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <input type="text" placeholder="Select Athlete" aria-label="Athletes Name" matInput [formControl]="myControl" [matAutocomplete]="auto" 
+            (input)="onAthleteChange($event.target.value)">
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='onAthleteChange($event.option.value)'>
           <mat-option *ngFor="let athlete of filteredAthletes | async" [value]="athlete.first_name + ' ' + athlete.last_name">
             {{athlete.first_name}} {{athlete.last_name}}
           </mat-option>
@@ -15,7 +16,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card>
+  <mat-card *ngIf="selectedAthlete">
     <mat-card-content>
       <mat-card-title *ngIf="levels" class="eventsCard">
         <span (click)="openLevelSelectDialog()" class="pointer">{{levels[0].name}}</span>
@@ -41,7 +42,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="spacingForButton">
+  <mat-card class="spacingForButton" *ngIf="selectedAthlete">
     <mat-card-content>
       <mat-form-field class="w-100">
         <textarea matInput rows="10" placeholder="Leave a comment"></textarea>
@@ -49,5 +50,5 @@
     </mat-card-content>
   </mat-card>
 
-  <button mat-raised-button color="accent" class="submitButton">Submit for Approval</button>
+  <button mat-raised-button color="accent" class="submitButton" *ngIf="selectedAthlete">Submit for Approval</button>
 </form>
