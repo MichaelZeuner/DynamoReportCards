@@ -5,6 +5,7 @@ import { User } from '../interfaces/user';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Login } from '../interfaces/login';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
@@ -19,16 +20,16 @@ export class AuthService {
     return this.loggedIn.asObservable();
   }
   
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private snackBar: MatSnackBar) { }
 
   login(loginData: Login) {
 
     localStorage.setItem(this.storageLocation, btoa(`${loginData.username}:${loginData.password}`));
 
-    this.attemptLogin();
+    this.attemptLogin(true);
   }
 
-  attemptLogin() {
+  attemptLogin(isErrorDisplayed: boolean) {
     this.http.get(`${this.baseUrl}/login`).subscribe(
       (result: User) => {
         console.log(result.access);
@@ -37,17 +38,27 @@ export class AuthService {
       },
       (err: ErrorApi) => {
         console.error(err);
+        let message = 'Error Unknown...';
         if(err.error !== undefined) {
-          console.log(err.error.message);
+          message = err.error.message;
+        }
+        if(isErrorDisplayed) {
+          this.openSnackBar(message)
         }
       }
     );
   }
 
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+    });
+  }
+
   autoLogin() {
     if(localStorage.getItem(this.storageLocation)) {
       console.log('Attmeping to auto login');
-      this.attemptLogin();
+      this.attemptLogin(false);
     }
   }
 

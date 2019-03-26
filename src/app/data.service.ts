@@ -22,6 +22,10 @@ export class DataService {
     
   }
 
+  getLevelEvents(levelId: number) {
+    return this.http.get(this.baseUrl + `levels/${levelId}/events`)
+  }
+
   getLevels() {
     return this.http.get(this.baseUrl + '/levels');
   }

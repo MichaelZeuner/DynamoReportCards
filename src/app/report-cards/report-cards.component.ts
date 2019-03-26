@@ -1,9 +1,8 @@
 
 import { DataService } from '../data.service';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { Athlete } from '../interfaces/athlete';
 import { Level } from '../interfaces/level';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-report-cards',
@@ -13,70 +12,28 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 export class ReportCardsComponent implements OnInit {
 
-  levels: Level[];
-  level: string;
+  public selectedLevel: Level;
 
   public selectedAthlete: Athlete;
   test: string;
 
-  constructor(private data: DataService, public dialog: MatDialog) { }
+  constructor(private data: DataService) { }
 
-  ngOnInit() {
-
-    this.data.getLevels().subscribe((data : Level[]) => {
-      console.log(data);
-
-      this.levels = data;
-      console.log(this.levels[0].name);
-      this.level = this.levels[0].name;
-    });
-
-  }
-
-  openLevelSelectDialog(): void {
-    console.log(this.selectedAthlete);
-
-    const dialogRef = this.dialog.open(LevelSelectDialog, {
-      width: '500px',
-      data: { levels: this.levels, selectedLevel: this.level }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
+  ngOnInit() { }
 
   submitForApproval() {
     console.log("SUBMITTED");
   }
 
-  myCrazyCallback(newAthlete: Athlete) {
+  updateSelectAthlete(newAthlete: Athlete) {
     console.log(newAthlete);
     this.selectedAthlete = newAthlete;
   }
-}
 
-export interface LevelDialogData {
-  levels: Level[];
-  selectedLevel: Level;
-}
+  updateSelectLevel(newLevel: Level) {
+    console.log(newLevel);
+    this.selectedLevel = newLevel;
 
-@Component({
-  selector: 'app-level-select-dialog',
-  templateUrl: './level-select-dialog.html',
-})
-export class LevelSelectDialog {
-
-  selectedLevel: Level;
-  constructor(
-    public dialogRef: MatDialogRef<LevelSelectDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: LevelDialogData
-  ) {
-    console.log(data.levels);
+    
   }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
 }

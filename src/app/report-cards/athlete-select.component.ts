@@ -38,8 +38,8 @@ import { Athlete } from '../interfaces/athlete';
 export class AthletesSelectComponent implements OnInit {
   @Output() selectedAthleteChange = new EventEmitter<Athlete>();
 
-  protected myControl = new FormControl();
-  protected filteredAthletes: Observable<Athlete[]>;
+  public myControl = new FormControl();
+  public filteredAthletes: Observable<Athlete[]>;
 
   protected athletes: Athlete[];
   protected selectedAthlete: Athlete;

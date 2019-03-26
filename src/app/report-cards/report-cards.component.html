@@ -3,21 +3,16 @@
     <mat-card-title>Report Cards</mat-card-title>
     <mat-card-subtitle class="mb-0">Select athlete to continue</mat-card-subtitle>
     <mat-card-content>
-      <app-athlete-select (selectedAthleteChange)="myCrazyCallback($event)" ></app-athlete-select>
+      <app-athlete-select (selectedAthleteChange)="updateSelectAthlete($event)" ></app-athlete-select>
     </mat-card-content>
   </mat-card>
 
   <mat-card *ngIf="selectedAthlete">
     <mat-card-content>
-      <mat-card-title *ngIf="levels" class="eventsCard">
-        <span (click)="openLevelSelectDialog()" class="pointer">{{levels[0].name}}</span>
-        <span class="fill-remaining-space"></span>
-        <button mat-raised-button color="accent">View Previous Report Card</button>
-      </mat-card-title>
-      <mat-card-subtitle class="mb-0 pointer" (click)="openLevelSelectDialog()">Click level to change</mat-card-subtitle>
+      <app-level-select (selectedLevelChange)="updateSelectLevel($event)" ></app-level-select>
 
-      <mat-list *ngIf="levels">
-        <div *ngFor="let event of levels[0].events">
+      <mat-list *ngIf="selectedLevel">
+        <div *ngFor="let event of levels[0].events"> <!--loop through the events in the selected level and user app-event-->
           <mat-divider></mat-divider>
           <h3 class="eventTitle">{{event.name}}</h3>
           <mat-list-item *ngFor="let skill of event.skills">
