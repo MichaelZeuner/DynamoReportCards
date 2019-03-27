@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
   `,
   styles: []
 })
-export class EventComponent implements OnInit {
+export class EventsComponent implements OnInit {
 
   //maybe take in a level object
   constructor() { }

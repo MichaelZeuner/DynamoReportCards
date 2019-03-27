@@ -19,7 +19,7 @@ import { AuthService } from './auth/auth.service';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AthletesSelectComponent } from './report-cards/athlete-select.component';
 import { LevelSelectComponent } from './report-cards/level-select.component';
-import { EventComponent } from './report-cards/event/event.component';
+import { EventsComponent } from './report-cards/events.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,7 @@ import { EventComponent } from './report-cards/event/event.component';
     LoginLayoutComponent,
     AthletesSelectComponent,
     LevelSelectComponent,
-    EventComponent
+    EventsComponent
   ],
   imports: [
     BrowserModule,
