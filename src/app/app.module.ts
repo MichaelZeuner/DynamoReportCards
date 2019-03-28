@@ -20,6 +20,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { AthletesSelectComponent } from './report-cards/athlete-select.component';
 import { LevelSelectComponent } from './report-cards/level-select.component';
 import { EventsComponent } from './report-cards/events.component';
+import { SkillsComponent } from './report-cards/skills.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { EventsComponent } from './report-cards/events.component';
     LoginLayoutComponent,
     AthletesSelectComponent,
     LevelSelectComponent,
-    EventsComponent
+    EventsComponent,
+    SkillsComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +65,6 @@ import { EventsComponent } from './report-cards/events.component';
   ],
   entryComponents: [
     RequiredModificationsDialog,
-    LevelSelectComponent
   ],
   providers: [
     AuthService,

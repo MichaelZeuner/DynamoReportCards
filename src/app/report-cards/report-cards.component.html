@@ -12,18 +12,7 @@
       <app-level-select (selectedLevelChange)="updateSelectLevel($event)" ></app-level-select>
 
       <mat-list *ngIf="selectedLevel">
-        <div *ngFor="let event of levels[0].events"> <!--loop through the events in the selected level and user app-event-->
-          <mat-divider></mat-divider>
-          <h3 class="eventTitle">{{event.name}}</h3>
-          <mat-list-item *ngFor="let skill of event.skills">
-            <span>{{skill.name}}</span>
-            <span class="fill-remaining-space"></span>
-            <mat-button-toggle-group name="skillAbility" aria-label="Skill Ability">
-              <mat-button-toggle value="Learning" class="btnToggle" checked="{{skill.rank === 'Learning'}}">Learning</mat-button-toggle>
-              <mat-button-toggle value="Mastered" class="btnToggle" checked="{{skill.rank === 'Mastered'}}">Mastered</mat-button-toggle>
-            </mat-button-toggle-group>
-          </mat-list-item>
-        </div>
+        <app-events [level]="selectedLevel" (events)="onEventsChange($event)"></app-events>
       </mat-list>
     </mat-card-content>
   </mat-card>
