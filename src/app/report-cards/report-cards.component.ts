@@ -4,6 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { Athlete } from '../interfaces/athlete';
 import { Level } from '../interfaces/level';
 import { Event } from '../interfaces/event';
+import { MatSnackBar } from '@angular/material';
+import { ReportCard } from '../interfaces/report-card';
+import { ErrorApi } from '../interfaces/error-api';
+import { Skill } from '../interfaces/skill';
+import { ReportCardComponent } from '../interfaces/report-card-component';
 
 @Component({
   selector: 'app-report-cards',
@@ -12,10 +17,12 @@ import { Event } from '../interfaces/event';
 })
 export class ReportCardsComponent implements OnInit {
 
-  public selectedLevel: Level;
+  public level: Level;
   public selectedAthlete: Athlete;
+  
+  comment: string;
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, private snackBar: MatSnackBar) { }
 
   ngOnInit() { }
 
@@ -30,10 +37,117 @@ export class ReportCardsComponent implements OnInit {
 
   updateSelectLevel(newLevel: Level) {
     console.log(newLevel);
-    this.selectedLevel = newLevel;
+    this.level = newLevel;
   }
 
   onEventsChange(events: Event[]) {
-    console.log(events);
+    this.level.events = events;
+    console.log(this.level);
+  }
+
+  submitClick() {
+    console.log(this.comment);
+    if(typeof this.comment === 'undefined' || this.comment.length === 0) {
+      this.openSnackBar('Comment required!');
+      return;
+    }
+
+    if(typeof this.level.events === 'undefined') {
+      this.openSnackBar('Please select a ranking for all skills.');
+      return;
+    }
+
+    
+    let errors = this.getErrors();
+    if(errors.length > 0) {
+      let error: string = `Please select rankings for the following: ${errors[0]}`;
+      for(let i=1; i<errors.length; i++) {
+        error += (i === errors.length-1) ? ', and ' : ', ';
+        error += errors[i];
+      }
+      this.openSnackBar(error, errors.length * 1000);
+      return;
+    }
+
+    this.addReportCard();
+  }
+
+  getErrors(): string[] {
+    let errors: string[] = [];
+    for(let e=0; e<this.level.events.length; e++) {
+      const event = this.level.events[e];
+
+      if(typeof event.skills === 'undefined') {
+        errors.push(`all the skills in ${event.name}`);
+        continue;
+      }
+
+      for(let s=0; s<event.skills.length; s++) {
+        const skill = event.skills[s];
+        if(typeof skill.rank === 'undefined') {
+          errors.push(`${skill.name} in ${event.name}`);
+        }
+      }
+    }
+    return errors;
+  }
+
+  addReportCard() {
+    let reportCard = {} as ReportCard;
+    reportCard.athletes_id = this.selectedAthlete.id;
+    reportCard.levels_id = this.level.id;
+    reportCard.comment = this.comment;
+    this.data.addReportCard(reportCard).subscribe(
+      (data: ReportCard) => {
+        console.log(data);
+        this.addAllComponentsToReportCard(data);
+      },
+      (err: ErrorApi) => {
+        console.error(err);
+        let message = 'Error Unknown...';
+        if(err.error !== undefined) {
+          message = err.error.message;
+        }
+        this.openSnackBar(message)
+      }
+    );
+  }
+
+  addAllComponentsToReportCard(reportCard: ReportCard) {
+    for(let e=0; e<this.level.events.length; e++) {
+      const event = this.level.events[e];
+      for(let s=0; s<event.skills.length; s++) {
+        const skill = event.skills[s];
+        let reportCardComponent = {} as ReportCardComponent;
+        reportCardComponent.report_cards_id = reportCard.id;
+        reportCardComponent.skills_id = skill.id;
+        reportCardComponent.rank = skill.rank;
+        this.addComponentToReportCard(reportCardComponent);
+      }
+    }
+
+    this.openSnackBar('Report card has been submitted for approval!');
+  }
+
+  addComponentToReportCard(reportCardComponent: ReportCardComponent) {
+    this.data.addReportCardComponent(reportCardComponent).subscribe(
+      (data: ReportCardComponent) => {
+        console.log(data);
+      },
+      (err: ErrorApi) => {
+        console.error(err);
+        let message = 'Error Unknown...';
+        if(err.error !== undefined) {
+          message = err.error.message;
+        }
+        this.openSnackBar(message);
+      }
+    );
+  }
+
+  openSnackBar(message: string, duration: number = 2000) {
+    this.snackBar.open(message, 'OK', {
+      duration: duration,
+    });
   }
 }

@@ -23,7 +23,7 @@ import { Skill } from '../interfaces/skill';
 export class EventsComponent implements OnInit {
   @Input() public level: Level;
   @Output() events = new EventEmitter<Event[]>();
-  private eventsInternal: Event[];
+  public eventsInternal: Event[];
 
   //maybe take in a level object
   constructor(private data: DataService) { }

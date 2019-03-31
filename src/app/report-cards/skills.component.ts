@@ -22,7 +22,7 @@ export class SkillsComponent implements OnInit {
   @Input() level: Level;
   @Input() event: Event;
   @Output() skills = new EventEmitter<Skill[]>();
-  skillsInternal: Skill[];
+  public skillsInternal: Skill[];
 
   constructor(private data: DataService) { }
 

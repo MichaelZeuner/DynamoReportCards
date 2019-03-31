@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Login } from '../interfaces/login';
 import { MatSnackBar } from '@angular/material';
+import { ErrorApi } from '../interfaces/error-api';
 
 @Injectable({
   providedIn: 'root'
@@ -67,12 +68,4 @@ export class AuthService {
     this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }
-}
-
-interface ErrorApi extends Error {
-  error: APIMessage;
-}
-
-interface APIMessage {
-  message: string;
 }

@@ -34,13 +34,13 @@ import { startWith, map } from 'rxjs/operators';
   styles: [ ]
 })
 export class LevelSelectComponent {
-  @Output() selectedLevelChange = new EventEmitter<Level>();
+  @Output() levelChange = new EventEmitter<Level>();
 
   public myControl = new FormControl();
   public filteredLevels: Observable<Level[]>;
 
   protected levels: Level[];
-  protected selectedLevel: Level;
+  protected level: Level;
 
   constructor(private data: DataService) {
     this.data.getLevels().subscribe((data : Level[]) => {
@@ -64,21 +64,21 @@ export class LevelSelectComponent {
   }
 
   onLevelChange(searchValue : string ) {  
-    const currentLevel = this.selectedLevel;
+    const currentLevel = this.level;
     for(let i=0; i<this.levels.length; i++) {
       const level = this.levels[i];
       if(level.name === searchValue) {
         console.log('SETTING LEVEL');
-        this.selectedLevel = level;
+        this.level = level;
         break;
       } else {
         console.log('clear athlete');
-        this.selectedLevel = null;
+        this.level = null;
       }
     }
 
-    if(currentLevel !== this.selectedLevel) {
-      this.selectedLevelChange.emit(this.selectedLevel);  
+    if(currentLevel !== this.level) {
+      this.levelChange.emit(this.level);  
     }
   }
 }

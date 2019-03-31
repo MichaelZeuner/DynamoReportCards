@@ -9,21 +9,21 @@
 
   <mat-card *ngIf="selectedAthlete">
     <mat-card-content>
-      <app-level-select (selectedLevelChange)="updateSelectLevel($event)" ></app-level-select>
+      <app-level-select (levelChange)="updateSelectLevel($event)" ></app-level-select>
 
-      <mat-list *ngIf="selectedLevel">
-        <app-events [level]="selectedLevel" (events)="onEventsChange($event)"></app-events>
+      <mat-list *ngIf="level">
+        <app-events [level]="level" (events)="onEventsChange($event)"></app-events>
       </mat-list>
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="spacingForButton" *ngIf="selectedAthlete">
+  <mat-card class="spacingForButton" *ngIf="level && selectedAthlete">
     <mat-card-content>
       <mat-form-field class="w-100">
-        <textarea matInput rows="10" placeholder="Leave a comment"></textarea>
+        <textarea matInput rows="10" [(ngModel)]="comment" [ngModelOptions]="{standalone: true}" placeholder="Leave a comment"></textarea>
       </mat-form-field>
     </mat-card-content>
   </mat-card>
 
-  <button mat-raised-button color="accent" class="submitButton" *ngIf="selectedAthlete">Submit for Approval</button>
+  <button mat-raised-button color="accent" (click)="submitClick()" class="submitButton" *ngIf="level && selectedAthlete">Submit for Approval</button>
 </form>
