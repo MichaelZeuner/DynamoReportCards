@@ -1,50 +1,70 @@
 <mat-accordion>
-    <mat-expansion-panel>
+        <mat-expansion-panel #matExpansionPanel (closed)="onClosed(matExpansionPanel)">
+          <mat-expansion-panel-header>
+             <mat-panel-title>
+                  <mat-icon>account_circle</mat-icon>
+                  Your General Details
+              </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Yous should not see me</p>
+        </mat-expansion-panel>
+        
+        <mat-expansion-panel #matExpansionPanel (closed)="onClosed(matExpansionPanel)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+                  <mat-icon>home</mat-icon>
+                  You should see me too
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Yous should not see me too</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+      
+
+
+<mat-accordion>
+    <mat-expansion-panel #pane15 *ngFor="let reportCard of reportCards" (closed)="onClosed(panel15)">
         <mat-expansion-panel-header>
         <mat-panel-title>
-            Michael Zeuner
+            {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
         </mat-panel-title>
         <mat-panel-description>
-            Kinder Level One
+            {{reportCard.level.name}}
         </mat-panel-description>
         </mat-expansion-panel-header>
-
-        <mat-selection-list *ngIf="levels" #skills>
-            <div *ngFor="let event of levels[0].events">
-                <mat-divider></mat-divider>
-                <h3 class="eventTitle">{{event.name}}</h3>
-                <mat-list-option *ngFor="let skill of event.skills">
-                    <span>{{skill.name}} ({{skill.rank}})</span>
-                </mat-list-option>
-            </div>
-
+    
+        <mat-list *ngFor="let event of reportCard.events">
             <mat-divider></mat-divider>
-            <h3>Comment</h3>
-            <p>
-                Lorem ipsum sollicitudin torquent sapien maecenas habitant egestas, ut scelerisque tincidunt auctor amet venenatis, elit hac imperdiet tristique dapibus ipsum bibendum praesent consectetur fermentum purus metus per massa lobortis, commodo ad turpis arcu inceptos mollis elementum ligula viverra himenaeos nisi pulvinar laoreet arcu platea aliquet morbi, tincidunt orci nostra sed in hac massa eu et, tempus elit convallis vehicula auctor donec vulputate aliquam.
-            </p>
 
-            <p *ngIf="modifications !== ''"><i>{{modifications}}</i></p>
-
-            <div class="center">
-                    <button *ngIf="modifications === '' && skills.selectedOptions.selected.length === 0" mat-raised-button color="accent" class="mr-1">Complete Report Card</button>
-                    <button *ngIf="modifications !== '' || skills.selectedOptions.selected.length > 0" mat-raised-button color="warn" class="mr-1">Send Report Card Back</button>
-                <button mat-raised-button (click)="openDialog()">Modification Required</button>
+            <h3 class="eventTitle">{{event.name}}</h3>
+            <div *ngFor="let component of reportCard.components">
+                <mat-list-item *ngIf="component.skill.events_id == event.id">
+                    <span>{{component.skill.name}}</span>
+                    <span class="fill-remaining-space"></span>
+                    <mat-button-toggle-group #group="matButtonToggleGroup" value="{{component.rank}}" (click)="skillRankChanged(reportCard, group.value)" name="skillAbility" aria-label="Skill Ability">
+                        <mat-button-toggle value="LEARNING" class="btnToggle">Learning</mat-button-toggle>
+                        <mat-button-toggle value="MASTERED" class="btnToggle">Mastered</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </mat-list-item>
             </div>
-            
-        </mat-selection-list>
+        </mat-list>
 
-    </mat-expansion-panel>
-    <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-        <mat-panel-title>
-            Self aware panel
-        </mat-panel-title>
-        <mat-panel-description>
-            Currently I am {{panelOpenState ? 'open' : 'closed'}}
-        </mat-panel-description>
-        </mat-expansion-panel-header>
-        <p>I'm visible because I am open</p>
+        <mat-divider></mat-divider>
+        <h3>Comment</h3>
+        <p>{{reportCard.comment}}</p>
+        <div class='display: float;'>
+            <span class="fill-remaining-space"></span>
+            <button mat-raised-button (click)="openDialog(reportCard.comment)">Modification Required</button>
+        </div>
+        
+
+        <p *ngIf="modifications !== ''"><i>{{modifications}}</i></p>
+
+        <div class="center">
+            <button *ngIf="modifications === '' && changedRanks.length === 0" mat-raised-button color="accent" class="mr-1">Complete Report Card</button>
+            <button *ngIf="modifications !== '' || changedRanks.length > 0" mat-raised-button color="accent" class="mr-1">Complete Report Card with Changes</button>
+            <button *ngIf="modifications !== '' || changedRanks.length > 0" mat-raised-button color="warn" class="mr-1">Send Report Card Back</button>
+        </div>
+            
     </mat-expansion-panel>
 </mat-accordion>

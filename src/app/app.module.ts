@@ -21,6 +21,8 @@ import { AthletesSelectComponent } from './report-cards/athlete-select.component
 import { LevelSelectComponent } from './report-cards/level-select.component';
 import { EventsComponent } from './report-cards/events.component';
 import { SkillsComponent } from './report-cards/skills.component';
+import { CompletedReportCardsComponent } from './completed-report-cards/completed-report-cards.component';
+import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { SkillsComponent } from './report-cards/skills.component';
     AthletesSelectComponent,
     LevelSelectComponent,
     EventsComponent,
-    SkillsComponent
+    SkillsComponent,
+    CompletedReportCardsComponent,
+    MatConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +69,7 @@ import { SkillsComponent } from './report-cards/skills.component';
   ],
   entryComponents: [
     RequiredModificationsDialog,
+    MatConfirmDialogComponent
   ],
   providers: [
     AuthService,

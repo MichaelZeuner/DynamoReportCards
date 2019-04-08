@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatSidenav } from "@angular/material";
 import { AuthService } from '../auth/auth.service';
+import { DataService } from '../data.service';
+import { ReportCard } from '../interfaces/report-card';
 
 @Component({
   selector: 'app-main-nav',
@@ -14,12 +16,24 @@ export class MainNavComponent {
 
   @ViewChild('drawer') sidenav: MatSidenav;
 
+  public count: number = 0;
+
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService) {}
+  constructor(private breakpointObserver: BreakpointObserver, public authService: AuthService, private data: DataService) {
+    this.reloadApprovalNeeded();
+    console.log(authService.accessLevel);
+  }
+
+  reloadApprovalNeeded() {
+    this.data.getReportCardsNeedingApproval().subscribe((data : ReportCard[]) => {
+      console.log(data);
+      this.count = data.length;
+    });
+  }
 
   closeNav() {
     this.isHandset$.subscribe(close => {

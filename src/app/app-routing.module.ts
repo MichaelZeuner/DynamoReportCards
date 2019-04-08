@@ -6,6 +6,7 @@ import { ApproveReportCardsComponent } from './approve-report-cards/approve-repo
 import { MainLayoutComponent } from './layouts/main-layout.component';
 import { LoginLayoutComponent } from './layouts/login-layout.component';
 import { AuthGuard } from './auth/auth.guard';
+import { CompletedReportCardsComponent } from './completed-report-cards/completed-report-cards.component';
 
 const routes: Routes = [
   {
@@ -14,7 +15,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', component: ReportCardsComponent },
-      { path: 'approve', component: ApproveReportCardsComponent }
+      { path: 'approve', component: ApproveReportCardsComponent },
+      { path: 'completed', component: CompletedReportCardsComponent }
     ]
   },
   {

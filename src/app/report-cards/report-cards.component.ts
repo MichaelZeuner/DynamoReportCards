@@ -9,6 +9,7 @@ import { ReportCard } from '../interfaces/report-card';
 import { ErrorApi } from '../interfaces/error-api';
 import { Skill } from '../interfaces/skill';
 import { ReportCardComponent } from '../interfaces/report-card-component';
+import { MainNavComponent } from '../main-nav/main-nav.component';
 
 @Component({
   selector: 'app-report-cards',
@@ -22,7 +23,7 @@ export class ReportCardsComponent implements OnInit {
   
   comment: string;
 
-  constructor(private data: DataService, private snackBar: MatSnackBar) { }
+  constructor(private data: DataService, private snackBar: MatSnackBar, private mainNav: MainNavComponent) { }
 
   ngOnInit() { }
 
@@ -70,6 +71,7 @@ export class ReportCardsComponent implements OnInit {
     }
 
     this.addReportCard();
+    this.mainNav.reloadApprovalNeeded();
   }
 
   getErrors(): string[] {

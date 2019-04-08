@@ -20,11 +20,11 @@ export class DataService {
   }
 
   getLevelEvents(levelId: number) {
-    return this.http.get(this.baseUrl + `/levelEvents/${levelId}`)
+    return this.http.get(this.baseUrl + `/level-events/${levelId}`);
   }
 
   getEventSkills(levelId: number, eventId: number) {
-    return this.http.get(this.baseUrl + `/levelEventSkills/${levelId}/${eventId}`)
+    return this.http.get(this.baseUrl + `/level-event-skills/${levelId}/${eventId}`);
   }
 
   getLevels() {
@@ -32,10 +32,14 @@ export class DataService {
   }
 
   addReportCard(reportCard: ReportCard) {
-    return this.http.post(this.baseUrl + '/reportcards', reportCard);
+    return this.http.post(this.baseUrl + '/report-cards', reportCard);
   }
 
   addReportCardComponent(reportCardComponent: ReportCardComponent) {
     return this.http.post(this.baseUrl + '/report-cards-components', reportCardComponent);
+  }
+
+  getReportCardsNeedingApproval() {
+    return this.http.get(this.baseUrl + '/report-cards-requiring-approval');
   }
 }

@@ -15,7 +15,7 @@ export class AuthService {
   baseUrl = environment.baseUrl;
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public storageLocation: string = 'creds';
-
+  public accessLevel: string; 
   
   get isLoggedIn() {
     return this.loggedIn.asObservable();
@@ -34,6 +34,7 @@ export class AuthService {
     this.http.get(`${this.baseUrl}/login`).subscribe(
       (result: User) => {
         console.log(result.access);
+        this.accessLevel = result.access;
         this.loggedIn.next(true);
         this.router.navigate(['/']);
       },
