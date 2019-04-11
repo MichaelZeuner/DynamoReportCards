@@ -12,8 +12,6 @@ export interface ReportCardCompleted extends ReportCard {
     events: Event[]
 }
 
-//I want to have the events in here some how
-
-interface ReportCardComponentCompleted extends ReportCardComponent{
+export interface ReportCardComponentCompleted extends ReportCardComponent{
     skill: Skill
 }

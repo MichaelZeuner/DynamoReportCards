@@ -35,8 +35,16 @@ export class DataService {
     return this.http.post(this.baseUrl + '/report-cards', reportCard);
   }
 
+  putReportCard(reportCard: ReportCard) {
+    return this.http.put(this.baseUrl + '/report-cards/' + reportCard.id, reportCard);
+  }
+
   addReportCardComponent(reportCardComponent: ReportCardComponent) {
     return this.http.post(this.baseUrl + '/report-cards-components', reportCardComponent);
+  }
+
+  putReportCardComponent(reportCardComponent: ReportCardComponent) {
+    return this.http.put(this.baseUrl + '/report-cards-components/' + reportCardComponent.id, reportCardComponent);
   }
 
   getReportCardsNeedingApproval() {

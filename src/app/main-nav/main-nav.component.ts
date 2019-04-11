@@ -25,7 +25,7 @@ export class MainNavComponent {
 
   constructor(private breakpointObserver: BreakpointObserver, public authService: AuthService, private data: DataService) {
     this.reloadApprovalNeeded();
-    console.log(authService.accessLevel);
+    console.log(authService.user.access);
   }
 
   reloadApprovalNeeded() {

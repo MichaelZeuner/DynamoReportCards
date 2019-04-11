@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReportCardsComponent } from './report-cards/report-cards.component';
-import { ApproveReportCardsComponent, RequiredModificationsDialog } from './approve-report-cards/approve-report-cards.component';
+import { ApproveReportCardsComponent } from './approve-report-cards/approve-report-cards.component';
 import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
@@ -23,6 +23,7 @@ import { EventsComponent } from './report-cards/events.component';
 import { SkillsComponent } from './report-cards/skills.component';
 import { CompletedReportCardsComponent } from './completed-report-cards/completed-report-cards.component';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
+import { ReportCardPanelComponent, RequiredModificationsDialog } from './approve-report-cards/report-card-panel.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dial
     EventsComponent,
     SkillsComponent,
     CompletedReportCardsComponent,
-    MatConfirmDialogComponent
+    MatConfirmDialogComponent,
+    ReportCardPanelComponent
   ],
   imports: [
     BrowserModule,

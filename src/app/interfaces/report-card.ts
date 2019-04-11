@@ -3,7 +3,7 @@ export interface ReportCard {
   levels_id: number,
   athletes_id: number,
   comment: string,
-  approved: boolean,
+  approved: number,
   updated_date: string,
   created_date: string
 }
