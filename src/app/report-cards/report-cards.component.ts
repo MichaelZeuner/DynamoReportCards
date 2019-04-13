@@ -10,6 +10,7 @@ import { ErrorApi } from '../interfaces/error-api';
 import { Skill } from '../interfaces/skill';
 import { ReportCardComponent } from '../interfaces/report-card-component';
 import { MainNavComponent } from '../main-nav/main-nav.component';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-report-cards',
@@ -23,7 +24,7 @@ export class ReportCardsComponent implements OnInit {
   
   comment: string;
 
-  constructor(private data: DataService, private snackBar: MatSnackBar, private mainNav: MainNavComponent) { }
+  constructor(private data: DataService, private snackBar: MatSnackBar, private mainNav: MainNavComponent, private auth: AuthService) { }
 
   ngOnInit() { }
 
@@ -96,6 +97,7 @@ export class ReportCardsComponent implements OnInit {
 
   addReportCard() {
     let reportCard = {} as ReportCard;
+    reportCard.submitted_by = this.auth.user.id;
     reportCard.athletes_id = this.selectedAthlete.id;
     reportCard.levels_id = this.level.id;
     reportCard.comment = this.comment;

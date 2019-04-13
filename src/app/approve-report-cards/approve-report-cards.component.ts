@@ -22,9 +22,7 @@ export class ApproveReportCardsComponent implements OnInit {
   }
 
   refreshReportCardsData() {
-    console.log('refreshing...');
     this.data.getReportCardsNeedingApproval().subscribe((data : ReportCardCompleted[]) => {
-      console.log(data);
       this.reportCards = data;
     });
   }

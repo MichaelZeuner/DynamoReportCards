@@ -1,5 +1,6 @@
 export interface ReportCard {
   id: number,
+  submitted_by: number,
   levels_id: number,
   athletes_id: number,
   comment: string,

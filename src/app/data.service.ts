@@ -50,4 +50,8 @@ export class DataService {
   getReportCardsNeedingApproval() {
     return this.http.get(this.baseUrl + '/report-cards-requiring-approval');
   }
+
+  getReportCardsCompleted() {
+    return this.http.get(this.baseUrl + '/report-cards-completed/' + this.authService.user.id);
+  }
 }

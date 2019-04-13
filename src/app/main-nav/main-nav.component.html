@@ -6,15 +6,15 @@
       class="sidenav">
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
-      <a (click)="closeNav()" mat-list-item routerLink="">
+      <a (click)="closeNav()" mat-list-item routerLink="/">
         <mat-icon>assignment</mat-icon>
         &nbsp;Report Cards
       </a>
-      <a (click)="closeNav()" mat-list-item routerLink="completed">
+      <a (click)="closeNav()" mat-list-item routerLink="/completed">
         <mat-icon>list</mat-icon>
         <span matBadge="{{completedReportCards}}" matBadgeColor="accent" [matBadgeHidden]="completedReportCards == 0" matBadgeOverlap="false">&nbsp;All Completed</span>
       </a>
-      <a *ngIf="authService.user.access === 'ADMIN' || authService.user.access === 'SUPERVISOR'" (click)="closeNav()" mat-list-item routerLink="approve">
+      <a *ngIf="authService.user.access === 'ADMIN' || authService.user.access === 'SUPERVISOR'" (click)="closeNav()" mat-list-item routerLink="/approve">
           <mat-icon>check</mat-icon>  
         <span matBadge="{{count}}" matBadgeColor="accent" [matBadgeHidden]="count == 0" matBadgeOverlap="false">&nbsp;Approve Report Cards</span>
       </a>

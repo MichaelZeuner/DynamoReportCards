@@ -7,6 +7,7 @@ import { MatDialog, MatExpansionPanel, MatDialogRef, MAT_DIALOG_DATA } from '@an
 import { AuthService } from '../auth/auth.service';
 import { ReportCardsComponent } from '../report-cards/report-cards.component';
 import { ErrorApi } from '../interfaces/error-api';
+import { ReportCardComponent } from '../interfaces/report-card-component';
 
 interface ChangedComponents {
   id: number,
@@ -36,7 +37,7 @@ interface ChangedComponents {
             <mat-list-item *ngIf="component.skill.events_id == event.id">
                 <span>{{component.skill.name}}</span>
                 <span class="fill-remaining-space"></span>
-                <mat-button-toggle-group #group="matButtonToggleGroup" value="{{component.rank}}" (click)="skillRankChanged(group.value)" name="skillAbility" aria-label="Skill Ability">
+                <mat-button-toggle-group #group="matButtonToggleGroup" value="{{component.rank}}" (click)="skillRankChanged(group.value, component.id)" name="skillAbility" aria-label="Skill Ability">
                     <mat-button-toggle value="LEARNING" class="btnToggle">Learning</mat-button-toggle>
                     <mat-button-toggle value="MASTERED" class="btnToggle">Mastered</mat-button-toggle>
                 </mat-button-toggle-group>
@@ -57,7 +58,8 @@ interface ChangedComponents {
 
     <div class="center">
         <button *ngIf="modifications === '' && changedComponents.length === 0" 
-          mat-raised-button color="accent" class="mr-1">Complete Report Card</button>
+          mat-raised-button color="accent" class="mr-1"
+          (click)="putReportCard()">Complete Report Card</button>
         <button *ngIf="modifications !== '' || changedComponents.length > 0" 
           mat-raised-button color="accent" class="mr-1" 
           (click)="submitReportCard()">Complete Report Card with Changes</button>
@@ -103,27 +105,33 @@ export class ReportCardPanelComponent implements OnInit {
   }
 
   submitReportCard() {
-    this.reportCard.approved = this.auth.user.id;
-    console.log(this.reportCard);
-    this.data.putReportCard(this.reportCard).subscribe(data => {
-      console.log(data);
-    },
-    (err: ErrorApi) => {
-      console.error(err);
-    });
+    this.putReportCard();
 
     for(let i=0; i<this.changedComponents.length; i++) {
-      //SUBMIT REPORT CARD COMPONENT
+      const component = this.changedComponents[i];
+      this.data.putReportCardComponent(component).subscribe(
+        (data: ReportCardComponent) => { console.log(data); },
+        (err: ErrorApi) => { console.error(err); }
+      );
     }
-    console.log(this.changedComponents);
   }
 
-  skillRankChanged(newRank: string) {
+  putReportCard() {
+    this.reportCard.approved = this.auth.user.id;
+    this.data.putReportCard(this.reportCard).subscribe(
+      (data: ReportCard) => { console.log(data); },
+      (err: ErrorApi) => { console.error(err); }
+    );
+  }
+
+  skillRankChanged(newRank: string, id: number) {
 
     for(let x=0; x<this.reportCard.components.length; x++) {
       const component = this.reportCard.components[x];
-      if(this.removeComponentChangedIfNeeded(component, newRank)) { return; }
-      if(this.addComponentChangedIfNeeded(component, newRank)) { return; }
+      if(component.id === id) {
+        if(this.removeComponentChangedIfNeeded(component, newRank)) { return; }
+        if(this.addComponentChangedIfNeeded(component, newRank)) { return; }
+      }
     }
   } 
 
