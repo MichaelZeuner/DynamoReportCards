@@ -1,0 +1,60 @@
+
+<mat-grid-list cols="6" rowHeight="40px">
+  <div *ngFor="let user of users">
+    <mat-grid-tile><b>First Name:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input matInput value="{{user.first_name}}">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile><b>Last Name:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input matInput value="{{user.last_name}}">
+      </mat-form-field>
+    </mat-grid-tile>
+
+    
+    <mat-grid-tile><b>Username:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input matInput value="{{user.username}}">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile><b>Email:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input matInput value="{{user.email}}">
+      </mat-form-field>
+    </mat-grid-tile>
+
+
+    <mat-grid-tile><b>Password:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile><b>Confirm Password:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="1">
+      <button mat-raised-button color="primary">Update User</button>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2"></mat-grid-tile>
+    <mat-grid-tile [colspan]="1">
+      <button mat-raised-button color="warn">Delete User</button>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1"></mat-grid-tile>
+    
+    <mat-grid-tile [colspan]="6">
+      <mat-divider style="width: 100%;"></mat-divider>
+    </mat-grid-tile>
+  </div>
+</mat-grid-list>
+    

@@ -4,13 +4,12 @@ import { Component, OnInit } from '@angular/core';
 import { Athlete } from '../interfaces/athlete';
 import { Level } from '../interfaces/level';
 import { Event } from '../interfaces/event';
-import { MatSnackBar } from '@angular/material';
 import { ReportCard } from '../interfaces/report-card';
 import { ErrorApi } from '../interfaces/error-api';
-import { Skill } from '../interfaces/skill';
 import { ReportCardComponent } from '../interfaces/report-card-component';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { AuthService } from '../auth/auth.service';
+import { DialogService } from '../shared/dialog.service';
 
 @Component({
   selector: 'app-report-cards',
@@ -24,7 +23,7 @@ export class ReportCardsComponent implements OnInit {
   
   comment: string;
 
-  constructor(private data: DataService, private snackBar: MatSnackBar, private mainNav: MainNavComponent, private auth: AuthService) { }
+  constructor(private data: DataService, private mainNav: MainNavComponent, private auth: AuthService, private dialog: DialogService) { }
 
   ngOnInit() { }
 
@@ -50,12 +49,12 @@ export class ReportCardsComponent implements OnInit {
   submitClick() {
     console.log(this.comment);
     if(typeof this.comment === 'undefined' || this.comment.length === 0) {
-      this.openSnackBar('Comment required!');
+      this.dialog.openSnackBar('Comment required!');
       return;
     }
 
     if(typeof this.level.events === 'undefined') {
-      this.openSnackBar('Please select a ranking for all skills.');
+      this.dialog.openSnackBar('Please select a ranking for all skills.');
       return;
     }
 
@@ -67,7 +66,7 @@ export class ReportCardsComponent implements OnInit {
         error += (i === errors.length-1) ? ', and ' : ', ';
         error += errors[i];
       }
-      this.openSnackBar(error, errors.length * 1000);
+      this.dialog.openSnackBar(error, errors.length * 1000);
       return;
     }
 
@@ -112,7 +111,7 @@ export class ReportCardsComponent implements OnInit {
         if(err.error !== undefined) {
           message = err.error.message;
         }
-        this.openSnackBar(message)
+        this.dialog.openSnackBar(message)
       }
     );
   }
@@ -130,7 +129,7 @@ export class ReportCardsComponent implements OnInit {
       }
     }
 
-    this.openSnackBar('Report card has been submitted for approval!');
+    this.dialog.openSnackBar('Report card has been submitted for approval!');
   }
 
   addComponentToReportCard(reportCardComponent: ReportCardComponent) {
@@ -144,14 +143,8 @@ export class ReportCardsComponent implements OnInit {
         if(err.error !== undefined) {
           message = err.error.message;
         }
-        this.openSnackBar(message);
+        this.dialog.openSnackBar(message);
       }
     );
-  }
-
-  openSnackBar(message: string, duration: number = 2000) {
-    this.snackBar.open(message, 'OK', {
-      duration: duration,
-    });
   }
 }

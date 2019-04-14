@@ -5,6 +5,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatExpansionPanel } from '@an
 import { ReportCardCompleted } from '../interfaces/report-card-completed';
 import { DialogService } from '../shared/dialog.service';
 import { ReportCard } from '../interfaces/report-card';
+import { ErrorApi } from '../interfaces/error-api';
 
 @Component({
   selector: 'app-approve-report-cards',
@@ -13,7 +14,7 @@ import { ReportCard } from '../interfaces/report-card';
 })
 export class ApproveReportCardsComponent implements OnInit {
 
-  public reportCards: ReportCard[];
+  public reportCards: ReportCard[] = [];
 
   constructor(private data: DataService, public dialog: MatDialog, private dialogService: DialogService) { }
 
@@ -22,8 +23,8 @@ export class ApproveReportCardsComponent implements OnInit {
   }
 
   refreshReportCardsData() {
-    this.data.getReportCardsNeedingApproval().subscribe((data : ReportCardCompleted[]) => {
-      this.reportCards = data;
-    });
+    this.data.getReportCardsNeedingApproval().subscribe(
+      (data : ReportCardCompleted[]) => { this.reportCards = data; }
+    );
   }
 }

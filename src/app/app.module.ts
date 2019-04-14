@@ -24,6 +24,8 @@ import { SkillsComponent } from './report-cards/skills.component';
 import { CompletedReportCardsComponent } from './completed-report-cards/completed-report-cards.component';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
 import { ReportCardPanelComponent, RequiredModificationsDialog } from './approve-report-cards/report-card-panel.component';
+import { UsersComponent } from './users/users.component';
+import { LevelsComponent } from './levels/levels.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { ReportCardPanelComponent, RequiredModificationsDialog } from './approve
     SkillsComponent,
     CompletedReportCardsComponent,
     MatConfirmDialogComponent,
-    ReportCardPanelComponent
+    ReportCardPanelComponent,
+    UsersComponent,
+    LevelsComponent
   ],
   imports: [
     BrowserModule,

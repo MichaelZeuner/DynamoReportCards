@@ -1,3 +1,31 @@
-<p>
-  completed-report-cards works!
-</p>
+<mat-grid-list cols="3" rowHeight="25px">
+  <div *ngFor="let reportCard of reportCards">
+    <mat-grid-tile>
+      <b>Athlete:</b>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
+    </mat-grid-tile>
+    <mat-grid-tile [rowspan]="3">
+      <button mat-raised-button color="primary">Generate Report Card</button>
+    </mat-grid-tile>
+    
+    <mat-grid-tile>
+      <b>Level:</b>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      {{reportCard.level.name}}
+    </mat-grid-tile>
+    
+    <mat-grid-tile>
+      <b>Approved By:</b>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      {{reportCard.approved}}
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="3">
+      <mat-divider style="width: 100%;"></mat-divider>
+    </mat-grid-tile>
+  </div>
+</mat-grid-list>

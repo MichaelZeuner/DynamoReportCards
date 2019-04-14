@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { MatConfirmDialogComponent } from '../mat-confirm-dialog/mat-confirm-dialog.component';
 
 @Injectable({
@@ -7,7 +7,7 @@ import { MatConfirmDialogComponent } from '../mat-confirm-dialog/mat-confirm-dia
 })
 export class DialogService {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   openConfirmDialog(msg: string) {
     console.log('About to open confirm');
@@ -18,6 +18,12 @@ export class DialogService {
       data: {
         message: msg
       }
+    });
+  }
+
+  openSnackBar(message: string, duration: number = 2000) {
+    this.snackBar.open(message, 'OK', {
+      duration: duration,
     });
   }
 }

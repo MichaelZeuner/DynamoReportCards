@@ -1,4 +1,7 @@
 <mat-accordion>
+    <div *ngIf="reportCards.length === 0">
+        <h1>No Report Cards waiting to be Approved!</h1>
+    </div>
     <app-report-card-panel 
         *ngFor="let reportCard of reportCards" 
         [reportCard]="reportCard">

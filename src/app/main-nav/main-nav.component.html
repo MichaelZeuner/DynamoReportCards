@@ -15,8 +15,16 @@
         <span matBadge="{{completedReportCards}}" matBadgeColor="accent" [matBadgeHidden]="completedReportCards == 0" matBadgeOverlap="false">&nbsp;All Completed</span>
       </a>
       <a *ngIf="authService.user.access === 'ADMIN' || authService.user.access === 'SUPERVISOR'" (click)="closeNav()" mat-list-item routerLink="/approve">
-          <mat-icon>check</mat-icon>  
+        <mat-icon>check</mat-icon>  
         <span matBadge="{{count}}" matBadgeColor="accent" [matBadgeHidden]="count == 0" matBadgeOverlap="false">&nbsp;Approve Report Cards</span>
+      </a>
+      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/levels">
+        <mat-icon>gavel</mat-icon>  
+        <span>&nbsp;Levels</span>
+      </a>
+      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/users">
+        <mat-icon>face</mat-icon>  
+        <span>&nbsp;Users</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>

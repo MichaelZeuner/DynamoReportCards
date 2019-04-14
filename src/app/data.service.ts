@@ -15,6 +15,10 @@ export class DataService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
+  getUsers() {
+    return this.http.get(this.baseUrl + '/users');
+  }
+
   getAthletes() {
     return this.http.get(this.baseUrl + '/athletes');
   }

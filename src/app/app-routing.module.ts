@@ -7,6 +7,8 @@ import { MainLayoutComponent } from './layouts/main-layout.component';
 import { LoginLayoutComponent } from './layouts/login-layout.component';
 import { AuthGuard } from './auth/auth.guard';
 import { CompletedReportCardsComponent } from './completed-report-cards/completed-report-cards.component';
+import { LevelsComponent } from './levels/levels.component';
+import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
   {
@@ -16,7 +18,9 @@ const routes: Routes = [
     children: [
       { path: '', component: ReportCardsComponent },
       { path: 'approve', component: ApproveReportCardsComponent },
-      { path: 'completed', component: CompletedReportCardsComponent }
+      { path: 'completed', component: CompletedReportCardsComponent },
+      { path: 'levels', component: LevelsComponent },
+      { path: 'users', component: UsersComponent }
     ]
   },
   {

@@ -80,7 +80,7 @@ export class ReportCardPanelComponent implements OnInit {
   modifications: string = '';
   panelOpenState: boolean;
 
-  constructor(private data: DataService, public dialog: MatDialog, private auth: AuthService) { }
+  constructor(private data: DataService, public matDialog: MatDialog, private auth: AuthService, private dialog: DialogService) { }
 
   ngOnInit() {
     console.log('report card in panel');
@@ -89,7 +89,7 @@ export class ReportCardPanelComponent implements OnInit {
 
   openDialog(comment: string): void {
     console.log(comment);
-    const dialogRef = this.dialog.open(RequiredModificationsDialog, {
+    const dialogRef = this.matDialog.open(RequiredModificationsDialog, {
       width: '500px',
       data: { comment: comment, modifications: this.modifications }
     });
@@ -122,6 +122,8 @@ export class ReportCardPanelComponent implements OnInit {
       (data: ReportCard) => { console.log(data); },
       (err: ErrorApi) => { console.error(err); }
     );
+
+    this.dialog.openSnackBar("Report Card Approved!");
   }
 
   skillRankChanged(newRank: string, id: number) {
