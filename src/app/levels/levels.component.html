@@ -1,3 +1,45 @@
-<p>
-  levels works!
-</p>
+
+<mat-grid-list cols="6" rowHeight="40px" class="m-1">
+    <div *ngFor="let level of levels">
+      <mat-grid-tile [colspan]="5">
+        <mat-form-field class="levelName w-100">
+          <input matInput value="{{level.name}}">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button mat-raised-button color="warn">Remove Level</button>
+      </mat-grid-tile>
+      
+      <div *ngFor="let event of level.events">
+        <mat-grid-tile [colspan]="6" class="ml-1">
+          <b class="w-100">{{event.name}}</b>
+        </mat-grid-tile>
+
+        <div *ngFor="let skill of event.skills">
+            <mat-grid-tile [colspan]="5" class="ml-1">
+              <mat-form-field class="w-100">
+                <input (keyup)="skillChanged(skill, event, level, $event.target.value)" matInput value="{{skill.name}}">
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <button (click)="deleteSkill(skill)" mat-raised-button color="warn">Remove Skill</button>
+            </mat-grid-tile>
+        </div>      
+
+        <mat-grid-tile [colspan]="5" class="ml-1">
+          <mat-form-field class="w-100">
+            <input matInput #newSkill>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button (click)="addSkill(newSkill, event, level)" mat-raised-button color="primary">Add Skill</button>
+        </mat-grid-tile>
+      </div>
+
+
+      <mat-grid-tile [colspan]="6">
+        <mat-divider style="width: 100%;"></mat-divider>
+      </mat-grid-tile>
+    </div>
+  </mat-grid-list>
+      

@@ -5,6 +5,8 @@ import { Level } from './interfaces/level';
 import { ReportCard } from './interfaces/report-card';
 import { AuthService } from './auth/auth.service';
 import { ReportCardComponent } from './interfaces/report-card-component';
+import { Skill } from './interfaces/skill';
+import { ReportCardSkill } from './interfaces/report-card-skill';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +35,18 @@ export class DataService {
 
   getLevels() {
     return this.http.get(this.baseUrl + '/levels');
+  }
+
+  addSkill(skill: ReportCardSkill) {
+    return this.http.post(this.baseUrl + '/skills', skill);
+  }
+
+  putSkill(skill: ReportCardSkill) { 
+    return this.http.put(this.baseUrl + '/skills/' + skill.id, skill);
+  }
+
+  deleteSkill(skill: Skill) {
+    return this.http.delete(this.baseUrl + '/skills/' + skill.id);
   }
 
   addReportCard(reportCard: ReportCard) {

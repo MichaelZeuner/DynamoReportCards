@@ -43,14 +43,21 @@
     </mat-grid-tile>
 
     <mat-grid-tile [colspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+        <mat-button-toggle-group name="accessLevel" aria-label="Access Level" value="{{user.access}}">
+          <mat-button-toggle value="COACH">Coach</mat-button-toggle>
+          <mat-button-toggle value="SUPERVISOR">Supervisor</mat-button-toggle>
+          <mat-button-toggle value="ADMIN">Admin</mat-button-toggle>
+        </mat-button-toggle-group>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1"></mat-grid-tile>
     <mat-grid-tile [colspan]="1">
       <button mat-raised-button color="primary">Update User</button>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="2"></mat-grid-tile>
     <mat-grid-tile [colspan]="1">
       <button mat-raised-button color="warn">Delete User</button>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="1"></mat-grid-tile>
     
     <mat-grid-tile [colspan]="6">
       <mat-divider style="width: 100%;"></mat-divider>
