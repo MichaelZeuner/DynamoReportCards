@@ -1,0 +1,21 @@
+<mat-grid-list cols="6" rowHeight="40px" class="m-1">
+  <div *ngFor="let event of events">
+    <mat-grid-tile [colspan]="5">
+      <mat-form-field class="eventName w-100">
+        <input (keyup)="eventChanged(event, $event.target.value)" matInput value="{{event.name}}">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button (click)="deleteEvent(event)" mat-raised-button color="warn">Remove Event</button>
+    </mat-grid-tile>
+  </div>
+
+  <mat-grid-tile [colspan]="5">
+    <mat-form-field class="w-100">
+      <input matInput #newEvent>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button (click)="addEvent(newEvent)" mat-raised-button color="primary">Add Event</button>
+  </mat-grid-tile>
+</mat-grid-list>

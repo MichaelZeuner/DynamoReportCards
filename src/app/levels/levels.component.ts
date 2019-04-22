@@ -25,13 +25,22 @@ interface FullEvent extends Event {
 export class LevelsComponent implements OnInit {
 
   public levels: FullLevel[] = [];
+  public allEvents: Event[] = [];
 
   constructor(private data: DataService, private dialog: DialogService) { }
 
   ngOnInit() {
-    this.data.getLevels().subscribe(
-      (levels: Level[]) => {
-        this.populateLevels(levels);
+    this.data.getEvents().subscribe(
+      (events: Event[]) => {
+        this.allEvents = events;
+        console.log(this.allEvents);
+
+        this.data.getLevels().subscribe(
+          (levels: Level[]) => {
+            console.log(levels);
+            this.populateLevels(levels);
+          }
+        );
       }
     );
   }
@@ -55,6 +64,9 @@ export class LevelsComponent implements OnInit {
 
   populateEvents(level: Level, events: Event[]) {
     const currentLevel = this.levels.length-1;
+    let missingEvents: Event[] = [];
+    Object.assign(missingEvents, this.allEvents);
+
     for(let i=0; i<events.length; i++) {
       const event = events[i];
       this.levels[currentLevel].events.push({
@@ -62,6 +74,13 @@ export class LevelsComponent implements OnInit {
         name: event.name,
         skills: []
       });
+
+      for(let x=0; x<this.allEvents.length; x++) {
+        if(event.id === missingEvents[x].id) {
+          missingEvents.splice(x, 1);
+          break;
+        }
+      }
 
       const currentEvent = this.levels[currentLevel].events.length-1;
       this.data.getEventSkills(level.id, event.id).subscribe(
@@ -73,6 +92,44 @@ export class LevelsComponent implements OnInit {
         }
       );
     }
+
+    for(let i=0; i<missingEvents.length; i++) {
+      const missingEvent = missingEvents[i];
+      this.levels[currentLevel].events.push({
+        id: missingEvent.id,
+        name: missingEvent.name,
+        skills: []
+      });
+    }
+  }
+
+  levelChanged(level: Level, newName: string) {
+    level.name = newName;
+    console.log(level);
+    this.data.putLevel(level).subscribe(
+      (data: Level) => { 
+        this.dialog.openSnackBar('Level Updated!', 3000); 
+        console.log(data);
+      }
+    );
+  }
+
+  deleteLevel(levelToRemove: Level) {
+    this.dialog.openConfirmDialog('Are you sure you wish to remove the level "' + levelToRemove.name + '"?')
+    .afterClosed().subscribe(res =>{
+      if(res){
+        this.data.deleteLevel(levelToRemove).subscribe(() => { 
+          for(let i=0; i<this.levels.length; i++) {
+            let level = this.levels[i];
+              if(level.id === levelToRemove.id) {
+              this.levels.splice(i);
+              this.dialog.openSnackBar('Level Deleted!'); 
+              return;
+            }
+          }
+        });
+      }
+    });
   }
 
   skillChanged(skill: Skill, event: Event, level: Level, newName: string) {
@@ -85,7 +142,10 @@ export class LevelsComponent implements OnInit {
 
     console.log(reportCardSkill);
     this.data.putSkill(reportCardSkill).subscribe(
-      (data: ReportCardSkill) => { console.log(data); }
+      (data: ReportCardSkill) => { 
+        this.dialog.openSnackBar('Skill Updated!', 3000); 
+        console.log(data); 
+      }
     );
   }
 
@@ -127,10 +187,20 @@ export class LevelsComponent implements OnInit {
         for(let i=0; i<this.levels.length; i++) {
           let level = this.levels[i];
           for(let x=0; x<level.events.length; x++) {
-            this.levels[i].events[x].skills.push(data);
-            newSkill.value = '';
-            return;
+            if(level.events[x].id === event.id) {
+              this.levels[i].events[x].skills.push(data);
+              newSkill.value = '';
+              return;
+            }
           }
+
+          let newSkills: Skill[] = [];
+          newSkills.push(data);
+          this.levels[i].events.push({
+            id: event.id,
+            name: event.name,
+            skills: newSkills
+          });
         }
       },
       (error: ErrorApi) => { console.log(error); }

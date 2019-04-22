@@ -22,6 +22,10 @@
         <mat-icon>gavel</mat-icon>  
         <span>&nbsp;Levels</span>
       </a>
+      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/events">
+        <mat-icon>rowing</mat-icon>  
+        <span>&nbsp;Events</span>
+      </a>
       <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/users">
         <mat-icon>face</mat-icon>  
         <span>&nbsp;Users</span>

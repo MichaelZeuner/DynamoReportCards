@@ -19,13 +19,14 @@ import { AuthService } from './auth/auth.service';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { AthletesSelectComponent } from './report-cards/athlete-select.component';
 import { LevelSelectComponent } from './report-cards/level-select.component';
-import { EventsComponent } from './report-cards/events.component';
+import { ReportCardEventsComponent } from './report-cards/events.component';
 import { SkillsComponent } from './report-cards/skills.component';
 import { CompletedReportCardsComponent } from './completed-report-cards/completed-report-cards.component';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
 import { ReportCardPanelComponent, RequiredModificationsDialog } from './approve-report-cards/report-card-panel.component';
 import { UsersComponent } from './users/users.component';
 import { LevelsComponent } from './levels/levels.component';
+import { EventsComponent } from './events/events.component';
 
 @NgModule({
   declarations: [
@@ -39,13 +40,14 @@ import { LevelsComponent } from './levels/levels.component';
     LoginLayoutComponent,
     AthletesSelectComponent,
     LevelSelectComponent,
-    EventsComponent,
+    ReportCardEventsComponent,
     SkillsComponent,
     CompletedReportCardsComponent,
     MatConfirmDialogComponent,
     ReportCardPanelComponent,
     UsersComponent,
-    LevelsComponent
+    LevelsComponent,
+    EventsComponent
   ],
   imports: [
     BrowserModule,

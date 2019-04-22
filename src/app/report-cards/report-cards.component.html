@@ -12,7 +12,7 @@
       <app-level-select (levelChange)="updateSelectLevel($event)" ></app-level-select>
 
       <mat-list *ngIf="level">
-        <app-events [level]="level" (events)="onEventsChange($event)"></app-events>
+        <app-report-card-events [level]="level" (events)="onEventsChange($event)"></app-report-card-events>
       </mat-list>
     </mat-card-content>
   </mat-card>

@@ -9,6 +9,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { CompletedReportCardsComponent } from './completed-report-cards/completed-report-cards.component';
 import { LevelsComponent } from './levels/levels.component';
 import { UsersComponent } from './users/users.component';
+import { EventsComponent } from './events/events.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'approve', component: ApproveReportCardsComponent },
       { path: 'completed', component: CompletedReportCardsComponent },
       { path: 'levels', component: LevelsComponent },
+      { path: 'events', component: EventsComponent },
       { path: 'users', component: UsersComponent }
     ]
   },

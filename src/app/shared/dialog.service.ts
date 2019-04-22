@@ -21,7 +21,7 @@ export class DialogService {
     });
   }
 
-  openSnackBar(message: string, duration: number = 2000) {
+  openSnackBar(message: string, duration: number = 5000) {
     this.snackBar.open(message, 'OK', {
       duration: duration,
     });

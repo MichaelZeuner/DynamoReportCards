@@ -5,7 +5,7 @@ import { DataService } from '../data.service';
 import { Skill } from '../interfaces/skill';
 
 @Component({
-  selector: 'app-events',
+  selector: 'app-report-card-events',
   template: `
   <div *ngFor="let event of eventsInternal">
     <mat-divider></mat-divider>
@@ -20,7 +20,7 @@ import { Skill } from '../interfaces/skill';
     }
   `]
 })
-export class EventsComponent implements OnInit {
+export class ReportCardEventsComponent implements OnInit {
   @Input() public level: Level;
   @Output() events = new EventEmitter<Event[]>();
   public eventsInternal: Event[];

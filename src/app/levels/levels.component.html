@@ -3,11 +3,11 @@
     <div *ngFor="let level of levels">
       <mat-grid-tile [colspan]="5">
         <mat-form-field class="levelName w-100">
-          <input matInput value="{{level.name}}">
+          <input (keyup)="levelChanged(level, $event.target.value)" matInput value="{{level.name}}">
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <button mat-raised-button color="warn">Remove Level</button>
+        <button mat-raised-button (click)="deleteLevel(level)" color="warn">Remove Level</button>
       </mat-grid-tile>
       
       <div *ngFor="let event of level.events">
@@ -35,7 +35,6 @@
           <button (click)="addSkill(newSkill, event, level)" mat-raised-button color="primary">Add Skill</button>
         </mat-grid-tile>
       </div>
-
 
       <mat-grid-tile [colspan]="6">
         <mat-divider style="width: 100%;"></mat-divider>
