@@ -25,22 +25,132 @@ export class UsersComponent implements OnInit {
     );
   }
 
-  updateUser(firstName: MatInput, 
+  deleteUser(id: number, firstName: string, lastName: string) {
+    this.dialog.openConfirmDialog('Are you sure you wish to remove the user "' + firstName + ' ' + lastName + '"?')
+    .afterClosed().subscribe(res =>{
+      if(res){
+        this.data.deleteUser(id).subscribe(() => {
+          for(let i=0; i<this.users.length; i++) {
+            const currentUser = this.users[i];
+            if(currentUser.id === id) {
+              this.dialog.openSnackBar("User deleted!");
+              this.users.splice(i, 1);
+              return;
+            }
+          }
+        });
+      }
+    });
+  }
+
+  createUser(firstName: MatInput, 
               lastName: MatInput, 
               username: MatInput, 
               email: MatInput, 
               password: MatInput, 
               passwordConfirm: MatInput,
               accessLevel: MatButtonToggleGroup) {
-    if(password.value === passwordConfirm.value) {
-      console.log(firstName.value);
-      console.log(lastName.value);
-      console.log(username.value);
-      console.log(email.value);
-      console.log(accessLevel.value);
-    } else {
-      this.dialog.openSnackBar("Password and Confirm Password do not match.");
+    if(this.checkInput(true, firstName, lastName, username, email, password, passwordConfirm, accessLevel) === false) { return; }
+
+    let user: User = {
+      username: username.value,
+      email: email.value,
+      password: password.value,
+      access: accessLevel.value,
+      first_name: firstName.value,
+      last_name: lastName.value
     }
+
+    console.log(user);
+    this.data.addUser(user).subscribe(
+      (data: User) => {
+        this.users.push(data);
+        firstName.value = '';
+        lastName.value = '';
+        username.value = '';
+        email.value = '';
+        password.value = '';
+        passwordConfirm.value = '';
+      }
+    )
   }
 
+  updateUser( id: number,
+              firstName: MatInput, 
+              lastName: MatInput, 
+              username: MatInput, 
+              email: MatInput, 
+              password: MatInput, 
+              passwordConfirm: MatInput,
+              accessLevel: MatButtonToggleGroup) {
+    if(this.checkInput(false, firstName, lastName, username, email, password, passwordConfirm, accessLevel) === false) { return; }
+    let user: User = {
+      id: id,
+      username: username.value,
+      email: email.value,
+      password: password.value,
+      access: accessLevel.value,
+      first_name: firstName.value,
+      last_name: lastName.value
+    }
+
+    this.data.putUser(user).subscribe(
+      (data: User) => { console.log(data); },
+      (error: ErrorApi) => { 
+        console.log(error); 
+        this.dialog.openSnackBar(error.error.message);
+      }
+    );
+
+    console.log(user);
+  }
+
+  checkInput(passwordRequired: boolean,
+              firstName: MatInput, 
+              lastName: MatInput, 
+              username: MatInput, 
+              email: MatInput, 
+              password: MatInput, 
+              passwordConfirm: MatInput,
+              accessLevel: MatButtonToggleGroup) {
+    if(firstName.value === '') {
+      this.dialog.openSnackBar('First Name required!');
+      firstName.focus();
+      return false;
+    }
+    if(lastName.value === '') {
+      this.dialog.openSnackBar('Last Name required!');
+      lastName.focus();
+      return false;
+    }
+    if(username.value === '') {
+      this.dialog.openSnackBar('Username required!');
+      username.focus();
+      return false;
+    }
+    if(email.value === '') {
+      this.dialog.openSnackBar('Email required!');
+      email.focus();
+      return false;
+    }
+    if(password.value === '' && passwordRequired) {
+      this.dialog.openSnackBar('Password required!');
+      password.focus();
+      return false;
+    }
+    if(passwordConfirm.value === '' && passwordConfirm) {
+      this.dialog.openSnackBar('Password Confirm required!');
+      passwordConfirm.focus();
+      return false;
+    }
+    if(typeof accessLevel.value === 'undefined') {
+      this.dialog.openSnackBar('Access Level required!');
+      return false;
+    }
+    if(password.value !== passwordConfirm.value) {
+      this.dialog.openSnackBar("Password and Confirm Password do not match.");
+      return false;
+    }
+    return true;
+  }
 }

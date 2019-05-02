@@ -33,7 +33,7 @@ export class EventsComponent implements OnInit {
           for(let i=0; i<this.events.length; i++) {
             let event = this.events[i];
               if(event.id === eventToRemove.id) {
-              this.events.splice(i);
+              this.events.splice(i, 1);
               this.dialog.openSnackBar('Event Deleted!'); 
               return;
             }

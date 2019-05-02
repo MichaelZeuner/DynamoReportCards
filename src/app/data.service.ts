@@ -8,6 +8,7 @@ import { ReportCardComponent } from './interfaces/report-card-component';
 import { Skill } from './interfaces/skill';
 import { ReportCardSkill } from './interfaces/report-card-skill';
 import { Event } from './interfaces/event';
+import { User } from './interfaces/user';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,22 @@ export class DataService {
 
   getUsers() {
     return this.http.get(this.baseUrl + '/users');
+  }
+
+  putUser(user: User) {
+    if(user.password === '') {
+      return this.http.put(this.baseUrl + '/update-user-no-password/' + user.id, user);
+    } else {
+      return this.http.put(this.baseUrl + '/users/' + user.id, user);
+    }
+  }
+
+  addUser(user: User) {
+    return this.http.post(this.baseUrl + '/users', user);
+  }
+
+  deleteUser(id: number) {
+    return this.http.delete(this.baseUrl + '/users/' + id);
   }
 
   getAthletes() {
@@ -40,6 +57,10 @@ export class DataService {
 
   putLevel(level: Level) {
     return this.http.put(this.baseUrl + '/levels/' + level.id, level);
+  }
+
+  addLevel(level: Level) {
+    return this.http.post(this.baseUrl + '/levels', level);
   }
 
   deleteLevel(level: Level) {

@@ -32,13 +32,13 @@
     <mat-grid-tile><b>Password:</b></mat-grid-tile>
     <mat-grid-tile [colspan]="2">
       <mat-form-field class="w-100">
-        <input #password matInput>
+        <input #password matInput type="password">
       </mat-form-field>
     </mat-grid-tile>
     <mat-grid-tile><b>Confirm Password:</b></mat-grid-tile>
     <mat-grid-tile [colspan]="2">
       <mat-form-field class="w-100">
-        <input #passwordConfirm matInput>
+        <input #passwordConfirm matInput type="password">
       </mat-form-field>
     </mat-grid-tile>
 
@@ -53,15 +53,72 @@
 
     <mat-grid-tile [colspan]="1"></mat-grid-tile>
     <mat-grid-tile [colspan]="1">
-      <button (click)="updateUser(firstName, lastName, username, email, password, passwordConfirm, accessLevelGroup)" mat-raised-button color="primary">Update User</button>
+      <button mat-raised-button color="primary" (click)="updateUser(user.id, firstName, lastName, username, email, password, passwordConfirm, accessLevelGroup)">Update User</button>
     </mat-grid-tile>
     <mat-grid-tile [colspan]="1">
-      <button mat-raised-button color="warn">Delete User</button>
+      <button mat-raised-button color="warn" (click)="deleteUser(user.id, firstName.value, lastName.value)">Delete User</button>
     </mat-grid-tile>
     
     <mat-grid-tile [colspan]="6">
       <mat-divider style="width: 100%;"></mat-divider>
     </mat-grid-tile>
   </div>
+
+  <!-- New User -->
+  <mat-grid-tile><b>First Name:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input #firstName matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile><b>Last Name:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input #lastName matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    
+    <mat-grid-tile><b>Username:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input #username matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile><b>Email:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input #email matInput>
+      </mat-form-field>
+    </mat-grid-tile>
+
+
+    <mat-grid-tile><b>Password:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input #password matInput type="password">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile><b>Confirm Password:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input #passwordConfirm matInput type="password">
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+        <mat-button-toggle-group name="accessLevel" #accessLevelGroup="matButtonToggleGroup" aria-label="Access Level">
+          <mat-button-toggle value="COACH">Coach</mat-button-toggle>
+          <mat-button-toggle value="SUPERVISOR">Supervisor</mat-button-toggle>
+          <mat-button-toggle value="ADMIN">Admin</mat-button-toggle>
+        </mat-button-toggle-group>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <button (click)="createUser(firstName, lastName, username, email, password, passwordConfirm, accessLevelGroup)" mat-raised-button color="primary">Create User</button>
+    </mat-grid-tile>
+    
 </mat-grid-list>
     

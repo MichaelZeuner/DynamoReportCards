@@ -40,5 +40,18 @@
         <mat-divider style="width: 100%;"></mat-divider>
       </mat-grid-tile>
     </div>
+
+    <mat-grid-tile [colspan]="6">
+      <h2 class="w-100">Create New Level</h2>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="5">
+      <mat-form-field class="levelName w-100">
+        <input matInput #levelName>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-raised-button (click)="addLevel(levelName)" color="primary">Add Level</button>
+    </mat-grid-tile>
   </mat-grid-list>
       
