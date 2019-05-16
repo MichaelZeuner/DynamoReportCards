@@ -4,6 +4,7 @@
     </div>
     <app-report-card-panel 
         *ngFor="let reportCard of reportCards" 
-        [reportCard]="reportCard">
+        [reportCard]="reportCard"
+        (reportCardApprovedChanged)="reportCardApproved($event)">
     </app-report-card-panel>
 </mat-accordion>

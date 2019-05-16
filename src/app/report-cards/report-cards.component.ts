@@ -1,6 +1,6 @@
 
 import { DataService } from '../data.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Athlete } from '../interfaces/athlete';
 import { Level } from '../interfaces/level';
 import { Event } from '../interfaces/event';
@@ -10,6 +10,7 @@ import { ReportCardComponent } from '../interfaces/report-card-component';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 import { AuthService } from '../auth/auth.service';
 import { DialogService } from '../shared/dialog.service';
+import { AthletesSelectComponent } from './athlete-select.component';
 
 @Component({
   selector: 'app-report-cards',
@@ -20,7 +21,8 @@ export class ReportCardsComponent implements OnInit {
 
   public level: Level;
   public selectedAthlete: Athlete;
-  
+  @ViewChild('athleteSelect') athleteSelect: AthletesSelectComponent; 
+
   comment: string;
 
   constructor(private data: DataService, private mainNav: MainNavComponent, private auth: AuthService, private dialog: DialogService) { }
@@ -71,7 +73,6 @@ export class ReportCardsComponent implements OnInit {
     }
 
     this.addReportCard();
-    this.mainNav.reloadApprovalNeeded();
   }
 
   getErrors(): string[] {
@@ -104,6 +105,7 @@ export class ReportCardsComponent implements OnInit {
       (data: ReportCard) => {
         console.log(data);
         this.addAllComponentsToReportCard(data);
+        this.mainNav.reloadApprovalNeeded();
       },
       (err: ErrorApi) => {
         console.error(err);
@@ -129,6 +131,7 @@ export class ReportCardsComponent implements OnInit {
       }
     }
 
+    this.athleteSelect.clearAthlete();
     this.dialog.openSnackBar('Report card has been submitted for approval!');
   }
 

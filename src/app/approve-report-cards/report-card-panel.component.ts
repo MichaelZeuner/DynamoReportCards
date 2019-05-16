@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Inject, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ReportCard } from '../interfaces/report-card';
 import { ReportCardCompleted, ReportCardComponentCompleted } from '../interfaces/report-card-completed';
 import { DataService } from '../data.service';
@@ -19,7 +19,7 @@ interface ChangedComponents {
 @Component({
   selector: 'app-report-card-panel',
   template: `
-  <mat-expansion-panel>
+  <mat-expansion-panel #panel>
     <mat-expansion-panel-header>
     <mat-panel-title>
         {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
@@ -73,8 +73,10 @@ interface ChangedComponents {
 })
 export class ReportCardPanelComponent implements OnInit {
 
+  @ViewChild('panel') panel: MatExpansionPanel;
   @Input() reportCard: ReportCardCompleted;
 
+  @Output() reportCardApprovedChanged = new EventEmitter<ReportCard>();
   changedComponents: ChangedComponents[] = [];
   
   modifications: string = '';
@@ -105,8 +107,10 @@ export class ReportCardPanelComponent implements OnInit {
   }
 
   submitReportCard() {
+    console.log("submit report card");
     this.putReportCard();
 
+    console.log("put changes");
     for(let i=0; i<this.changedComponents.length; i++) {
       const component = this.changedComponents[i];
       this.data.putReportCardComponent(component).subscribe(
@@ -119,11 +123,15 @@ export class ReportCardPanelComponent implements OnInit {
   putReportCard() {
     this.reportCard.approved = this.auth.user.id;
     this.data.putReportCard(this.reportCard).subscribe(
-      (data: ReportCard) => { console.log(data); },
+      (data: ReportCard) => { 
+        console.log(data); 
+        this.dialog.openSnackBar("Report Card Approved!");
+
+        console.log('About to emit reportcard');
+        this.reportCardApprovedChanged.emit(this.reportCard);
+      },
       (err: ErrorApi) => { console.error(err); }
     );
-
-    this.dialog.openSnackBar("Report Card Approved!");
   }
 
   skillRankChanged(newRank: string, id: number) {
@@ -182,30 +190,6 @@ export class RequiredModificationsDialog {
   ) {
     console.log('TEST: ' + data.comment);
   }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
-
-@Component({
-  selector: 'app-required-modifications-dialog',
-  template: `
-    <div mat-dialog-content>
-      <p>You are about to close a report card with unsaved changed. Doing so will r</p>
-      <mat-form-field class="w-100">
-          <textarea matInput rows="10" placeholder="Enter modification notes" [(ngModel)]="data.modifications"></textarea>
-      </mat-form-field>
-    </div>
-    <div mat-dialog-actions>
-      <button mat-raised-button color="warn" (click)="onNoClick()">Clear Comments</button>
-      <button mat-raised-button color="accent" [mat-dialog-close]="data.modifications" cdkFocusInitial>Submit Comments</button>
-    </div>
-  `,
-})
-export class CloseReportCardDialog {
-
-  constructor(public dialogRef: MatDialogRef<CloseReportCardDialog>) { }
 
   onNoClick(): void {
     this.dialogRef.close();

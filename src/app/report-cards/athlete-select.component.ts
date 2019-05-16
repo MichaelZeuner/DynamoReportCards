@@ -1,16 +1,18 @@
 
 import { DataService } from '../data.service';
-import { Component, OnInit, Inject, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Inject, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Athlete } from '../interfaces/athlete';
+import { MatInput } from '@angular/material';
 
 @Component({
   selector: 'app-athlete-select',
   template: `
     <mat-form-field class="w-100 input-headline">
       <input 
+        #athleteName
         type="text" 
         placeholder="Select Athlete" 
         aria-label="Athletes Name" 
@@ -37,6 +39,7 @@ import { Athlete } from '../interfaces/athlete';
 
 export class AthletesSelectComponent implements OnInit {
   @Output() selectedAthleteChange = new EventEmitter<Athlete>();
+  @ViewChild('athleteName') athleteName; 
 
   public myControl = new FormControl();
   public filteredAthletes: Observable<Athlete[]>;
@@ -66,6 +69,11 @@ export class AthletesSelectComponent implements OnInit {
     return this.athletes.filter(
       option => (option.first_name.toLowerCase() + ' ' + option.last_name.toLowerCase()).indexOf(filterValue) === 0
     );
+  }
+
+  public clearAthlete() {
+    this.athleteName.nativeElement.value = '';
+    this.onAthleteChange('');
   }
 
   onAthleteChange(searchValue : string ) {  

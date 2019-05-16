@@ -6,6 +6,7 @@ import { ReportCardCompleted } from '../interfaces/report-card-completed';
 import { DialogService } from '../shared/dialog.service';
 import { ReportCard } from '../interfaces/report-card';
 import { ErrorApi } from '../interfaces/error-api';
+import { MainNavComponent } from '../main-nav/main-nav.component';
 
 @Component({
   selector: 'app-approve-report-cards',
@@ -16,7 +17,7 @@ export class ApproveReportCardsComponent implements OnInit {
 
   public reportCards: ReportCard[] = [];
 
-  constructor(private data: DataService, public dialog: MatDialog, private dialogService: DialogService) { }
+  constructor(private data: DataService, public dialog: MatDialog, private dialogService: DialogService, private mainNav: MainNavComponent) { }
 
   ngOnInit() {
     this.refreshReportCardsData();
@@ -26,5 +27,17 @@ export class ApproveReportCardsComponent implements OnInit {
     this.data.getReportCardsNeedingApproval().subscribe(
       (data : ReportCardCompleted[]) => { this.reportCards = data; }
     );
+  }
+
+  reportCardApproved(reportCardApproved: ReportCard) {
+    console.log('This isnt being called???');
+    console.log(reportCardApproved);
+    for(let i=0; i< this.reportCards.length; i++) {
+      if(this.reportCards[i].id === reportCardApproved.id) {
+        this.reportCards.splice(i, 1);
+        this.mainNav.reloadApprovalNeeded();
+        return;
+      }
+    }
   }
 }

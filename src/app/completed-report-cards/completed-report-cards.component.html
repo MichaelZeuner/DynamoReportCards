@@ -1,4 +1,8 @@
 <mat-grid-list cols="3" rowHeight="25px">
+  <mat-grid-tile [colspan]="3" [rowspan]="2" *ngIf="reportCards.length === 0">
+      <h1>No Report Cards have been approved.</h1>
+  </mat-grid-tile>
+
   <div *ngFor="let reportCard of reportCards">
     <mat-grid-tile>
       <b>Athlete:</b>
@@ -22,6 +26,13 @@
     </mat-grid-tile>
     <mat-grid-tile>
       {{reportCard.approved}}
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <b>Submitted By:</b>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      {{reportCard.submitted_by}}
     </mat-grid-tile>
 
     <mat-grid-tile [colspan]="3">

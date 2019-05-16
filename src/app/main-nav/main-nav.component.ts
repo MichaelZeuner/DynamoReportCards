@@ -6,6 +6,7 @@ import { MatSidenav } from "@angular/material";
 import { AuthService } from '../auth/auth.service';
 import { DataService } from '../data.service';
 import { ReportCard } from '../interfaces/report-card';
+import { ErrorApi } from '../interfaces/error-api';
 
 @Component({
   selector: 'app-main-nav',
@@ -17,6 +18,7 @@ export class MainNavComponent {
   @ViewChild('drawer') sidenav: MatSidenav;
 
   public count: number = 0;
+  public completedReportCards: number = 0;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -29,10 +31,15 @@ export class MainNavComponent {
   }
 
   reloadApprovalNeeded() {
-    this.data.getReportCardsNeedingApproval().subscribe((data : ReportCard[]) => {
-      console.log(data);
-      this.count = data.length;
-    });
+    this.data.getReportCardsNeedingApproval().subscribe(
+      (data : ReportCard[]) => {
+        console.log(data);
+        this.count = data.length;
+      },
+      (err: ErrorApi) => {
+        console.log(err.error.message);
+        this.count = 0;
+      });
   }
 
   closeNav() {
