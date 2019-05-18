@@ -1,4 +1,306 @@
-<div class="reportCard" *ngFor="let id of reportCardIds; let i = index">
+<!--<div class="reportCard" *ngFor="let id of reportCardIds; let i = index">
   <h1>Report Card. {{ id }}</h1>
-  Amount: {{ (reportCardDetails[i] | async)?.amount }}
+  Amount: {{ (reportCardDetails[i] | async)?.day_of_week }}
+</div>-->
+
+<!-- Comment Summary and Title Page-->
+<div class="page">
+  <table class="pageTable">
+    <tr>
+      <td colspan="2">
+        <h3 class="coachCommentsTop">COACH COMMENTS:</h3>
+      </td>
+    </tr>
+    <tr>
+      <td class="halfPage">
+        <table class="commentTable w-100">
+          <tr class="commentRow"><td>
+            <p>LEVEL COMPLETED: 1</p>
+            <p>COMMENTS: woohoo</p>
+          </td></tr>
+          <tr class="commentRow"><td>
+            <p>COACH: </p>
+            <p>DATE: </p>
+            <p>LEVEL COMPLETED: 1</p>
+            <p>COMMENTS: woohoo</p>
+          </td></tr>
+          <tr class="commentRow"><td>
+            <p>COACH: </p>
+            <p>DATE: </p>
+            <p>LEVEL COMPLETED: 1</p>
+            <p>COMMENTS: woohoo</p>
+          </td></tr>
+          <tr class="commentRow"><td>
+            <p>COACH: </p>
+            <p>DATE: </p>
+            <p>LEVEL COMPLETED: 1</p>
+            <p>COMMENTS: woohoo</p>
+          </td></tr>
+          <tr class="commentRow"><td>
+            <p>COACH: </p>
+            <p>DATE: </p>
+            <p>LEVEL COMPLETED: 1</p>
+            <p>COMMENTS: woohoo</p>
+          </td></tr>
+        </table>
+      </td>
+      <td class="halfPage">
+        <h1>this will be the front page</h1>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="page">
+  <table class="pageTable rankTable">
+      <tr>
+        <td colspan="2" class="shading"></td>
+        <td class="skill levelName shading">Women's Level 1</td>
+        <td class="spacing shading"></td>
+        <td class="skill levelName shading">Women's Level 2</td>
+        <td class="spacing shading"></td>
+        <td class="skill levelName shading">Women's Level 3</td>
+        <td class="spacing shading"></td>
+        <td class="skill levelName shading">Women's Level 4</td>
+        <td class="spacing shading"></td>
+        <td class="skill levelName shading">Women's Level 5</td>
+        <td class="spacing shading"></td>
+        <td class="skill levelName shading">Women's Level 6</td>
+      </tr>
+      <tr>
+          <td class="eventName shading" rowspan="4"><div><b>EVENT</b></div></td>
+          <td class="spacing">M</td>
+          <td class="skill">skill skill skill skill skill skill skill skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+        </tr>
+        <tr>
+          <td class="spacing">M</td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+        </tr>
+        <tr>
+          <td class="spacing">M</td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+        </tr>
+        <tr>
+          <td class="spacing">M</td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+          <td class="spacing"></td>
+          <td class="skill">skill skill skill</td>
+        </tr>
+        <tr>
+            <td class="eventName shading" rowspan="4"><div><b>EVENT</b></div></td>
+            <td class="spacing">M</td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+          </tr>
+          <tr>
+            <td class="spacing">M</td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+          </tr>
+          <tr>
+            <td class="spacing">M</td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+          </tr>
+          <tr>
+            <td class="spacing">M</td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+            <td class="spacing"></td>
+            <td class="skill">skill skill skill</td>
+          </tr>
+          <tr>
+              <td class="eventName shading" rowspan="4"><div><b>EVENT</b></div></td>
+              <td class="spacing">M</td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+            </tr>
+            <tr>
+              <td class="spacing">M</td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+            </tr>
+            <tr>
+              <td class="spacing">M</td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+            </tr>
+            <tr>
+              <td class="spacing">M</td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+              <td class="spacing"></td>
+              <td class="skill">skill skill skill</td>
+            </tr>
+            <tr>
+                <td class="eventName shading" rowspan="4"><div><b>EVENT</b></div></td>
+                <td class="spacing">M</td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+              </tr>
+              <tr>
+                <td class="spacing">M</td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+              </tr>
+              <tr>
+                <td class="spacing">M</td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+              </tr>
+              <tr>
+                <td class="spacing">M</td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+                <td class="spacing"></td>
+                <td class="skill">skill skill skill</td>
+              </tr>
+    <tr>
+      <td colspan="13">
+        <br>
+        <p class="legend w-100"><b>LEGEND:</b> L - LEARNING   M - MASTERED</p>
+        <p class="note w-100"><i>Please feel free to speak to your child's coach or any member of our Dynamo Gymnastics staff regarding any questions about this report card.</i></p>
+      </td>
+    </tr>
+  </table>
 </div>

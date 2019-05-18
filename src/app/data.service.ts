@@ -95,6 +95,10 @@ export class DataService {
     return this.http.delete(this.baseUrl + '/skills/' + skill.id);
   }
 
+  getAthletesRecentReportCards(athleteId: number) {
+    return this.http.get(this.baseUrl + '/get-athletes-recent-report-cards/' + athleteId);
+  }
+
   addReportCard(reportCard: ReportCard) {
     return this.http.post(this.baseUrl + '/report-cards', reportCard);
   }
@@ -109,6 +113,10 @@ export class DataService {
 
   putReportCardComponent(reportCardComponent: ReportCardComponent) {
     return this.http.put(this.baseUrl + '/report-cards-components/' + reportCardComponent.id, reportCardComponent);
+  }
+
+  getReportCardDetails(reportCardId: number) {
+    return this.http.get(this.baseUrl + '/report-cards-components-for-report-card/' + reportCardId);
   }
 
   getReportCardsNeedingApproval() {

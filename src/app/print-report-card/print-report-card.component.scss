@@ -1,2 +1,31 @@
 .reportCard { page-break-after: always; }
 .reportCard:last-child { page-break-after: avoid; }
+
+.page { width: 11in; height: 8.5in; }
+.pageTable { margin: 0.125in 0.25in 0.25in 0.25in; padding: 0; }
+
+h3.coachCommentsTop { margin: 0; }
+
+.halfPage { width: 5.25in; }
+
+.commentTable { border-collapse: collapse; }
+table.commentTable tr td { border: 1px solid black; }
+.commentRow { height: 1.5in; width: 100%; }
+td.commentRow { height: 100%; width: 100%; }
+.commentRow td p { margin: 0; margin-left: 0.125in; }
+
+.rankTable { border-collapse: collapse; }
+table.rankTable tr td { border: 1px solid black; }
+.eventName { 
+    width: 0.5in;
+    white-space: nowrap; 
+}
+td.eventName > div { transform: rotate(270deg); }
+
+.shading { background-color: lightgray; -webkit-print-color-adjust: exact; }
+.spacing { width: 0.25in; font-size: x-small; font-weight: bold; text-align: center; }
+.skill { width: 1.4166666in; height: 0.35in; font-size: x-small; }
+.levelName { font-size: small; font-weight: bold; text-align: center; }
+
+.legend { font-size: large; text-align: center; }
+.note { font-size: small; text-align: center; }
