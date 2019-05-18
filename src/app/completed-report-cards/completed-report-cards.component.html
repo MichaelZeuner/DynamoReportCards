@@ -11,7 +11,7 @@
       {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
     </mat-grid-tile>
     <mat-grid-tile [rowspan]="3">
-      <button mat-raised-button color="primary">Generate Report Card</button>
+      <button mat-raised-button (click)="generateReportCard()" color="primary">Generate Report Card</button>
     </mat-grid-tile>
     
     <mat-grid-tile>

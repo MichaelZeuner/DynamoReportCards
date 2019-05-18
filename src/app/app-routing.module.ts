@@ -10,6 +10,8 @@ import { CompletedReportCardsComponent } from './completed-report-cards/complete
 import { LevelsComponent } from './levels/levels.component';
 import { UsersComponent } from './users/users.component';
 import { EventsComponent } from './events/events.component';
+import { PrintLayoutComponent } from './print-layout/print-layout.component';
+import { PrintReportCardComponent } from './print-report-card/print-report-card.component';
 
 const routes: Routes = [
   {
@@ -30,6 +32,15 @@ const routes: Routes = [
     component: LoginLayoutComponent,
     children: [
       { path: 'login', component: LoginComponent }
+    ]
+  },
+  {
+    path: 'print',
+    outlet: 'print',
+    component: PrintLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'report-card/:reportCardIds', component: PrintReportCardComponent }
     ]
   },
   { path: '**', redirectTo: '' }

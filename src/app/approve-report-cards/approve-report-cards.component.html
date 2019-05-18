@@ -1,3 +1,13 @@
+<section class="day-of-week-section">
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="sunChecked">Sunday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="monChecked">Monday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="tueChecked">Tuesday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="wedChecked">Wednesday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="thuChecked">Thursday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="friChecked">Friday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="satChecked">Saturday</mat-checkbox>
+</section>
+
 <mat-accordion>
     <div *ngIf="reportCards.length === 0">
         <h1>No Report Cards waiting to be Approved!</h1>

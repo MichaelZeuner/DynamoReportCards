@@ -11,6 +11,7 @@ import { MainNavComponent } from '../main-nav/main-nav.component';
 import { AuthService } from '../auth/auth.service';
 import { DialogService } from '../shared/dialog.service';
 import { AthletesSelectComponent } from './athlete-select.component';
+import { MatDialogRef, MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-report-cards',
@@ -25,7 +26,7 @@ export class ReportCardsComponent implements OnInit {
 
   comment: string;
 
-  constructor(private data: DataService, private mainNav: MainNavComponent, private auth: AuthService, private dialog: DialogService) { }
+  constructor(private data: DataService, public matDialog: MatDialog, private mainNav: MainNavComponent, private auth: AuthService, private dialog: DialogService) { }
 
   ngOnInit() { }
 
@@ -49,30 +50,43 @@ export class ReportCardsComponent implements OnInit {
   }
 
   submitClick() {
-    console.log(this.comment);
-    if(typeof this.comment === 'undefined' || this.comment.length === 0) {
-      this.dialog.openSnackBar('Comment required!');
-      return;
-    }
+    const dialogRef = this.matDialog.open(DayOfWeekDialog, {
+      width: '400px'
+    });
 
-    if(typeof this.level.events === 'undefined') {
-      this.dialog.openSnackBar('Please select a ranking for all skills.');
-      return;
-    }
-
-    
-    let errors = this.getErrors();
-    if(errors.length > 0) {
-      let error: string = `Please select rankings for the following: ${errors[0]}`;
-      for(let i=1; i<errors.length; i++) {
-        error += (i === errors.length-1) ? ', and ' : ', ';
-        error += errors[i];
+    dialogRef.afterClosed().subscribe(dayOfWeek => {
+      console.log('The dialog was closed');
+      if(typeof dayOfWeek === 'undefined') {
+        this.dialog.openSnackBar("Day of week must be selected in order to submit a report card.");
+        return;
       }
-      this.dialog.openSnackBar(error, errors.length * 1000);
-      return;
-    }
+      console.log(dayOfWeek);
 
-    this.addReportCard();
+      console.log(this.comment);
+      if(typeof this.comment === 'undefined' || this.comment.length === 0) {
+        this.dialog.openSnackBar('Comment required!');
+        return;
+      }
+
+      if(typeof this.level.events === 'undefined') {
+        this.dialog.openSnackBar('Please select a ranking for all skills.');
+        return;
+      }
+
+      
+      let errors = this.getErrors();
+      if(errors.length > 0) {
+        let error: string = `Please select rankings for the following: ${errors[0]}`;
+        for(let i=1; i<errors.length; i++) {
+          error += (i === errors.length-1) ? ', and ' : ', ';
+          error += errors[i];
+        }
+        this.dialog.openSnackBar(error, errors.length * 1000);
+        return;
+      }
+
+      this.addReportCard(dayOfWeek);
+    });
   }
 
   getErrors(): string[] {
@@ -95,12 +109,13 @@ export class ReportCardsComponent implements OnInit {
     return errors;
   }
 
-  addReportCard() {
+  addReportCard(dayOfWeek: string) {
     let reportCard = {} as ReportCard;
     reportCard.submitted_by = this.auth.user.id;
     reportCard.athletes_id = this.selectedAthlete.id;
     reportCard.levels_id = this.level.id;
     reportCard.comment = this.comment;
+    reportCard.day_of_week = dayOfWeek;
     this.data.addReportCard(reportCard).subscribe(
       (data: ReportCard) => {
         console.log(data);
@@ -149,5 +164,20 @@ export class ReportCardsComponent implements OnInit {
         this.dialog.openSnackBar(message);
       }
     );
+  }
+}
+
+@Component({
+  selector: 'app-day-of-week-dialog',
+  templateUrl: './day-of-week-dialog.html',
+})
+export class DayOfWeekDialog {
+
+  constructor(public dialogRef: MatDialogRef<DayOfWeekDialog>) {
+    console.log('TEST: Created I guess');
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }

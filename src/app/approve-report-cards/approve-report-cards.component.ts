@@ -15,7 +15,15 @@ import { MainNavComponent } from '../main-nav/main-nav.component';
 })
 export class ApproveReportCardsComponent implements OnInit {
 
+  public reportCardsFull: ReportCard[] = [];
   public reportCards: ReportCard[] = [];
+  public sunChecked: Boolean = true;
+  public monChecked: Boolean = true;
+  public tueChecked: Boolean = true;
+  public wedChecked: Boolean = true;
+  public thuChecked: Boolean = true;
+  public friChecked: Boolean = true;
+  public satChecked: Boolean = true;
 
   constructor(private data: DataService, public dialog: MatDialog, private dialogService: DialogService, private mainNav: MainNavComponent) { }
 
@@ -25,7 +33,10 @@ export class ApproveReportCardsComponent implements OnInit {
 
   refreshReportCardsData() {
     this.data.getReportCardsNeedingApproval().subscribe(
-      (data : ReportCardCompleted[]) => { this.reportCards = data; }
+      (data : ReportCardCompleted[]) => { 
+        this.reportCardsFull = data;
+        this.reportCards = this.reportCardsFull; 
+      }
     );
   }
 
@@ -38,6 +49,19 @@ export class ApproveReportCardsComponent implements OnInit {
         this.mainNav.reloadApprovalNeeded();
         return;
       }
+    }
+  }
+
+  adjustDisplayedCards() {
+    this.reportCards = [];
+    for(let i=0; i< this.reportCardsFull.length; i++) {
+      if(this.sunChecked && this.reportCardsFull[i].day_of_week === 'SUN') { this.reportCards.push(this.reportCardsFull[i]); }
+      else if(this.monChecked && this.reportCardsFull[i].day_of_week === 'MON') { this.reportCards.push(this.reportCardsFull[i]); }
+      else if(this.tueChecked && this.reportCardsFull[i].day_of_week === 'TUE') { this.reportCards.push(this.reportCardsFull[i]); }
+      else if(this.wedChecked && this.reportCardsFull[i].day_of_week === 'WED') { this.reportCards.push(this.reportCardsFull[i]); }
+      else if(this.thuChecked && this.reportCardsFull[i].day_of_week === 'THU') { this.reportCards.push(this.reportCardsFull[i]); }
+      else if(this.friChecked && this.reportCardsFull[i].day_of_week === 'FRI') { this.reportCards.push(this.reportCardsFull[i]); }
+      else if(this.satChecked && this.reportCardsFull[i].day_of_week === 'SAT') { this.reportCards.push(this.reportCardsFull[i]); }
     }
   }
 }

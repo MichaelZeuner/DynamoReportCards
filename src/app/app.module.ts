@@ -4,13 +4,13 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ReportCardsComponent } from './report-cards/report-cards.component';
+import { ReportCardsComponent, DayOfWeekDialog } from './report-cards/report-cards.component';
 import { ApproveReportCardsComponent } from './approve-report-cards/approve-report-cards.component';
 import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatAutocompleteModule, MatFormFieldModule, MatOptionModule, MatInputModule, MatCardModule, MatExpansionModule, MatGridListModule, MatButtonToggleModule, MatDividerModule, MatBadgeModule, MatDialogModule, MatSnackBarModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatAutocompleteModule, MatFormFieldModule, MatOptionModule, MatInputModule, MatCardModule, MatExpansionModule, MatGridListModule, MatButtonToggleModule, MatDividerModule, MatBadgeModule, MatDialogModule, MatSnackBarModule, MatCheckboxModule } from '@angular/material';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MainLayoutComponent } from './layouts/main-layout.component';
@@ -27,6 +27,8 @@ import { ReportCardPanelComponent, RequiredModificationsDialog } from './approve
 import { UsersComponent } from './users/users.component';
 import { LevelsComponent } from './levels/levels.component';
 import { EventsComponent } from './events/events.component';
+import { PrintLayoutComponent } from './print-layout/print-layout.component';
+import { PrintReportCardComponent } from './print-report-card/print-report-card.component';
 
 @NgModule({
   declarations: [
@@ -45,9 +47,12 @@ import { EventsComponent } from './events/events.component';
     CompletedReportCardsComponent,
     MatConfirmDialogComponent,
     ReportCardPanelComponent,
+    DayOfWeekDialog,
     UsersComponent,
     LevelsComponent,
-    EventsComponent
+    EventsComponent,
+    PrintLayoutComponent,
+    PrintReportCardComponent
   ],
   imports: [
     BrowserModule,
@@ -73,11 +78,13 @@ import { EventsComponent } from './events/events.component';
     MatDividerModule,
     MatBadgeModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCheckboxModule
   ],
   entryComponents: [
     RequiredModificationsDialog,
-    MatConfirmDialogComponent
+    MatConfirmDialogComponent,
+    DayOfWeekDialog
   ],
   providers: [
     AuthService,

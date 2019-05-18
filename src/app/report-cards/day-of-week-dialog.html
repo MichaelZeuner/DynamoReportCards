@@ -1,0 +1,16 @@
+<div mat-dialog-content>
+  <h3>Supervisor Day</h3>
+  <mat-button-toggle-group #group="matButtonToggleGroup" name="dayOfWeek" aria-label="Day of Week">
+    <mat-button-toggle value="SUN" class="btnToggle">Sun</mat-button-toggle>
+    <mat-button-toggle value="MON" class="btnToggle">Mon</mat-button-toggle>
+    <mat-button-toggle value="TUE" class="btnToggle">Tue</mat-button-toggle>
+    <mat-button-toggle value="WED" class="btnToggle">Wed</mat-button-toggle>
+    <mat-button-toggle value="THU" class="btnToggle">Thu</mat-button-toggle>
+    <mat-button-toggle value="FRI" class="btnToggle">Fri</mat-button-toggle>
+    <mat-button-toggle value="SAT" class="btnToggle">Sat</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="warn" (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button color="accent" [mat-dialog-close]="group.value" cdkFocusInitial>Submit</button>
+</div>

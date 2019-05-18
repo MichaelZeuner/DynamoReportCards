@@ -1,0 +1,4 @@
+<div class="reportCard" *ngFor="let id of reportCardIds; let i = index">
+  <h1>Report Card. {{ id }}</h1>
+  Amount: {{ (reportCardDetails[i] | async)?.amount }}
+</div>

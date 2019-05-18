@@ -15,8 +15,21 @@
 
 .mat-list-panel mat-list.mat-list {
     height: unset;
-  }
+}
 
- .mat-option-text.mat-option-text {
+.mat-option-text.mat-option-text {
     white-space: normal;
-  }
+}
+
+.day-of-week-section {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+}
+
+.day-of-week-margin {
+    margin: 0 10px;
+}

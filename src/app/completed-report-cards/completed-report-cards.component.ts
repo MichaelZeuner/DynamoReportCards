@@ -3,6 +3,7 @@ import { DataService } from '../data.service';
 import { ReportCardCompleted } from '../interfaces/report-card-completed';
 import { ReportCard } from '../interfaces/report-card';
 import { ErrorApi } from '../interfaces/error-api';
+import { PrintService } from '../print.service';
 
 export interface Tile {
   color: string;
@@ -20,7 +21,7 @@ export class CompletedReportCardsComponent implements OnInit {
 
   public reportCards: ReportCard[] = [];
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, public printService: PrintService) { }
 
   ngOnInit() {
     this.data.getReportCardsCompleted().subscribe(
@@ -34,6 +35,12 @@ export class CompletedReportCardsComponent implements OnInit {
 
       }
     );
+  }
+
+  generateReportCard() {
+    console.log("Print it");
+    const reportCardIds = ['101', '102'];
+    this.printService.printDocument('report-card', reportCardIds);
   }
 
 }
