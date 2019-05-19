@@ -1,7 +1,7 @@
 .reportCard { page-break-after: always; }
 .reportCard:last-child { page-break-after: avoid; }
 
-td { border: 1px solid red; }
+//td { border: 1px solid transparent; }
 
 .newPage { page-break-after: always; }
 
@@ -19,9 +19,39 @@ h3.coachCommentsTop { margin: 0; }
     height: 100%
 }
 
+.rowThingy {
+    height: 100%;
+}
+
+.star {
+    width: 4in;
+}
+
+.logoWrapper {
+    width: 100%;
+    text-align: left;
+}
+
+.logo {
+    min-width: 3in;
+    width: 3in;
+}
+
+.infoWrapper {
+    text-align: left;
+}
+
+.infoWrapper p {
+    margin: 0;
+    margin-left: 0.25in;
+    color: black;
+    font-size: 1.25rem; 
+}
+
 .gender {
-    width: 1.5in;
-    min-width: 1.5in;
+    width: 1in;
+    min-width: 1in;
+    max-width: 1in;
     height: 100%;
     border-right: 2px solid green;
 }
@@ -33,40 +63,38 @@ h3.coachCommentsTop { margin: 0; }
     color: white;
 }
 
+.starWrapper {
+    position: relative;
+}
+
+.starWrapper svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
 .title { 
+    --webkit-print-color-adjust: exact;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: white;
-    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     width: 100%;
     text-align: center;
 }
 
-.firstLineTitle { 
-    font-size: 4rem; 
-    position: absolute;
-    top: 0;
-}
-.secondLineTitle { 
-    font-size: 3rem; 
-    position: absolute;
-    top: 1.25in;
-}
-.thirdLineTitle { 
-    font-size: 3rem; 
-    position: absolute;
-    top: 2in;
-}
 .athleteName { 
     position: absolute;
     width: 100%;
-    top: 3.5in;
+    color: black;
+    top: 2in;
 }
 
-.halfPage { width: 5.25in; min-width: 5.25in; }
+.halfPage { width: 5.2in; min-width: 5.2in; max-width: 5.2in; }
 
-.commentTable { border-collapse: collapse; }
+.commentTable { border-collapse: collapse; width: 100%; }
 table.commentTable tr td { border: 1px solid black; }
-.commentRow { height: 1.7in; min-height: 1.7in; width: 100%; }
+.commentRow { height: 1.5in; min-height: 1.5in; max-width: 4.5in; }
 td.commentRow { height: 100%; width: 100%; }
 .commentRow td p { margin: 0; margin-left: 0.125in; }
 
@@ -80,7 +108,7 @@ td.eventName > div { transform: rotate(270deg); }
 
 .shading { background-color: lightgray; -webkit-print-color-adjust: exact; }
 .spacing { min-width: 0.25in; font-size: x-small; font-weight: bold; text-align: center; }
-.skill { min-width: 1.4166666in; height: 0.35in; font-size: x-small; }
+.skill { min-width: 1.3in; height: 0.35in; font-size: x-small; }
 .levelName { font-size: small; font-weight: bold; text-align: center; }
 
 .legend { font-size: large; text-align: center; }
