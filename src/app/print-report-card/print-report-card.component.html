@@ -3,7 +3,7 @@
   Amount: {{ (reportCardDetails[i] | async)?.day_of_week }}
 </div>-->
 
-<!-- Comment Summary and Title Page-->
+<!-- Good luck to whoever ends up editting this page... Setting up pages specificly for printing sucks. -->
 <div class="page">
   <table class="pageTable">
     <tr>
@@ -49,6 +49,7 @@
           <tr class="rowThingy">
             <td class="gender">
               
+<!-- SVGs are used for the front page text to allow for outlined text and easier rotation -->
                 <svg
                 id="svg8"
                 version="1.1"
@@ -189,9 +190,6 @@
   </g>
 </svg>
               </div>
-              <!--<h1 class="firstLineTitle title">WOMEN'S</h1>
-              <h1 class="secondLineTitle title">GYMNASTICS</h1>
-              <h1 class="thirdLineTitle title">LEVELS 1-6</h1>-->
               <h1 class="athleteName">Athlete:</h1>
               <div class="logoWrapper">
                 <img src="assets/dynamoLogo.png" class="logo">
@@ -212,253 +210,25 @@
   </table>
 </div>
 
-<!--
-<div class="newPage"></div>
--->
 <div class="page">
   <table class="page2Table rankTable">
-      <tr>
-        <td colspan="2" class="shading"></td>
-        <td class="skill levelName shading">Women's Level 1</td>
-        <td class="spacing shading"></td>
-        <td class="skill levelName shading">Women's Level 2</td>
-        <td class="spacing shading"></td>
-        <td class="skill levelName shading">Women's Level 3</td>
-        <td class="spacing shading"></td>
-        <td class="skill levelName shading">Women's Level 4</td>
-        <td class="spacing shading"></td>
-        <td class="skill levelName shading">Women's Level 5</td>
-        <td class="spacing shading"></td>
-        <td class="skill levelName shading">Women's Level 6</td>
+    <tr>
+      <td colspan="2" class="shading"></td>
+      <ng-container *ngFor="let level of levels; let i = index">
+        <td *ngIf="i === 0" class="skill levelName shading">{{level}}</td>
+        <td *ngIf="i > 0" class="spacing shading"></td>
+        <td *ngIf="i > 0" class="skill levelName shading">{{level}}</td>
+      </ng-container>
+    </tr>
+    <ng-container *ngFor="let event of printableReportCard">
+      <tr *ngFor="let skill of event.skills; let i = index">
+        <td *ngIf="i === 0" class="eventName shading" [attr.rowspan]="event.skills.length"><div><b>{{event.name}}</b></div></td>
+        <ng-container *ngFor="let level of skill.levels">
+          <td class="spacing">{{level.rank}}</td>
+          <td class="skill">{{level.name}}</td>
+        </ng-container>
       </tr>
-      <tr>
-          <td class="eventName shading" rowspan="4"><div><b>EVENT</b></div></td>
-          <td class="spacing">M</td>
-          <td class="skill">skill skill skill skill skill skill skill skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-        </tr>
-        <tr>
-          <td class="spacing">M</td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-        </tr>
-        <tr>
-          <td class="spacing">M</td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-        </tr>
-        <tr>
-          <td class="spacing">M</td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-          <td class="spacing"></td>
-          <td class="skill">skill skill skill</td>
-        </tr>
-        <tr>
-            <td class="eventName shading" rowspan="4"><div><b>EVENT</b></div></td>
-            <td class="spacing">M</td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-          </tr>
-          <tr>
-            <td class="spacing">M</td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-          </tr>
-          <tr>
-            <td class="spacing">M</td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-          </tr>
-          <tr>
-            <td class="spacing">M</td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-            <td class="spacing"></td>
-            <td class="skill">skill skill skill</td>
-          </tr>
-          <tr>
-              <td class="eventName shading" rowspan="4"><div><b>EVENT</b></div></td>
-              <td class="spacing">M</td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-            </tr>
-            <tr>
-              <td class="spacing">M</td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-            </tr>
-            <tr>
-              <td class="spacing">M</td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-            </tr>
-            <tr>
-              <td class="spacing">M</td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-              <td class="spacing"></td>
-              <td class="skill">skill skill skill</td>
-            </tr>
-            <tr>
-                <td class="eventName shading" rowspan="4"><div><b>EVENT</b></div></td>
-                <td class="spacing">M</td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-              </tr>
-              <tr>
-                <td class="spacing">M</td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-              </tr>
-              <tr>
-                <td class="spacing">M</td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-              </tr>
-              <tr>
-                <td class="spacing">M</td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-                <td class="spacing"></td>
-                <td class="skill">skill skill skill</td>
-              </tr>
+    </ng-container>
     <tr>
       <td colspan="13">
         <br>
