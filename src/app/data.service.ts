@@ -126,4 +126,8 @@ export class DataService {
   getReportCardsCompleted() {
     return this.http.get(this.baseUrl + '/report-cards-completed/' + this.authService.user.id);
   }
+
+  getPrintableReportCard(athleteId: number) {
+    return this.http.get(this.baseUrl + '/printable-report-card/' + athleteId);
+  }
 }

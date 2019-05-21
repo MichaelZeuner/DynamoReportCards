@@ -4,6 +4,7 @@
 </div>-->
 
 <!-- Good luck to whoever ends up editting this page... Setting up pages specificly for printing sucks. -->
+<ng-container *ngIf="reportCardLoaded | async">
 <div class="page">
   <table class="pageTable">
     <tr>
@@ -214,13 +215,13 @@
   <table class="page2Table rankTable">
     <tr>
       <td colspan="2" class="shading"></td>
-      <ng-container *ngFor="let level of levels; let i = index">
-        <td *ngIf="i === 0" class="skill levelName shading">{{level}}</td>
+      <ng-container *ngFor="let level of printableReportCard.levels; let i = index">
+        <td *ngIf="i === 0" class="skill levelName shading">{{level.name}}</td>
         <td *ngIf="i > 0" class="spacing shading"></td>
-        <td *ngIf="i > 0" class="skill levelName shading">{{level}}</td>
+        <td *ngIf="i > 0" class="skill levelName shading">{{level.name}}</td>
       </ng-container>
     </tr>
-    <ng-container *ngFor="let event of printableReportCard">
+    <ng-container *ngFor="let event of printableReportCard.events">
       <tr *ngFor="let skill of event.skills; let i = index">
         <td *ngIf="i === 0" class="eventName shading" [attr.rowspan]="event.skills.length"><div><b>{{event.name}}</b></div></td>
         <ng-container *ngFor="let level of skill.levels">
@@ -238,3 +239,4 @@
     </tr>
   </table>
 </div>
+</ng-container>

@@ -5,7 +5,7 @@
 
 .newPage { page-break-after: always; }
 
-.page { width: 11in; min-width: 11in; height: 8.5in; min-height: 8.5in; }
+.page { width: 11in; min-width: 11in; height: 8.5in; min-height: 8.5in; max-height: 8.5in; }
 .pageTable { margin: 0.125in 0.25in 0.25in 0.25in; padding: 0; }
 .page2Table { margin: 0.25in; padding: 0; }
 
@@ -103,12 +103,13 @@ table.rankTable tr td { border: 1px solid black; }
 .eventName { 
     width: 0.5in;
     white-space: nowrap; 
+    text-align: center;
 }
 td.eventName > div { transform: rotate(270deg); }
 
 .shading { background-color: lightgray; -webkit-print-color-adjust: exact; }
 .spacing { min-width: 0.25in; font-size: x-small; font-weight: bold; text-align: center; }
-.skill { min-width: 1.3in; height: 0.35in; font-size: x-small; }
+.skill { min-width: 1.3in; height: 0.35in; font-size: x-small; padding-left: 0.1in; }
 .levelName { font-size: small; font-weight: bold; text-align: center; }
 
 .legend { font-size: large; text-align: center; }

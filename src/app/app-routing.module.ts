@@ -40,7 +40,7 @@ const routes: Routes = [
     component: PrintLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'report-card/:reportCardIds', component: PrintReportCardComponent }
+      { path: 'report-card/:athleteIds', component: PrintReportCardComponent }
     ]
   },
   { path: '**', redirectTo: '' }

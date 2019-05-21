@@ -39,15 +39,9 @@ export class CompletedReportCardsComponent implements OnInit {
 
   generateReportCard(athleteId: number) {
     console.log(athleteId);
-    this.data.getAthletesRecentReportCards(athleteId).subscribe(
-      (data: any[]) => {
-        let reportCardIds = [];
-        for(let i=0; i<data.length; i++) {
-          reportCardIds.push(data[i].id);
-        }
-        this.printService.printDocument('report-card', reportCardIds);
-      }
-    );
+    let reportCardData: string[] = [];
+    reportCardData.push(athleteId.toString());
+    this.printService.printDocument('report-card', reportCardData);
   }
 
 }
