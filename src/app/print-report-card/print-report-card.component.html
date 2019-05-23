@@ -15,34 +15,14 @@
     <tr>
       <td class="halfPage">
         <table class="commentTable">
-          <tr class="commentRow"><td>
-            <p>LEVEL COMPLETED: 1</p>
-            <p>COMMENTS: woohoo</p>
-          </td></tr>
-          <tr class="commentRow"><td>
-            <p>COACH: </p>
-            <p>DATE: </p>
-            <p>LEVEL COMPLETED: 1</p>
-            <p>COMMENTS: woohoo</p>
-          </td></tr>
-          <tr class="commentRow"><td>
-            <p>COACH: </p>
-            <p>DATE: </p>
-            <p>LEVEL COMPLETED: 1</p>
-            <p>COMMENTS: woohoo</p>
-          </td></tr>
-          <tr class="commentRow"><td>
-            <p>COACH: </p>
-            <p>DATE: </p>
-            <p>LEVEL COMPLETED: 1</p>
-            <p>COMMENTS: woohoo</p>
-          </td></tr>
-          <tr class="commentRow"><td>
-            <p>COACH: </p>
-            <p>DATE: </p>
-            <p>LEVEL COMPLETED: 1</p>
-            <p>COMMENTS: woohoo</p>
-          </td></tr>
+          <tr *ngFor="let comment of printableReportCard.coachComments;" class="commentRow">
+            <td>
+              <p>LEVEL COMPLETED: {{comment.level_name}}</p>
+              <p>Date: {{comment.updated_date}}</p>
+              <p>Coach: {{comment.first_name}} {{comment.last_name}}</p>
+              <p>COMMENTS: {{comment.comment}}</p>
+            </td>
+          </tr>
         </table>
       </td>
       <td class="halfPage frontPage">
@@ -223,7 +203,7 @@
     </tr>
     <ng-container *ngFor="let event of printableReportCard.events">
       <tr *ngFor="let skill of event.skills; let i = index">
-        <td *ngIf="i === 0" class="eventName shading" [attr.rowspan]="event.skills.length"><div><b>{{event.name}}</b></div></td>
+        <td *ngIf="i === 0" class="eventName shading" [attr.rowspan]="event.skills.length"><div><b class="vertical-text">{{event.name}}</b></div></td>
         <ng-container *ngFor="let level of skill.levels">
           <td class="spacing">{{level.rank}}</td>
           <td class="skill">{{level.name}}</td>

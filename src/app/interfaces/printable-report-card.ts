@@ -7,8 +7,10 @@ export interface PrintableReportCard {
 interface PrintableCoachComments {
     levelCompleted: string,
     comments: string,
-    coach: string,
-    date: string
+    level_name: string,
+    first_name: string,
+    last_name: string,
+    updated_date: string
 }
 
 interface PrintableEvent {
