@@ -14,6 +14,7 @@ export class PrintReportCardComponent implements OnInit {
   athleteIds: string[];
   reportCardLoaded: Promise<boolean>;
   printableReportCard: PrintableReportCard;
+  levelBase: string;
 
   constructor(route: ActivatedRoute, private printService: PrintService, private data: DataService) {
     this.athleteIds = route.snapshot.params['athleteIds'].split(',');
@@ -24,7 +25,7 @@ export class PrintReportCardComponent implements OnInit {
       this.data.getPrintableReportCard(+this.athleteIds[0]).subscribe(
         (data: PrintableReportCard) => {
           this.printableReportCard = data;
-          console.log(data);
+          this.levelBase = this.printableReportCard.levels[0].name.split(' ')[0].toUpperCase();
           this.printService.onDataReady();
           this.reportCardLoaded = Promise.resolve(true);
         }

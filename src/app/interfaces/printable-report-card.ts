@@ -1,7 +1,13 @@
 export interface PrintableReportCard {
-    levels: string[],
+    levels: PrintableLevel[],
     events: PrintableEvent[],
-    coachComments: PrintableCoachComments[]
+    coachComments: PrintableCoachComments[],
+    athlete: string
+}
+
+interface PrintableLevel {
+    name: string;
+    id: number;
 }
 
 interface PrintableCoachComments {
