@@ -17,10 +17,12 @@
         <table class="commentTable">
           <tr *ngFor="let comment of printableReportCard.coachComments;" class="commentRow">
             <td>
-              <p>LEVEL COMPLETED: {{comment.level_name}}</p>
-              <p>Date: {{comment.updated_date}}</p>
-              <p>Coach: {{comment.first_name}} {{comment.last_name}}</p>
-              <p>COMMENTS: {{comment.comment}}</p>
+              <ng-container *ngIf="comment.level_name !== 'empty'">
+                <p>LEVEL COMPLETED: {{comment.level_name}}</p>
+                <p>Date: {{comment.updated_date}}</p>
+                <p>Coach: {{comment.first_name}} {{comment.last_name}}</p>
+                <p>COMMENTS: {{comment.comment}}</p>
+              </ng-container>
             </td>
           </tr>
         </table>

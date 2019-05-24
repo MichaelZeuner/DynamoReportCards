@@ -121,6 +121,8 @@ export class ReportCardPanelComponent implements OnInit {
   }
 
   putReportCard() {
+    if(this.modifications !== '') { this.reportCard.comment = this.modifications; }
+
     this.reportCard.approved = this.auth.user.id;
     this.data.putReportCard(this.reportCard).subscribe(
       (data: ReportCard) => { 

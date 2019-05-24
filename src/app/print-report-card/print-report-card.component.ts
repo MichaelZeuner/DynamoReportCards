@@ -24,6 +24,7 @@ export class PrintReportCardComponent implements OnInit {
     if(this.athleteIds.length >= 0) {
       this.data.getPrintableReportCard(+this.athleteIds[0]).subscribe(
         (data: PrintableReportCard) => {
+          console.log(data);
           this.printableReportCard = data;
           this.levelBase = this.printableReportCard.levels[0].name.split(' ')[0].toUpperCase();
           this.printService.onDataReady();

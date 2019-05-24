@@ -1,11 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Level } from '../interfaces/level';
 import { DataService } from '../data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatExpansionPanel } from '@angular/material';
 import { ReportCardCompleted } from '../interfaces/report-card-completed';
 import { DialogService } from '../shared/dialog.service';
 import { ReportCard } from '../interfaces/report-card';
-import { ErrorApi } from '../interfaces/error-api';
 import { MainNavComponent } from '../main-nav/main-nav.component';
 
 @Component({
@@ -34,6 +32,7 @@ export class ApproveReportCardsComponent implements OnInit {
   refreshReportCardsData() {
     this.data.getReportCardsNeedingApproval().subscribe(
       (data : ReportCardCompleted[]) => { 
+        console.log(data);
         this.reportCardsFull = data;
         this.reportCards = this.reportCardsFull; 
       }
