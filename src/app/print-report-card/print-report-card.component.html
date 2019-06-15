@@ -16,7 +16,7 @@
           <tr *ngFor="let comment of printableReportCard.coachComments;" class="commentRow">
             <td>
               <ng-container *ngIf="comment.level_name !== 'empty'">
-                <p>LEVEL COMPLETED: {{comment.level_name}}</p>
+                <p>LEVEL COMPLETED: {{comment.level_name}} Level {{comment.level_number}}</p>
                 <p>Date: {{comment.updated_date}}</p>
                 <p>Coach: {{comment.first_name}} {{comment.last_name}}</p>
                 <p>COMMENTS: {{comment.comment}}</p>
@@ -198,17 +198,17 @@
     <tr>
       <td colspan="2" class="shading"></td>
       <ng-container *ngFor="let level of printableReportCard.levels; let i = index">
-        <td *ngIf="i === 0" class="skill levelName shading">{{level.name}}</td>
+        <td *ngIf="i === 0" class="skill levelName shading">{{level.name}} Level {{level.level_number}}</td>
         <td *ngIf="i > 0" class="spacing shading"></td>
-        <td *ngIf="i > 0" class="skill levelName shading">{{level.name}}</td>
+        <td *ngIf="i > 0" class="skill levelName shading">{{level.name}} Level {{level.level_number}}</td>
       </ng-container>
     </tr>
     <ng-container *ngFor="let event of printableReportCard.events">
       <tr *ngFor="let skill of event.skills; let i = index">
         <td *ngIf="i === 0" class="eventName shading" [attr.rowspan]="event.skills.length"><div><b class="vertical-text">{{event.name}}</b></div></td>
-        <ng-container *ngFor="let level of skill.levels">
-          <td class="spacing">{{level.rank}}</td>
-          <td class="skill">{{level.name}}</td>
+        <ng-container *ngFor="let skill of skill.levels">
+          <td class="spacing">{{skill.rank}}</td>
+          <td class="skill">{{skill.name}}</td>
         </ng-container>
       </tr>
     </ng-container>

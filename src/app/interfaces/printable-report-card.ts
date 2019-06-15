@@ -7,6 +7,7 @@ export interface PrintableReportCard {
 
 interface PrintableLevel {
     name: string;
+    level_number: number;
     id: number;
 }
 
@@ -14,6 +15,7 @@ interface PrintableCoachComments {
     levelCompleted: string,
     comments: string,
     level_name: string,
+    level_number: number,
     first_name: string,
     last_name: string,
     updated_date: string
