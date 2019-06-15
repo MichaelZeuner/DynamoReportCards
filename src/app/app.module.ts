@@ -10,7 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatAutocompleteModule, MatFormFieldModule, MatOptionModule, MatInputModule, MatCardModule, MatExpansionModule, MatGridListModule, MatButtonToggleModule, MatDividerModule, MatBadgeModule, MatDialogModule, MatSnackBarModule, MatCheckboxModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatAutocompleteModule, MatFormFieldModule, MatOptionModule, MatInputModule, MatCardModule, MatExpansionModule, MatGridListModule, MatButtonToggleModule, MatDividerModule, MatBadgeModule, MatDialogModule, MatSnackBarModule, MatCheckboxModule, MatSelectModule } from '@angular/material';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MainLayoutComponent } from './layouts/main-layout.component';
@@ -29,6 +29,7 @@ import { LevelsComponent } from './levels/levels.component';
 import { EventsComponent } from './events/events.component';
 import { PrintLayoutComponent } from './print-layout/print-layout.component';
 import { PrintReportCardComponent } from './print-report-card/print-report-card.component';
+import { MatSelectDialogComponent } from './mat-select-dialog/mat-select-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { PrintReportCardComponent } from './print-report-card/print-report-card.
     SkillsComponent,
     CompletedReportCardsComponent,
     MatConfirmDialogComponent,
+    MatSelectDialogComponent,
     ReportCardPanelComponent,
     DayOfWeekDialog,
     UsersComponent,
@@ -78,12 +80,14 @@ import { PrintReportCardComponent } from './print-report-card/print-report-card.
     MatDividerModule,
     MatBadgeModule,
     MatDialogModule,
+    MatSelectModule,
     MatSnackBarModule,
     MatCheckboxModule
   ],
   entryComponents: [
     RequiredModificationsDialog,
     MatConfirmDialogComponent,
+    MatSelectDialogComponent,
     DayOfWeekDialog
   ],
   providers: [

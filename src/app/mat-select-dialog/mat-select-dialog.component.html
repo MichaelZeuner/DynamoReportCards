@@ -1,0 +1,15 @@
+<div>
+    <div class="content-container">
+        <mat-icon id="close-icon" (click)="closeDialog()">close</mat-icon>
+        <mat-label>{{data.label}}</mat-label>
+    </div>
+
+    <button 
+        class="w-100" 
+        mat-stroked-button 
+        color="primary" 
+        *ngFor="let option of data.options" 
+        [mat-dialog-close]="{id: option.id, value: option.value}">
+        {{option.value}}
+    </button>
+</div>

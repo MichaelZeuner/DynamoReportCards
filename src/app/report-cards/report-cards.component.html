@@ -17,12 +17,22 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="spacingForButton" *ngIf="level && selectedAthlete">
+  <mat-card *ngIf="level && selectedAthlete">
     <mat-card-content>
       <mat-form-field class="w-100">
-        <textarea matInput rows="10" [(ngModel)]="comment" [ngModelOptions]="{standalone: true}" placeholder="Leave a comment"></textarea>
+        <textarea matInput rows="2" [(ngModel)]="comment" [ngModelOptions]="{standalone: true}" placeholder="Leave a comment"></textarea>
       </mat-form-field>
     </mat-card-content>
+  </mat-card>
+
+  <mat-card class="spacingForButton" *ngIf="level && selectedAthlete">
+    <h3>Session:</h3>
+    <mat-button-toggle-group class="w-100" #group="matButtonToggleGroup" (click)="sessionChanged(group.value)" name="session" aria-label="Session">
+      <mat-button-toggle value="WINTER" class="btnToggle">Winter</mat-button-toggle>
+      <mat-button-toggle value="SPRING" class="btnToggle">Spring</mat-button-toggle>
+      <mat-button-toggle value="SUMMER" class="btnToggle">Summer</mat-button-toggle>
+      <mat-button-toggle value="FALL" class="btnToggle">Fall</mat-button-toggle>
+    </mat-button-toggle-group>
   </mat-card>
 
   <button mat-raised-button color="accent" (click)="submitClick()" class="submitButton" *ngIf="level && selectedAthlete">Submit for Approval</button>

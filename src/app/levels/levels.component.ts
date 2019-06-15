@@ -8,6 +8,10 @@ import { DialogService } from '../shared/dialog.service';
 import { Input } from '@angular/compiler/src/core';
 import { MatInput } from '@angular/material';
 import { ErrorApi } from '../interfaces/error-api';
+import { LevelGroups } from '../interfaces/level-groups';
+import { SelectDialogInput } from '../mat-select-dialog/select-dialog-input';
+import { count } from 'rxjs/operators';
+import { SelectDialogOutput } from '../mat-select-dialog/select-dialog-output';
 
 interface FullLevel extends Level {
   events: FullEvent[];
@@ -17,6 +21,8 @@ interface FullEvent extends Event {
   skills: Skill[];
 }
 
+const newLevelGroupDefault: SelectDialogOutput = {id: -1, value: 'Select Level Group'};
+
 @Component({
   selector: 'app-levels',
   templateUrl: './levels.component.html',
@@ -24,12 +30,26 @@ interface FullEvent extends Event {
 })
 export class LevelsComponent implements OnInit {
 
+  public newLevelGroup: SelectDialogOutput = newLevelGroupDefault;
   public levels: FullLevel[] = [];
   public allEvents: Event[] = [];
+  public allLevelGroups: LevelGroups[] = [];
+  public levelGroupsToShow: number[] = [];
 
   constructor(private data: DataService, private dialog: DialogService) { }
 
   ngOnInit() {
+    this.data.getLevelGroups().subscribe(
+      (levelGroups: LevelGroups[]) => {
+        this.allLevelGroups = levelGroups;
+        console.log(this.allLevelGroups);
+
+        for(let i=0; i<levelGroups.length; i++) {
+          this.levelGroupsToShow.push(levelGroups[i].id);
+        }
+      }
+    );
+
     this.data.getEvents().subscribe(
       (events: Event[]) => {
         this.allEvents = events;
@@ -45,12 +65,27 @@ export class LevelsComponent implements OnInit {
     );
   }
 
+  adjustDisplayedLevelGroups(id: number) {
+    console.log('toggle display ' + id);
+    for(let i=0; i<this.levelGroupsToShow.length; i++) {
+      if(this.levelGroupsToShow[i] === id) {
+        this.levelGroupsToShow.splice(i, 1);
+        console.log(this.levelGroupsToShow);
+        return;
+      }
+    }
+    this.levelGroupsToShow.push(id);
+    console.log(this.levelGroupsToShow);
+  }
+
   populateLevels(levels: Level[]) {
     for(let i=0; i<levels.length; i++) {
       const level = levels[i];
       this.levels.push({
         id: level.id,
         name: level.name,
+        level_number: level.level_number,
+        level_groups_id: level.level_groups_id,
         events: []
       });
 
@@ -111,8 +146,8 @@ export class LevelsComponent implements OnInit {
     }
   }
 
-  levelChanged(level: Level, newName: string) {
-    level.name = newName;
+  levelChanged(level: Level, newLevelNumber: number) {
+    level.level_number = newLevelNumber;
     console.log(level);
     this.data.putLevel(level).subscribe(
       (data: Level) => { 
@@ -140,16 +175,48 @@ export class LevelsComponent implements OnInit {
     });
   }
 
-  addLevel(level: MatInput) {
-    this.data.addLevel({name: level.value}).subscribe(
+  changeNewLevelGroup() {
+    let levelSelectInput: SelectDialogInput = {
+      label: 'Select Level Group',
+      options: []
+    };
+    for(let i=0; i<this.allLevelGroups.length; i++) {
+      levelSelectInput.options.push({
+        id: this.allLevelGroups[i].id,
+        value: this.allLevelGroups[i].name
+      });
+    }
+    this.dialog.openSelectDialog(levelSelectInput).afterClosed().subscribe(res =>{
+      console.log(res);
+      if(res){
+        let result: SelectDialogOutput = res;
+        console.log(result.id);
+        console.log(result.value);
+        this.newLevelGroup = result;
+      }
+    });
+  }
+
+  addLevel(levelNumber: MatInput) {
+    if (this.newLevelGroup.id === newLevelGroupDefault.id) {
+      this.dialog.openSnackBar('Please select a level group first.', 3000);
+      return;
+    } else if (levelNumber.value === '') {
+      this.dialog.openSnackBar('Please select a level number first.', 3000);
+      return;
+    }
+
+    this.data.addLevel({level_groups_id: this.newLevelGroup.id, level_number: parseInt(levelNumber.value)}).subscribe(
       (data: Level) => {
         console.log(data);
-        level.value = '';
         this.levels.push({
           id: data.id,
-          name: data.name,
+          name: this.newLevelGroup.value,
+          level_groups_id: data.level_groups_id,
+          level_number: data.level_number,
           events: []
         });
+        this.newLevelGroup = newLevelGroupDefault;
         this.populateEvents(this.levels.length-1, []);
       }
     )
@@ -230,5 +297,40 @@ export class LevelsComponent implements OnInit {
       },
       (error: ErrorApi) => { console.log(error); }
     );
+  }
+
+  changeLevelGroup(level: Level) {
+    let levelSelectInput: SelectDialogInput = {
+      label: 'Select Level Group',
+      options: []
+    };
+    for(let i=0; i<this.allLevelGroups.length; i++) {
+      levelSelectInput.options.push({
+        id: this.allLevelGroups[i].id,
+        value: this.allLevelGroups[i].name
+      });
+    }
+    this.dialog.openSelectDialog(levelSelectInput).afterClosed().subscribe(res =>{
+      console.log(res);
+      if(res){
+        let result: SelectDialogOutput = res;
+        console.log(result.id);
+        console.log(result.value);
+        for(let i=0; i<this.levels.length; i++) {
+          if(this.levels[i].id === level.id) {
+            this.levels[i].level_groups_id = result.id;
+            this.levels[i].name = result.value;
+
+            console.log(this.levels[i]);
+            this.data.putLevel(this.levels[i]).subscribe(
+              (data: Level) => { 
+                this.dialog.openSnackBar('Level Updated!', 3000); 
+                console.log(data);
+              }
+            );
+          }
+        }
+      }
+    });
   }
 }

@@ -15,13 +15,13 @@ export class ApproveReportCardsComponent implements OnInit {
 
   public reportCardsFull: ReportCard[] = [];
   public reportCards: ReportCard[] = [];
-  public sunChecked: Boolean = true;
-  public monChecked: Boolean = true;
-  public tueChecked: Boolean = true;
-  public wedChecked: Boolean = true;
-  public thuChecked: Boolean = true;
-  public friChecked: Boolean = true;
-  public satChecked: Boolean = true;
+  public sunChecked: Boolean = false;
+  public monChecked: Boolean = false;
+  public tueChecked: Boolean = false;
+  public wedChecked: Boolean = false;
+  public thuChecked: Boolean = false;
+  public friChecked: Boolean = false;
+  public satChecked: Boolean = false;
 
   constructor(private data: DataService, public dialog: MatDialog, private dialogService: DialogService, private mainNav: MainNavComponent) { }
 
@@ -34,7 +34,7 @@ export class ApproveReportCardsComponent implements OnInit {
       (data : ReportCardCompleted[]) => { 
         console.log(data);
         this.reportCardsFull = data;
-        this.reportCards = this.reportCardsFull; 
+        this.reportCards = []; 
       }
     );
   }

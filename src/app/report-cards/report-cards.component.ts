@@ -25,10 +25,12 @@ export class ReportCardsComponent implements OnInit {
   @ViewChild('athleteSelect') athleteSelect: AthletesSelectComponent; 
 
   comment: string;
+  session: string = '';
 
   constructor(private data: DataService, public matDialog: MatDialog, private mainNav: MainNavComponent, private auth: AuthService, private dialog: DialogService) { }
 
-  ngOnInit() { }
+  ngOnInit() {  }
+
 
   submitForApproval() {
     console.log("SUBMITTED");
@@ -50,6 +52,17 @@ export class ReportCardsComponent implements OnInit {
   }
 
   submitClick() {
+    const MAX_CHARACTERS = 250;
+    if (this.comment.length > MAX_CHARACTERS) {
+      this.dialog.openSnackBar('Comment too long. The message must be ' + MAX_CHARACTERS + ' characters or less. Yours currently is ' + this.comment.length + '.');
+      return;
+    }
+
+    if(this.session === '') {
+      this.dialog.openSnackBar('Please select a session before submitting report card.');
+      return;
+    }
+
     const dialogRef = this.matDialog.open(DayOfWeekDialog, {
       width: '400px'
     });
@@ -116,6 +129,7 @@ export class ReportCardsComponent implements OnInit {
     reportCard.levels_id = this.level.id;
     reportCard.comment = this.comment;
     reportCard.day_of_week = dayOfWeek;
+    reportCard.session = this.session;
     this.data.addReportCard(reportCard).subscribe(
       (data: ReportCard) => {
         console.log(data);
@@ -164,6 +178,10 @@ export class ReportCardsComponent implements OnInit {
         this.dialog.openSnackBar(message);
       }
     );
+  }
+
+  sessionChanged(newSession: string) {
+    this.session = newSession;
   }
 }
 

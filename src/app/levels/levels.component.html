@@ -1,10 +1,25 @@
 
+<section class="level-groups-section">
+    <mat-checkbox 
+      *ngFor="let levelGroup of allLevelGroups"
+      class="level-groups-margin" 
+      checked="true"
+      (change)="adjustDisplayedLevelGroups(levelGroup.id)">
+      {{levelGroup.name}}
+    </mat-checkbox>
+</section>
+
 <mat-grid-list cols="6" rowHeight="40px" class="m-1">
-    <div *ngFor="let level of levels">
-      <mat-grid-tile [colspan]="5">
+  <div *ngFor="let level of levels">
+    <ng-container *ngIf="levelGroupsToShow.includes(level.level_groups_id)">
+      <mat-grid-tile [colspan]="4">
         <mat-form-field class="levelName w-100">
-          <input (keyup)="levelChanged(level, $event.target.value)" matInput value="{{level.name}}">
+          <label>{{level.name}} Level </label>
+          <input type="number" maxlength="2" (change)="levelChanged(level, $event.target.value)" matInput value="{{level.level_number}}">
         </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button mat-raised-button (click)="changeLevelGroup(level)" color="primary">Change Group</button>
       </mat-grid-tile>
       <mat-grid-tile>
         <button mat-raised-button (click)="deleteLevel(level)" color="warn">Remove Level</button>
@@ -39,19 +54,24 @@
       <mat-grid-tile [colspan]="6">
         <mat-divider style="width: 100%;"></mat-divider>
       </mat-grid-tile>
-    </div>
+    </ng-container>
+  </div>
 
-    <mat-grid-tile [colspan]="6">
-      <h2 class="w-100">Create New Level</h2>
-    </mat-grid-tile>
+  <mat-grid-tile [colspan]="6">
+    <h2 class="w-100">Create New Level</h2>
+  </mat-grid-tile>
 
-    <mat-grid-tile [colspan]="5">
-      <mat-form-field class="levelName w-100">
-        <input matInput #levelName>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <button mat-raised-button (click)="addLevel(levelName)" color="primary">Add Level</button>
-    </mat-grid-tile>
-  </mat-grid-list>
+  <mat-grid-tile [colspan]="4">
+    <mat-form-field class="levelName w-100">
+      <label>{{newLevelGroup.value}} Level </label>
+      <input type="number" maxlength="2" #levelNumber matInput>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-raised-button (click)="changeNewLevelGroup()" color="primary">Change Group</button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-raised-button (click)="addLevel(levelNumber)" color="primary">Add Level</button>
+  </mat-grid-tile>
+</mat-grid-list>
       

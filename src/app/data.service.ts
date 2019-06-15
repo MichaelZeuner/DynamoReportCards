@@ -51,8 +51,12 @@ export class DataService {
     return this.http.get(this.baseUrl + `/level-event-skills/${levelId}/${eventId}`);
   }
 
+  getLevelGroups() {
+    return this.http.get(this.baseUrl + '/level-groups');
+  }
+
   getLevels() {
-    return this.http.get(this.baseUrl + '/levels');
+    return this.http.get(this.baseUrl + '/read-levels');
   }
 
   putLevel(level: Level) {

@@ -5,6 +5,7 @@ export interface ReportCard {
   athletes_id: number,
   comment: string,
   day_of_week: string,
+  session: string,
   approved: number,
   updated_date: string,
   created_date: string
