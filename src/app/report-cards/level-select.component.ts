@@ -25,8 +25,8 @@ import { startWith, map } from 'rxjs/operators';
 
       <mat-option
         *ngFor="let level of filteredLevels | async" 
-        [value]="level.name">
-        {{level.name}}
+        [value]="level.name + ' Level ' + level.level_number">
+        {{level.name}} Level {{level.level_number}}
       </mat-option>
       
       </mat-autocomplete>
@@ -59,7 +59,7 @@ export class LevelSelectComponent {
     const filterValue = value.toLowerCase();
 
     return this.levels.filter(
-      option => (option.name.toLowerCase()).indexOf(filterValue) === 0
+      option => (option.name.toLowerCase() + ' level ' + option.level_number).indexOf(filterValue) === 0
     );
   }
 
@@ -67,7 +67,8 @@ export class LevelSelectComponent {
     const currentLevel = this.level;
     for(let i=0; i<this.levels.length; i++) {
       const level = this.levels[i];
-      if(level.name === searchValue) {
+      const fullName = level.name + ' Level ' + level.level_number;
+      if(fullName === searchValue) {
         console.log('SETTING LEVEL');
         this.level = level;
         break;
