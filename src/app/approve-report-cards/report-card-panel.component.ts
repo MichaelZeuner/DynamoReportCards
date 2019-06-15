@@ -8,6 +8,7 @@ import { AuthService } from '../auth/auth.service';
 import { ReportCardsComponent } from '../report-cards/report-cards.component';
 import { ErrorApi } from '../interfaces/error-api';
 import { ReportCardComponent } from '../interfaces/report-card-component';
+import { PrintService } from '../print.service';
 
 interface ChangedComponents {
   id: number,
@@ -57,6 +58,9 @@ interface ChangedComponents {
     <p *ngIf="modifications !== ''"><i>{{modifications}}</i></p>
 
     <div class="center">
+        <button mat-raised-button color="primary" class="mr-1"
+        (click)="generateReportCard(reportCard.athlete.id)">Preview Last Report Card</button>
+
         <button *ngIf="modifications === '' && changedComponents.length === 0" 
           mat-raised-button color="accent" class="mr-1"
           (click)="putReportCard()">Complete Report Card</button>
@@ -82,7 +86,9 @@ export class ReportCardPanelComponent implements OnInit {
   modifications: string = '';
   panelOpenState: boolean;
 
-  constructor(private data: DataService, public matDialog: MatDialog, private auth: AuthService, private dialog: DialogService) { }
+  constructor(private data: DataService, public matDialog: MatDialog, 
+    private auth: AuthService, private dialog: DialogService, 
+    public printService: PrintService) { }
 
   ngOnInit() {
     console.log('report card in panel');
@@ -171,6 +177,13 @@ export class ReportCardPanelComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  generateReportCard(athleteId: number) {
+    console.log(athleteId);
+    let reportCardData: string[] = [];
+    reportCardData.push(athleteId.toString());
+    this.printService.printDocument('report-card', reportCardData);
   }
 
 }
