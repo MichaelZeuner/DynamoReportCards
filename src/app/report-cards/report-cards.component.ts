@@ -12,6 +12,7 @@ import { AuthService } from '../auth/auth.service';
 import { DialogService } from '../shared/dialog.service';
 import { AthletesSelectComponent } from './athlete-select.component';
 import { MatDialogRef, MatDialog } from '@angular/material';
+import { PrintService } from '../print.service';
 
 @Component({
   selector: 'app-report-cards',
@@ -27,7 +28,9 @@ export class ReportCardsComponent implements OnInit {
   comment: string;
   session: string = '';
 
-  constructor(private data: DataService, public matDialog: MatDialog, private mainNav: MainNavComponent, private auth: AuthService, private dialog: DialogService) { }
+  constructor(private data: DataService, public matDialog: MatDialog, 
+    private mainNav: MainNavComponent, private auth: AuthService, 
+    private dialog: DialogService, public printService: PrintService) { }
 
   ngOnInit() {  }
 
@@ -182,6 +185,13 @@ export class ReportCardsComponent implements OnInit {
 
   sessionChanged(newSession: string) {
     this.session = newSession;
+  }
+
+  generateReportCard(athleteId: number) {
+    console.log(athleteId);
+    let reportCardData: string[] = [];
+    reportCardData.push(athleteId.toString());
+    this.printService.printDocument('report-card', reportCardData);
   }
 }
 

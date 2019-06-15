@@ -6,7 +6,15 @@
     position: fixed;
     bottom: 10px;
 
-    left: 50%;
+    left: 55%;
+    transform: translateX(-50%);
+}
+
+.previewReportCardButton {
+    position: fixed;
+    bottom: 10px;
+
+    left: 45%;
     transform: translateX(-50%);
 }
 

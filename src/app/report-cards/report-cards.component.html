@@ -35,5 +35,6 @@
     </mat-button-toggle-group>
   </mat-card>
 
+  <button mat-raised-button color="primary" (click)="generateReportCard(selectedAthlete.id)" class="previewReportCardButton" *ngIf="selectedAthlete">Preview Report Card</button>
   <button mat-raised-button color="accent" (click)="submitClick()" class="submitButton" *ngIf="level && selectedAthlete">Submit for Approval</button>
 </form>
