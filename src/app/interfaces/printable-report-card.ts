@@ -18,7 +18,8 @@ interface PrintableCoachComments {
     level_number: number,
     first_name: string,
     last_name: string,
-    updated_date: string
+    updated_date: string,
+    session: string
 }
 
 interface PrintableEvent {

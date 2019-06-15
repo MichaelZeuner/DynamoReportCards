@@ -26,7 +26,7 @@ interface ChangedComponents {
         {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
     </mat-panel-title>
     <mat-panel-description>
-        {{reportCard.level.name}}
+        {{reportCard.level.name}} Level {{reportCard.level.level_number}}
     </mat-panel-description>
     </mat-expansion-panel-header>
 
@@ -56,6 +56,11 @@ interface ChangedComponents {
     
 
     <p *ngIf="modifications !== ''"><i>{{modifications}}</i></p>
+
+    <mat-button-toggle-group class="w-100 m-1" #groupStatus="matButtonToggleGroup" value="{{reportCard.status}}" (click)="reportCardStatusChanged(groupStatus.value)" name="reportCardStatus" aria-label="Report Card Status">
+        <mat-button-toggle value="In Progress" class="btnToggle w-50">In Progress</mat-button-toggle>
+        <mat-button-toggle value="Completed" class="btnToggle w-50">Completed</mat-button-toggle>
+    </mat-button-toggle-group>
 
     <div class="center">
         <button mat-raised-button color="primary" class="mr-1"
@@ -141,6 +146,10 @@ export class ReportCardPanelComponent implements OnInit {
       (err: ErrorApi) => { console.error(err); }
     );
   }
+
+  reportCardStatusChanged(newStatus: string) {
+    this.reportCard.status = newStatus;
+  } 
 
   skillRankChanged(newRank: string, id: number) {
 

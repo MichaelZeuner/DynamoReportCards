@@ -16,9 +16,9 @@
           <tr *ngFor="let comment of printableReportCard.coachComments;" class="commentRow">
             <td>
               <ng-container *ngIf="comment.level_name !== 'empty'">
-                <p>LEVEL COMPLETED: {{comment.level_name}} Level {{comment.level_number}}</p>
-                <p>Date: {{comment.updated_date}}</p>
-                <p>Coach: {{comment.first_name}} {{comment.last_name}}</p>
+                <p>LEVEL: {{comment.level_name}} Level {{comment.level_number}} ({{comment.status}})</p>
+                <p>Session: {{comment.session}} {{comment.updated_date.split('-')[0]}}</p>
+                <p>Coach: {{comment.first_name}} {{comment.last_name[0]}}</p>
                 <p>COMMENTS: {{comment.comment}}</p>
               </ng-container>
             </td>

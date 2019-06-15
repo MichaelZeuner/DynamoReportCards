@@ -133,6 +133,9 @@ export class ReportCardsComponent implements OnInit {
     reportCard.comment = this.comment;
     reportCard.day_of_week = dayOfWeek;
     reportCard.session = this.session;
+    reportCard.status = this.getReportCardStatus(reportCard);
+
+
     this.data.addReportCard(reportCard).subscribe(
       (data: ReportCard) => {
         console.log(data);
@@ -148,6 +151,25 @@ export class ReportCardsComponent implements OnInit {
         this.dialog.openSnackBar(message)
       }
     );
+  }
+
+  getReportCardStatus(reportCard: ReportCard) {
+    let learningCounter = 0;
+    for(let e=0; e<this.level.events.length; e++) {
+      const event = this.level.events[e];
+      for(let s=0; s<event.skills.length; s++) {
+        const skill = event.skills[s];
+        console.log(skill.rank);
+        if(skill.rank === 'LEARNING') {
+          learningCounter++;
+        }
+      }
+    }
+    if(learningCounter > 1) {
+      return "In Progress";
+    } else {
+      return "Completed";
+    }
   }
 
   addAllComponentsToReportCard(reportCard: ReportCard) {

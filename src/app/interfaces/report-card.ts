@@ -6,6 +6,7 @@ export interface ReportCard {
   comment: string,
   day_of_week: string,
   session: string,
+  status: string,
   approved: number,
   updated_date: string,
   created_date: string
