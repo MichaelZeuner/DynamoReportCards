@@ -12,6 +12,7 @@ import { UsersComponent } from './users/users.component';
 import { EventsComponent } from './events/events.component';
 import { PrintLayoutComponent } from './print-layout/print-layout.component';
 import { PrintReportCardComponent } from './print-report-card/print-report-card.component';
+import { LevelGroupsComponent } from './level-groups/level-groups.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
       { path: '', component: ReportCardsComponent },
       { path: 'approve', component: ApproveReportCardsComponent },
       { path: 'completed', component: CompletedReportCardsComponent },
+      { path: 'level-groups', component: LevelGroupsComponent },
       { path: 'levels', component: LevelsComponent },
       { path: 'events', component: EventsComponent },
       { path: 'users', component: UsersComponent }

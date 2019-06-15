@@ -1,0 +1,21 @@
+<mat-grid-list cols="6" rowHeight="40px" class="m-1">
+    <div *ngFor="let levelGroup of levelGroups">
+      <mat-grid-tile [colspan]="5">
+        <mat-form-field class="levelGroupName w-100">
+          <input (keyup)="levelGroupChanged(levelGroup, $levelGroup.target.value)" matInput value="{{levelGroup.name}}">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button (click)="deleteLevelGroup(levelGroup)" mat-raised-button color="warn">Remove Level Group</button>
+      </mat-grid-tile>
+    </div>
+  
+    <mat-grid-tile [colspan]="5">
+      <mat-form-field class="w-100">
+        <input matInput #newLevelGroup>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <button (click)="addLevelGroup(newLevelGroup)" mat-raised-button color="primary">Add Level Group</button>
+    </mat-grid-tile>
+  </mat-grid-list>

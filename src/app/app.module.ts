@@ -30,6 +30,7 @@ import { EventsComponent } from './events/events.component';
 import { PrintLayoutComponent } from './print-layout/print-layout.component';
 import { PrintReportCardComponent } from './print-report-card/print-report-card.component';
 import { MatSelectDialogComponent } from './mat-select-dialog/mat-select-dialog.component';
+import { LevelGroupsComponent } from './level-groups/level-groups.component';
 
 @NgModule({
   declarations: [
@@ -53,8 +54,10 @@ import { MatSelectDialogComponent } from './mat-select-dialog/mat-select-dialog.
     UsersComponent,
     LevelsComponent,
     EventsComponent,
+    LevelGroupsComponent,
     PrintLayoutComponent,
-    PrintReportCardComponent
+    PrintReportCardComponent,
+    LevelGroupsComponent
   ],
   imports: [
     BrowserModule,

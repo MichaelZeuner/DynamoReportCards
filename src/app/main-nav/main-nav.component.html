@@ -18,6 +18,10 @@
         <mat-icon>check</mat-icon>  
         <span matBadge="{{count}}" matBadgeColor="accent" [matBadgeHidden]="count == 0" matBadgeOverlap="false">&nbsp;Approve Report Cards</span>
       </a>
+      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/level-groups">
+        <mat-icon>description</mat-icon>  
+        <span>&nbsp;Level Groups</span>
+      </a>
       <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/levels">
         <mat-icon>gavel</mat-icon>  
         <span>&nbsp;Levels</span>

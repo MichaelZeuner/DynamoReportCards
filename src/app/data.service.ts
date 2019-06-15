@@ -9,6 +9,7 @@ import { Skill } from './interfaces/skill';
 import { ReportCardSkill } from './interfaces/report-card-skill';
 import { Event } from './interfaces/event';
 import { User } from './interfaces/user';
+import { LevelGroups } from './interfaces/level-groups';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,17 @@ export class DataService {
 
   getLevelGroups() {
     return this.http.get(this.baseUrl + '/level-groups');
+  }
+
+  putLevelGroup(levelGroup: LevelGroups) {
+    return this.http.put(this.baseUrl + '/level-groups/' + levelGroup.id, levelGroup);
+  }
+
+  addLevelGroup(levelGroup: LevelGroups) {
+    return this.http.post(this.baseUrl + '/level-groups', levelGroup);
+  }
+  deleteLevelGroup(levelGroup: LevelGroups) {
+    return this.http.delete(this.baseUrl + '/level-groups/' + levelGroup.id);
   }
 
   getLevels() {
