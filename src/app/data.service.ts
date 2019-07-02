@@ -139,6 +139,10 @@ export class DataService {
     return this.http.get(this.baseUrl + '/report-cards-requiring-approval');
   }
 
+  getAthletesAttemptsAtLevel(athleteId: number, reportCardId: number) {
+    return this.http.get(this.baseUrl + '/athletes-attempts-at-level/' + athleteId + '/' + reportCardId);
+  }
+
   getReportCardsCompleted() {
     return this.http.get(this.baseUrl + '/report-cards-completed/' + this.authService.user.id);
   }

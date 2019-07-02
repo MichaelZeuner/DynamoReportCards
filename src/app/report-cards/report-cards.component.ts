@@ -21,6 +21,8 @@ import { PrintService } from '../print.service';
 })
 export class ReportCardsComponent implements OnInit {
 
+  MAX_LEARNING_FOR_COMPLETED: number = 1;
+
   public level: Level;
   public selectedAthlete: Athlete;
   @ViewChild('athleteSelect') athleteSelect: AthletesSelectComponent; 
@@ -165,7 +167,7 @@ export class ReportCardsComponent implements OnInit {
         }
       }
     }
-    if(learningCounter > 1) {
+    if(learningCounter > this.MAX_LEARNING_FOR_COMPLETED) {
       return "In Progress";
     } else {
       return "Completed";

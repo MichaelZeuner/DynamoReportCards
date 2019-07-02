@@ -207,8 +207,8 @@
       <tr *ngFor="let skill of event.skills; let i = index">
         <td *ngIf="i === 0" class="eventName shading" [attr.rowspan]="event.skills.length"><div><b class="vertical-text">{{event.name}}</b></div></td>
         <ng-container *ngFor="let skill of skill.levels">
-          <td class="spacing">{{skill.rank}}</td>
-          <td class="skill">{{skill.name}}</td>
+          <td class="spacing">{{skill.rank === 'A' ? 'M' : skill.rank}}</td>
+          <td class="skill">{{skill.rank === 'A' ? skill.name + ' (A)' : skill.name}}</td>
         </ng-container>
       </tr>
     </ng-container>

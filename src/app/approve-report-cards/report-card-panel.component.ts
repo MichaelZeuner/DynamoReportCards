@@ -41,6 +41,7 @@ interface ChangedComponents {
                 <mat-button-toggle-group #group="matButtonToggleGroup" value="{{component.rank}}" (click)="skillRankChanged(group.value, component.id)" name="skillAbility" aria-label="Skill Ability">
                     <mat-button-toggle value="LEARNING" class="btnToggle">Learning</mat-button-toggle>
                     <mat-button-toggle value="MASTERED" class="btnToggle">Mastered</mat-button-toggle>
+                    <mat-button-toggle value="ASSISTED" class="btnToggle">Assisted</mat-button-toggle>
                 </mat-button-toggle-group>
             </mat-list-item>
         </div>
@@ -57,7 +58,8 @@ interface ChangedComponents {
 
     <p *ngIf="modifications !== ''"><i>{{modifications}}</i></p>
 
-    <mat-button-toggle-group class="w-100 m-1" #groupStatus="matButtonToggleGroup" value="{{reportCard.status}}" (click)="reportCardStatusChanged(groupStatus.value)" name="reportCardStatus" aria-label="Report Card Status">
+    <p *ngIf="attemptsAtLevel >= ATTEMPTS_BEFORE_PASS" class="mb-0"><i>*The level has been attempted {{attemptsAtLevel}} times prior. The athlete should pass regardless of the number of skills still learning.*</i></p>
+    <mat-button-toggle-group class="w-100 m-1" #groupStatus="matButtonToggleGroup"  [value]="attemptsAtLevel >= ATTEMPTS_BEFORE_PASS ? 'Completed' : reportCard.status" (click)="reportCardStatusChanged(groupStatus.value)" name="reportCardStatus" aria-label="Report Card Status">
         <mat-button-toggle value="In Progress" class="btnToggle w-50">In Progress</mat-button-toggle>
         <mat-button-toggle value="Completed" class="btnToggle w-50">Completed</mat-button-toggle>
     </mat-button-toggle-group>
@@ -82,6 +84,8 @@ interface ChangedComponents {
 })
 export class ReportCardPanelComponent implements OnInit {
 
+  ATTEMPTS_BEFORE_PASS: number = 2;
+
   @ViewChild('panel') panel: MatExpansionPanel;
   @Input() reportCard: ReportCardCompleted;
 
@@ -90,6 +94,7 @@ export class ReportCardPanelComponent implements OnInit {
   
   modifications: string = '';
   panelOpenState: boolean;
+  attemptsAtLevel: number = 0;
 
   constructor(private data: DataService, public matDialog: MatDialog, 
     private auth: AuthService, private dialog: DialogService, 
@@ -98,6 +103,10 @@ export class ReportCardPanelComponent implements OnInit {
   ngOnInit() {
     console.log('report card in panel');
     console.log(this.reportCard);
+    this.data.getAthletesAttemptsAtLevel(this.reportCard.athlete.id, this.reportCard.level.id).subscribe(
+      (data: number) => { this.attemptsAtLevel = data; },
+      (err: ErrorApi) => { console.error(err); }
+    );
   }
 
   openDialog(comment: string): void {
