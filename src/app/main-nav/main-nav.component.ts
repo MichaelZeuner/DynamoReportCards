@@ -18,7 +18,7 @@ export class MainNavComponent {
   @ViewChild('drawer') sidenav: MatSidenav;
 
   public count: number = 0;
-  public completedReportCards: number = 0;
+  public sentBackReportCards: number = 0;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -27,7 +27,21 @@ export class MainNavComponent {
 
   constructor(private breakpointObserver: BreakpointObserver, public authService: AuthService, private data: DataService) {
     this.reloadApprovalNeeded();
+    this.reloadReportCardsSentBack();
     console.log(authService.user.access);
+  }
+
+  reloadReportCardsSentBack() {
+    this.data.getReportCardsSentBack().subscribe(
+      (data: any[]) => {
+        console.log(data);
+        this.sentBackReportCards = data.length;
+      },
+      (err: ErrorApi) => {
+        console.log(err.error.message);
+        this.sentBackReportCards = 0;
+      }
+    );
   }
 
   reloadApprovalNeeded() {

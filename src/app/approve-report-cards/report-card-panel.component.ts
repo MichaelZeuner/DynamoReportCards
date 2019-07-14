@@ -9,6 +9,8 @@ import { ReportCardsComponent } from '../report-cards/report-cards.component';
 import { ErrorApi } from '../interfaces/error-api';
 import { ReportCardComponent } from '../interfaces/report-card-component';
 import { PrintService } from '../print.service';
+import { ReportCardMod } from '../interfaces/report-card-mod';
+import { ReportCardModComponent } from '../interfaces/report-card-mod-component';
 
 interface ChangedComponents {
   id: number,
@@ -75,7 +77,8 @@ interface ChangedComponents {
           mat-raised-button color="accent" class="mr-1" 
           (click)="submitReportCard()">Complete Report Card with Changes</button>
         <button *ngIf="modifications !== '' || changedComponents.length > 0" 
-          mat-raised-button color="warn" disabled class="mr-1">Send Report Card Back</button>
+          mat-raised-button color="warn" class="mr-1"
+          (click)="sendReportCardBack()">Send Report Card Back</button>
     </div>
         
   </mat-expansion-panel>
@@ -124,6 +127,51 @@ export class ReportCardPanelComponent implements OnInit {
       this.modifications = result;
       console.log('new comment:' + this.modifications);
     });
+  }
+
+  sendReportCardBack() {
+    if(this.modifications === '') {
+      this.dialog.openSnackBar('A modification note is required before sending a report card back.');
+      return;
+    }
+
+    this.dialog.openConfirmDialog('Are you sure you wish to send the report card back to the coach for modications?')
+    .afterClosed().subscribe(res =>{
+      if(res){
+        let reportCardMod: ReportCardMod = {
+          report_cards_id: this.reportCard.id,
+          comment_modifications: this.modifications
+        }
+    
+        this.data.addReportCardMod(reportCardMod).subscribe(
+          (data: ReportCardMod) => {
+            console.log('About to emit reportcard');
+            this.reportCardApprovedChanged.emit(this.reportCard);
+            
+            console.log(data);
+            for(let i=0; i<this.changedComponents.length; i++) {
+              let reportCardModComponent: ReportCardModComponent = {
+                report_cards_components_id: this.changedComponents[i].id,
+                suggested_rank: this.changedComponents[i].rank
+              }
+              this.data.addReportCardModComponent(reportCardModComponent).subscribe(
+                (componentData: ReportCardModComponent) => {
+                  console.log(componentData);
+                },
+                (err: ErrorApi) => {
+                  console.error(err.error.message);
+                }
+              )
+            }
+          },
+          (err: ErrorApi) => {
+            console.error(err.error.message);
+          }
+        )
+      }
+    });
+
+    
   }
 
   submitReportCard() {

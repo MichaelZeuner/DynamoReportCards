@@ -1,0 +1,10 @@
+<mat-accordion>
+  <div *ngIf="reportCards.length === 0" class="w-100">
+      <h1>No Report Cards waiting need to be fixed!</h1>
+  </div>
+  <app-report-card-modification-panel 
+      *ngFor="let reportCard of reportCards" 
+      [reportCard]="reportCard"
+      (reportCardSentBackChanged)="reportCardSentBack($event)">
+  </app-report-card-modification-panel>
+</mat-accordion>

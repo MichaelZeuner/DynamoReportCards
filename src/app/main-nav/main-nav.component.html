@@ -10,9 +10,13 @@
         <mat-icon>assignment</mat-icon>
         &nbsp;Report Cards
       </a>
+      <a (click)="closeNav()" mat-list-item routerLink="/sent-back-report-cards">
+        <mat-icon>build</mat-icon>
+        <span matBadge="{{sentBackReportCards}}" matBadgeColor="accent" [matBadgeHidden]="sentBackReportCards == 0" matBadgeOverlap="false">&nbsp;Sent Back Cards</span>
+      </a>
       <a (click)="closeNav()" mat-list-item routerLink="/completed">
         <mat-icon>list</mat-icon>
-        <span matBadge="{{completedReportCards}}" matBadgeColor="accent" [matBadgeHidden]="completedReportCards == 0" matBadgeOverlap="false">&nbsp;All Completed</span>
+        <span>&nbsp;All Completed</span>
       </a>
       <a *ngIf="authService.user.access === 'ADMIN' || authService.user.access === 'SUPERVISOR'" (click)="closeNav()" mat-list-item routerLink="/approve">
         <mat-icon>check</mat-icon>  

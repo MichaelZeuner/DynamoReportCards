@@ -10,6 +10,8 @@ import { ReportCardSkill } from './interfaces/report-card-skill';
 import { Event } from './interfaces/event';
 import { User } from './interfaces/user';
 import { LevelGroups } from './interfaces/level-groups';
+import { ReportCardMod } from './interfaces/report-card-mod';
+import { ReportCardModComponent } from './interfaces/report-card-mod-component';
 
 @Injectable({
   providedIn: 'root'
@@ -131,8 +133,28 @@ export class DataService {
     return this.http.put(this.baseUrl + '/report-cards-components/' + reportCardComponent.id, reportCardComponent);
   }
 
+  addReportCardMod(reportCardMod: ReportCardMod) {
+    return this.http.post(this.baseUrl + '/report-card-mod', reportCardMod);
+  }
+
+  deleteReportCardMod(reportCardModId: number) {
+    return this.http.delete(this.baseUrl + '/report-card-mod/' + reportCardModId);
+  }
+
+  addReportCardModComponent(reportCardModComponent: ReportCardModComponent) {
+    return this.http.post(this.baseUrl + '/report-card-mod-components', reportCardModComponent);
+  }
+
+  deleteReportCardModComponent(reportCardModComponentId: number) {
+    return this.http.delete(this.baseUrl + '/report-card-mod-components/' + reportCardModComponentId);
+  }
+
   getReportCardDetails(reportCardId: number) {
     return this.http.get(this.baseUrl + '/report-cards-components-for-report-card/' + reportCardId);
+  }
+
+  getReportCardsSentBack() {
+    return this.http.get(this.baseUrl + '/report-cards-sent-back/' + this.authService.user.id);
   }
 
   getReportCardsNeedingApproval() {

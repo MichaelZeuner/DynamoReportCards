@@ -1,0 +1,46 @@
+<mat-expansion-panel #panel>
+  <mat-expansion-panel-header>
+  <mat-panel-title>
+      {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
+  </mat-panel-title>
+  <mat-panel-description>
+      {{reportCard.level.name}} Level {{reportCard.level.level_number}}
+  </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <mat-list *ngFor="let event of reportCard.events">
+      <mat-divider></mat-divider>
+
+      <h3 class="eventTitle">{{event.name}}</h3>
+      <div *ngFor="let component of reportCard.components">
+          <h5 *ngIf="component.skill.events_id == event.id && component.suggested_rank != NULL">A supervisor has suggested the rank should be <b>{{component.suggested_rank}}</b></h5>
+          <mat-list-item *ngIf="component.skill.events_id == event.id">
+              <span>{{component.skill.name}}</span>
+              <span class="fill-remaining-space"></span>
+              <mat-button-toggle-group enabled #group="matButtonToggleGroup" [disabled]="component.suggested_rank == NULL" value="{{component.rank}}" (click)="skillRankChanged(group.value, component.report_cards_components_id)" name="skillAbility" aria-label="Skill Ability">
+                  <mat-button-toggle value="LEARNING" class="btnToggle" [ngClass]="{ suggestedRank: component.suggested_rank == 'LEARNING' }">Learning</mat-button-toggle>
+                  <mat-button-toggle value="MASTERED" class="btnToggle" [ngClass]="{ suggestedRank: component.suggested_rank == 'MASTERED' }">Mastered</mat-button-toggle>
+                  <mat-button-toggle value="ASSISTED" class="btnToggle" [ngClass]="{ suggestedRank: component.suggested_rank == 'ASSISTED' }">Assisted</mat-button-toggle>
+              </mat-button-toggle-group>
+          </mat-list-item>
+      </div>
+  </mat-list>
+
+  <mat-divider></mat-divider>
+  <h3>Supervisor Suggestions</h3>
+  <p><i>{{reportCard.comment_modifications}}</i></p>
+  <h3>Comment</h3>
+  <mat-form-field class="w-100">
+    <textarea matInput rows="2" [(ngModel)]="reportCard.comment" [ngModelOptions]="{standalone: true}" placeholder="Make the suggested changes"></textarea>
+  </mat-form-field>
+
+  <div class="center">
+      <button mat-raised-button color="primary" class="mr-1"
+      (click)="generateReportCard(reportCard.athlete.id)">Preview Last Report Card</button>
+
+      <button
+        mat-raised-button color="accent" class="mr-1" 
+        (click)="submitReportCard()">Send Back Report Card with Changes</button>
+  </div>
+      
+</mat-expansion-panel>

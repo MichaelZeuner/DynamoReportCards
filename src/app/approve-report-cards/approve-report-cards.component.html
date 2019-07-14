@@ -1,10 +1,10 @@
 <section class="day-of-week-section">
-    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="sunChecked">Sunday</mat-checkbox>
-    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="monChecked">Monday</mat-checkbox>
-    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="tueChecked">Tuesday</mat-checkbox>
-    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="wedChecked">Wednesday</mat-checkbox>
-    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="thuChecked">Thursday</mat-checkbox>
-    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="friChecked">Friday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="sunChecked" matBadge="{{sunCount}}" matBadgeColor="accent" [matBadgeHidden]="sunCount == 0" matBadgeOverlap="false">Sunday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="monChecked" matBadge="{{monCount}}" matBadgeColor="accent" [matBadgeHidden]="monCount == 0" matBadgeOverlap="false">Monday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="tueChecked" matBadge="{{tueCount}}" matBadgeColor="accent" [matBadgeHidden]="tueCount == 0" matBadgeOverlap="false">Tuesday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="wedChecked" matBadge="{{wedCount}}" matBadgeColor="accent" [matBadgeHidden]="wedCount == 0" matBadgeOverlap="false">Wednesday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="thuChecked" matBadge="{{thuCount}}" matBadgeColor="accent" [matBadgeHidden]="thuCount == 0" matBadgeOverlap="false">Thursday</mat-checkbox>
+    <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="friChecked" matBadge="{{friCount}}" matBadgeColor="accent" [matBadgeHidden]="friCount == 0" matBadgeOverlap="false">Friday</mat-checkbox>
     <mat-checkbox class="day-of-week-margin" (change)="adjustDisplayedCards()" [(ngModel)]="satChecked">Saturday</mat-checkbox>
 </section>
 

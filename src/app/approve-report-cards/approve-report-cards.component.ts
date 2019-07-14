@@ -15,13 +15,13 @@ export class ApproveReportCardsComponent implements OnInit {
 
   public reportCardsFull: ReportCard[] = [];
   public reportCards: ReportCard[] = [];
-  public sunChecked: Boolean = false;
-  public monChecked: Boolean = false;
-  public tueChecked: Boolean = false;
-  public wedChecked: Boolean = false;
-  public thuChecked: Boolean = false;
-  public friChecked: Boolean = false;
-  public satChecked: Boolean = false;
+  public sunChecked: Boolean = false; public sunCount: number = 0;
+  public monChecked: Boolean = false; public monCount: number = 0;
+  public tueChecked: Boolean = false; public tueCount: number = 0;
+  public wedChecked: Boolean = false; public wedCount: number = 0;
+  public thuChecked: Boolean = false; public thuCount: number = 0;
+  public friChecked: Boolean = false; public friCount: number = 0;
+  public satChecked: Boolean = false; public satCount: number = 0;
 
   constructor(private data: DataService, public dialog: MatDialog, private dialogService: DialogService, private mainNav: MainNavComponent) { }
 
@@ -35,8 +35,44 @@ export class ApproveReportCardsComponent implements OnInit {
         console.log(data);
         this.reportCardsFull = data;
         this.reportCards = []; 
+        this.sumCounters();
       }
     );
+  }
+
+  sumCounters() {
+    this.sunCount = 0;
+    this.monCount = 0;
+    this.tueCount = 0;
+    this.wedCount = 0;
+    this.thuCount = 0;
+    this.friCount = 0;
+    this.satCount = 0;
+    for(let i=0; i<this.reportCardsFull.length; i++) {
+      switch(this.reportCardsFull[i].day_of_week) {
+        case 'SUN':
+          this.sunCount++;
+          break;
+        case 'MON':
+          this.monCount++;
+          break;
+        case 'TUE':
+          this.tueCount++;
+          break;
+        case 'WED':
+          this.wedCount++;
+          break;
+        case 'THU':
+          this.thuCount++;
+          break;
+        case 'FRI':
+          this.friCount++;
+          break;
+        case 'SAT':
+          this.satCount++;
+          break;
+      }
+    }
   }
 
   reportCardApproved(reportCardApproved: ReportCard) {
@@ -44,8 +80,11 @@ export class ApproveReportCardsComponent implements OnInit {
     console.log(reportCardApproved);
     for(let i=0; i< this.reportCards.length; i++) {
       if(this.reportCards[i].id === reportCardApproved.id) {
+        this.dialogService.openSnackBar('Report Card Sent Back to the Coach!');
         this.reportCards.splice(i, 1);
         this.mainNav.reloadApprovalNeeded();
+        this.mainNav.reloadReportCardsSentBack();
+        this.refreshReportCardsData();
         return;
       }
     }

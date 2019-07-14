@@ -31,6 +31,8 @@ import { PrintLayoutComponent } from './print-layout/print-layout.component';
 import { PrintReportCardComponent } from './print-report-card/print-report-card.component';
 import { MatSelectDialogComponent } from './mat-select-dialog/mat-select-dialog.component';
 import { LevelGroupsComponent } from './level-groups/level-groups.component';
+import { SentBackReportCardsComponent } from './sent-back-report-cards/sent-back-report-cards.component';
+import { ReportCardModificationPanelComponent } from './sent-back-report-cards/report-card-modification-panel/report-card-modification-panel.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,9 @@ import { LevelGroupsComponent } from './level-groups/level-groups.component';
     LevelGroupsComponent,
     PrintLayoutComponent,
     PrintReportCardComponent,
-    LevelGroupsComponent
+    LevelGroupsComponent,
+    SentBackReportCardsComponent,
+    ReportCardModificationPanelComponent
   ],
   imports: [
     BrowserModule,
