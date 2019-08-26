@@ -36,6 +36,7 @@ export class ApproveReportCardsComponent implements OnInit {
         this.reportCardsFull = data;
         this.reportCards = []; 
         this.sumCounters();
+        this.adjustDisplayedCards();
       }
     );
   }

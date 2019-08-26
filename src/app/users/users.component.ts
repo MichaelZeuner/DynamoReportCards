@@ -95,7 +95,10 @@ export class UsersComponent implements OnInit {
     }
 
     this.data.putUser(user).subscribe(
-      (data: User) => { console.log(data); },
+      (data: User) => { 
+        console.log(data); 
+        this.dialog.openSnackBar('User Updated!');
+      },
       (error: ErrorApi) => { 
         console.log(error); 
         this.dialog.openSnackBar(error.error.message);
@@ -138,7 +141,7 @@ export class UsersComponent implements OnInit {
       password.focus();
       return false;
     }
-    if(passwordConfirm.value === '' && passwordConfirm) {
+    if(passwordConfirm.value === '' && passwordRequired) {
       this.dialog.openSnackBar('Password Confirm required!');
       passwordConfirm.focus();
       return false;

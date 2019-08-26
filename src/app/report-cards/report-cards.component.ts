@@ -27,6 +27,32 @@ export class ReportCardsComponent implements OnInit {
   public selectedAthlete: Athlete;
   @ViewChild('athleteSelect') athleteSelect: AthletesSelectComponent; 
 
+  public introsBase: string[] = [
+    'What a wonderful session you had ~!NAME!~!',
+    'test'
+  ];
+  public intros: string[] = [];
+  
+  public personalities: string[] = [
+    'I love how eager you are to start class each week.',
+    'test'
+  ];
+  
+  public skills: string[] = [
+    'Your forward roll on the beam is looking spectacular.',
+    'Note that this is level specific'
+  ];
+  
+  public goals: string[] = [
+    'I am excited for you start working on your back hip circle on bars.',
+    'Note that this is level specific'
+  ];
+  
+  public closings: string[] = [
+    'Looking forward to seeing you next session.',
+    'test'
+  ];
+
   comment: string;
   session: string = '';
 
@@ -44,6 +70,10 @@ export class ReportCardsComponent implements OnInit {
   updateSelectAthlete(newAthlete: Athlete) {
     console.log(newAthlete);
     this.selectedAthlete = newAthlete;
+
+    for(let i=0; i<this.introsBase.length; i++) {
+      this.intros[i] = this.introsBase[i].replace('~!NAME!~', newAthlete.first_name);
+    }
   }
 
   updateSelectLevel(newLevel: Level) {

@@ -198,9 +198,9 @@
     <tr>
       <td colspan="2" class="shading"></td>
       <ng-container *ngFor="let level of printableReportCard.levels; let i = index">
-        <td *ngIf="i === 0" class="skill levelName shading">{{level.name}} Level {{level.level_number}}</td>
+        <td *ngIf="i === 0" class="levelName shading">{{level.name}} Level {{level.level_number}}</td>
         <td *ngIf="i > 0" class="spacing shading"></td>
-        <td *ngIf="i > 0" class="skill levelName shading">{{level.name}} Level {{level.level_number}}</td>
+        <td *ngIf="i > 0" class="levelName shading">{{level.name}} Level {{level.level_number}}</td>
       </ng-container>
     </tr>
     <ng-container *ngFor="let event of printableReportCard.events">
@@ -214,7 +214,6 @@
     </ng-container>
     <tr>
       <td colspan="13">
-        <br>
         <p class="legend w-100"><b>LEGEND:</b> L - LEARNING   M - MASTERED</p>
         <p class="note w-100"><i>Please feel free to speak to your child's coach or any member of our Dynamo Gymnastics staff regarding any questions about this report card.</i></p>
       </td>
