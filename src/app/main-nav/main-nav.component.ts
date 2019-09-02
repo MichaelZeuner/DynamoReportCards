@@ -7,6 +7,7 @@ import { AuthService } from '../auth/auth.service';
 import { DataService } from '../data.service';
 import { ReportCard } from '../interfaces/report-card';
 import { ErrorApi } from '../interfaces/error-api';
+import { User } from '../interfaces/user';
 
 @Component({
   selector: 'app-main-nav',
@@ -17,6 +18,7 @@ export class MainNavComponent {
 
   @ViewChild('drawer') sidenav: MatSidenav;
 
+  public user: User;
   public count: number = 0;
   public sentBackReportCards: number = 0;
 
@@ -29,6 +31,8 @@ export class MainNavComponent {
     this.reloadApprovalNeeded();
     this.reloadReportCardsSentBack();
     console.log(authService.user.access);
+
+    this.user = authService.user;
   }
 
   reloadReportCardsSentBack() {

@@ -1,0 +1,67 @@
+<mat-grid-list cols="6" rowHeight="40px">
+  <div *ngFor="let athlete of athletes">
+    <mat-grid-tile><b>First Name:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input #firstName matInput value="{{athlete.first_name}}">
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile><b>Last Name:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input #lastName matInput value="{{athlete.last_name}}">
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile><b>Date of Birth:</b></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <mat-form-field class="w-100">
+        <input matInput [matDatepicker]="dateOfBirth" [value]="athlete.date_of_birth" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="dateOfBirth"></mat-datepicker-toggle>
+        <mat-datepicker #dateOfBirth></mat-datepicker>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="1">
+      <button mat-raised-button color="primary" (click)="updateAthlete(athlete.id, firstName, lastName, dateOfBirth)">Update Athlete</button>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1">
+      <button mat-raised-button color="warn" (click)="deleteAthlete(athlete.id, firstName.value, lastName.value)">Delete Athlete</button>
+    </mat-grid-tile>
+    
+    <mat-grid-tile [colspan]="6">
+      <mat-divider style="width: 100%;"></mat-divider>
+    </mat-grid-tile>
+  </div>
+
+  <!-- New User -->
+  <mat-grid-tile><b>First Name:</b></mat-grid-tile>
+  <mat-grid-tile [colspan]="2">
+    <mat-form-field class="w-100">
+      <input #firstName matInput>
+    </mat-form-field>
+  </mat-grid-tile>
+
+  <mat-grid-tile><b>Last Name:</b></mat-grid-tile>
+  <mat-grid-tile [colspan]="2">
+    <mat-form-field class="w-100">
+      <input #lastName matInput>
+    </mat-form-field>
+  </mat-grid-tile>
+
+  <mat-grid-tile><b>Date of Birth:</b></mat-grid-tile>
+  <mat-grid-tile [colspan]="2">
+    <mat-form-field class="w-100">
+      <input matInput #dobInput [matDatepicker]="dateOfBirth" placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="dateOfBirth"></mat-datepicker-toggle>
+      <mat-datepicker #dateOfBirth></mat-datepicker>
+    </mat-form-field>
+  </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <button (click)="createAthlete(firstName, lastName, dateOfBirth, dobInput)" mat-raised-button color="primary">Create Athlete</button>
+    </mat-grid-tile>
+</mat-grid-list>

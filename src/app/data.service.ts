@@ -12,6 +12,7 @@ import { User } from './interfaces/user';
 import { LevelGroups } from './interfaces/level-groups';
 import { ReportCardMod } from './interfaces/report-card-mod';
 import { ReportCardModComponent } from './interfaces/report-card-mod-component';
+import { Athlete } from './interfaces/athlete';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,18 @@ export class DataService {
 
   getAthletes() {
     return this.http.get(this.baseUrl + '/athletes');
+  }
+
+  addAthlete(athlete: Athlete) {
+    return this.http.post(this.baseUrl + '/athletes', athlete);
+  }
+
+  putAthlete(athlete: Athlete) {
+    return this.http.put(this.baseUrl + '/athletes/' + athlete.id, athlete);
+  }
+
+  deleteAthlete(id: number) {
+    return this.http.delete(this.baseUrl + '/athletes/' + id);
   }
 
   getLevelEvents(levelId: number) {

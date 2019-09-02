@@ -38,6 +38,10 @@
         <mat-icon>face</mat-icon>  
         <span>&nbsp;Users</span>
       </a>
+      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/athletes">
+        <mat-icon>directions_run</mat-icon>  
+        <span>&nbsp;Athletes</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -50,7 +54,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Dynamo Report Cards</span>
+      <span>Welcome {{user.first_name}} {{user.last_name}} to Dynamo Report Cards</span>
       <span class="fill-remaining-space"></span>
       <button mat-raised-button color="primary" (click)="onLogout()">Logout</button>
 

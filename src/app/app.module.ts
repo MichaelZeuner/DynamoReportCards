@@ -10,7 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatAutocompleteModule, MatFormFieldModule, MatOptionModule, MatInputModule, MatCardModule, MatExpansionModule, MatGridListModule, MatButtonToggleModule, MatDividerModule, MatBadgeModule, MatDialogModule, MatSnackBarModule, MatCheckboxModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatAutocompleteModule, MatFormFieldModule, MatOptionModule, MatInputModule, MatCardModule, MatExpansionModule, MatGridListModule, MatButtonToggleModule, MatDividerModule, MatBadgeModule, MatDialogModule, MatSnackBarModule, MatCheckboxModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MainLayoutComponent } from './layouts/main-layout.component';
@@ -33,6 +33,7 @@ import { MatSelectDialogComponent } from './mat-select-dialog/mat-select-dialog.
 import { LevelGroupsComponent } from './level-groups/level-groups.component';
 import { SentBackReportCardsComponent } from './sent-back-report-cards/sent-back-report-cards.component';
 import { ReportCardModificationPanelComponent } from './sent-back-report-cards/report-card-modification-panel/report-card-modification-panel.component';
+import { AthletesComponent } from './athletes/athletes.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { ReportCardModificationPanelComponent } from './sent-back-report-cards/r
     PrintReportCardComponent,
     LevelGroupsComponent,
     SentBackReportCardsComponent,
-    ReportCardModificationPanelComponent
+    ReportCardModificationPanelComponent,
+    AthletesComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +91,9 @@ import { ReportCardModificationPanelComponent } from './sent-back-report-cards/r
     MatDialogModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
   ],
   entryComponents: [
     RequiredModificationsDialog,

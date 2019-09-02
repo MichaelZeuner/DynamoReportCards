@@ -71,6 +71,7 @@ export class UsersComponent implements OnInit {
         email.value = '';
         password.value = '';
         passwordConfirm.value = '';
+        this.dialog.openSnackBar('User Created!');
       }
     )
   }
