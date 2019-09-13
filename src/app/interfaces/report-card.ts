@@ -3,7 +3,7 @@ export interface ReportCard {
   submitted_by: number,
   levels_id: number,
   athletes_id: number,
-  comment: string,
+  comment: number,
   day_of_week: string,
   session: string,
   status: string,

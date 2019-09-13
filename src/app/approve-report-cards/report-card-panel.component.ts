@@ -11,6 +11,9 @@ import { ReportCardComponent } from '../interfaces/report-card-component';
 import { PrintService } from '../print.service';
 import { ReportCardMod } from '../interfaces/report-card-mod';
 import { ReportCardModComponent } from '../interfaces/report-card-mod-component';
+import { Skill } from '../interfaces/skill';
+import { Comments } from '../interfaces/comments';
+import { Event } from '../interfaces/event';
 
 interface ChangedComponents {
   id: number,
@@ -50,15 +53,55 @@ interface ChangedComponents {
     </mat-list>
 
     <mat-divider></mat-divider>
-    <h3>Comment</h3>
-    <p>{{reportCard.comment}}</p>
-    <div class='display: float;'>
-        <span class="fill-remaining-space"></span>
-        <button mat-raised-button (click)="openDialog(reportCard.comment)">Modification Required</button>
-    </div>
-    
+    <h4>Comments</h4>
 
-    <p *ngIf="modifications !== ''"><i>{{modifications}}</i></p>
+      <mat-form-field class="w-100">
+        <mat-label>Intro/Greeting</mat-label>
+        <mat-select [(ngModel)]="selectedIntroComment" name="introComment">
+          <mat-option [value]="-1">None</mat-option>
+          <ng-container *ngFor="let commentActive of commentsActive">
+            <mat-option *ngIf="commentActive.type === 'INTRO'" [value]="commentActive.id">{{commentActive.comment}}</mat-option>
+          </ng-container>
+          
+        </mat-select>
+      </mat-form-field>
+      
+      <mat-form-field  class="w-25">
+        <mat-label>Event</mat-label>
+
+        <mat-select (selectionChange)="eventChanged($event.value)" [(ngModel)]="selectedSkillCommentEvent" name="skillCommentEvent">
+          <mat-option *ngFor="let event of events" [value]="event.id">{{event.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field  class="w-75">
+        <mat-label>Skill</mat-label>
+
+        <mat-select (selectionChange)="skillChanged($event.value)" [disabled]="skills.length === 0" [(ngModel)]="selectedSkillCommentSkill" name="skillCommentSkill">
+          <mat-option *ngFor="let skill of skills" [value]="skill.id">{{skill.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field  class="w-100">
+        <mat-label>Skill/Goal</mat-label>
+
+        <mat-select [disabled]="skillsDisabled" [(ngModel)]="selectedSkillComment" name="skillComment">
+          <mat-option [value]="-1">None</mat-option>
+          <ng-container *ngFor="let commentActive of commentsActive">
+            <mat-option *ngIf="commentActive.type === 'SKILL'" [value]="commentActive.id">{{commentActive.comment}}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field  class="w-100">
+        <mat-label>Closing</mat-label>
+        <mat-select [(ngModel)]="selectedClosingComment" name="closingComment">
+          <mat-option [value]="-1">None</mat-option>
+          <ng-container *ngFor="let commentActive of commentsActive">
+            <mat-option *ngIf="commentActive.type === 'CLOSING'" [value]="commentActive.id">{{commentActive.comment}}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
 
     <p *ngIf="attemptsAtLevel >= ATTEMPTS_BEFORE_PASS" class="mb-0"><i>*The level has been attempted {{attemptsAtLevel}} times prior. The athlete should pass regardless of the number of skills still learning.*</i></p>
     <mat-button-toggle-group class="w-100 m-1" #groupStatus="matButtonToggleGroup"  [value]="attemptsAtLevel >= ATTEMPTS_BEFORE_PASS ? 'Completed' : reportCard.status" (click)="reportCardStatusChanged(groupStatus.value)" name="reportCardStatus" aria-label="Report Card Status">
@@ -99,18 +142,116 @@ export class ReportCardPanelComponent implements OnInit {
   panelOpenState: boolean;
   attemptsAtLevel: number = 0;
 
+  public commentsBase: Comments[] = [];
+  public commentsActive: Comments[] = [];
+  
+  public events: Event[] = [];
+  selectedEvent: number;
+  public skills: Skill[] = [];
+  selectedSkill: number;
+
+  selectedIntroComment: number;
+  selectedSkillComment: number;
+  selectedSkillCommentEvent: number;
+  selectedSkillCommentSkill: number;
+  selectedClosingComment: number;
+
+  skillsDisabled: boolean;
+
   constructor(private data: DataService, public matDialog: MatDialog, 
     private auth: AuthService, private dialog: DialogService, 
     public printService: PrintService) { }
 
   ngOnInit() {
+    this.selectedIntroComment = this.reportCard.card_comments.intro_comment_id;
+    this.selectedSkillComment = this.reportCard.card_comments.skill_comment_id;
+    this.selectedSkillCommentEvent = this.reportCard.card_comments.event_id;
+    this.selectedSkillCommentSkill = this.reportCard.card_comments.skill_id;
+    this.selectedClosingComment = this.reportCard.card_comments.closing_comment_id;
+
     console.log('report card in panel');
     console.log(this.reportCard);
     this.data.getAthletesAttemptsAtLevel(this.reportCard.athlete.id, this.reportCard.level.id).subscribe(
       (data: number) => { this.attemptsAtLevel = data; },
       (err: ErrorApi) => { console.error(err); }
     );
+
+    this.data.getComments().subscribe(
+      (data: Comments[]) => {
+        //this slight hack of stringify followed by parse is a simiple deep copy
+        this.commentsBase = JSON.parse(JSON.stringify(data));
+        this.commentsActive = JSON.parse(JSON.stringify(data));
+        console.log(this.commentsBase);
+
+        this.data.getLevelEvents(this.reportCard.level.id).subscribe(
+          (data: Event[]) => {
+            this.events = data;
+            this.eventChanged(this.reportCard.card_comments.event_id);
+          }
+        )
+      },
+      (err: ErrorApi) => {
+        console.error(err);
+        let message = 'Error Unknown...';
+        if(err.error !== undefined) {
+          message = err.error.message;
+        }
+        this.dialog.openSnackBar(message)
+      }
+    );
   }
+
+  updateComments() {
+    let skillName: string, eventName: string;
+    for(let i=0; i<this.events.length; i++) {
+      if(this.events[i].id === this.selectedEvent) {
+        eventName = this.events[i].name; 
+        break;
+      }
+    }
+ 
+    console.log('Selected Skill: ' + this.selectedSkill);
+    for(let i=0; i<this.skills.length; i++) {
+      if(this.skills[i].id === this.selectedSkill) {
+       skillName = this.skills[i].name; 
+       break;
+      }
+    }
+
+    console.log(eventName);
+    console.log(skillName);
+
+    if(typeof skillName === 'undefined') {
+      this.skillsDisabled = true;
+      this.selectedSkillComment = -1;
+    } else {
+      this.skillsDisabled = false;
+    }
+
+    for(let i=0; i<this.commentsBase.length; i++) {
+      this.commentsActive[i].comment = this.commentsBase[i].comment
+        .replace('~!NAME!~', this.reportCard.athlete.first_name)
+        .replace('~!EVENT!~', eventName.toLowerCase())
+        .replace('~!SKILL!~', skillName.replace(/\(.*\)/g, '').toLowerCase());
+    }
+  }
+
+  eventChanged(eventId: number) {
+    this.selectedEvent = eventId;
+    this.data.getEventSkills(this.reportCard.level.id, eventId).subscribe(
+     (data: Skill[]) => {
+       this.skills = data;
+       console.log(data);
+       this.skillChanged(this.reportCard.card_comments.skill_id);
+     }
+   )
+
+  }
+
+ skillChanged(skillId: number) {
+   this.selectedSkill = skillId;
+    this.updateComments();
+ }
 
   openDialog(comment: string): void {
     console.log(comment);
@@ -189,7 +330,8 @@ export class ReportCardPanelComponent implements OnInit {
   }
 
   putReportCard() {
-    if(this.modifications !== '') { this.reportCard.comment = this.modifications; }
+    //FIXME: this should take in the comment number and select it in the correct drop downs
+    if(this.modifications !== '') { /*this.reportCard.comment = this.modifications;*/ }
 
     this.reportCard.approved = this.auth.user.id;
     this.data.putReportCard(this.reportCard).subscribe(

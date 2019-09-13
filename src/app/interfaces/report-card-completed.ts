@@ -4,10 +4,12 @@ import { Level } from './level';
 import { Skill } from './skill';
 import { ReportCard } from './report-card';
 import { Event } from './event';
+import { ReportCardComments } from './report-card-comments';
 
 export interface ReportCardCompleted extends ReportCard {
     components: ReportCardComponentCompleted[],
     athlete: Athlete,
+    card_comments: ReportCardComments,
     level: Level,
     events: Event[]
 }

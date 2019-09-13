@@ -11,8 +11,11 @@ import { MainNavComponent } from '../main-nav/main-nav.component';
 import { AuthService } from '../auth/auth.service';
 import { DialogService } from '../shared/dialog.service';
 import { AthletesSelectComponent } from './athlete-select.component';
-import { MatDialogRef, MatDialog } from '@angular/material';
+import { MatDialogRef, MatDialog, MatSelect } from '@angular/material';
 import { PrintService } from '../print.service';
+import { Comments } from '../interfaces/comments';
+import { ReportCardComments } from '../interfaces/report-card-comments';
+import { Skill } from '../interfaces/skill';
 
 @Component({
   selector: 'app-report-cards',
@@ -21,47 +24,87 @@ import { PrintService } from '../print.service';
 })
 export class ReportCardsComponent implements OnInit {
 
+  UNSELECTED: number = -1;
   MAX_LEARNING_FOR_COMPLETED: number = 1;
 
   public level: Level;
   public selectedAthlete: Athlete;
   @ViewChild('athleteSelect') athleteSelect: AthletesSelectComponent; 
 
-  public introsBase: string[] = [
-    'What a wonderful session you had ~!NAME!~!',
-    'test'
-  ];
-  public intros: string[] = [];
-  
-  public personalities: string[] = [
-    'I love how eager you are to start class each week.',
-    'test'
-  ];
-  
-  public skills: string[] = [
-    'Your forward roll on the beam is looking spectacular.',
-    'Note that this is level specific'
-  ];
-  
-  public goals: string[] = [
-    'I am excited for you start working on your back hip circle on bars.',
-    'Note that this is level specific'
-  ];
-  
-  public closings: string[] = [
-    'Looking forward to seeing you next session.',
-    'test'
-  ];
-
-  comment: string;
   session: string = '';
+  public commentsBase: Comments[] = [];
+  public commentsActive: Comments[] = [];
+
+  public events: Event[] = [];
+  selectedEvent: number;
+  public skills: Skill[] = [];
+  selectedSkill: number;
+  public skillsDisabled: Boolean = true;
+
+  selectedIntroComment: number = this.UNSELECTED;
+  selectedSkillComment: number = this.UNSELECTED;
+  selectedClosingComment: number = this.UNSELECTED;
 
   constructor(private data: DataService, public matDialog: MatDialog, 
     private mainNav: MainNavComponent, private auth: AuthService, 
     private dialog: DialogService, public printService: PrintService) { }
 
-  ngOnInit() {  }
+  ngOnInit() { 
+    this.data.getComments().subscribe(
+      (data: Comments[]) => {
+        //this slight hack of stringify followed by parse is a simiple deep copy
+        this.commentsBase = JSON.parse(JSON.stringify(data));
+        this.commentsActive = JSON.parse(JSON.stringify(data));
+        console.log(this.commentsBase);
+      },
+      (err: ErrorApi) => {
+        console.error(err);
+        let message = 'Error Unknown...';
+        if(err.error !== undefined) {
+          message = err.error.message;
+        }
+        this.dialog.openSnackBar(message)
+      }
+    );
+   }
 
+   eventChanged(eventId: number) {
+     this.selectedEvent = eventId;
+     this.data.getEventSkills(this.level.id, eventId).subscribe(
+      (data: Skill[]) => {
+        this.skills = data;
+      }
+    )
+
+   }
+
+  skillChanged(skillId: number) {
+    this.selectedSkill = skillId;
+    this.skillsDisabled = false;
+
+    let skillName: string, eventName: string;
+    for(let i=0; i<this.events.length; i++) {
+      if(this.events[i].id === this.selectedEvent) {
+        eventName = this.events[i].name; 
+        break;
+      }
+    }
+
+    for(let i=0; i<this.skills.length; i++) {
+      if(this.skills[i].id === skillId) {
+       skillName = this.skills[i].name; 
+       break;
+      }
+    }
+
+    console.log(skillName);
+    console.log(eventName);
+    for(let i=0; i<this.commentsActive.length; i++) {
+      if(this.commentsBase[i].comment.includes('~!SKILL!~') || this.commentsBase[i].comment.includes('~!EVENT!~')) {
+        this.commentsActive[i].comment = this.commentsBase[i].comment.replace('~!SKILL!~', skillName).replace('~!EVENT!~', eventName);
+      }
+    }
+  }
 
   submitForApproval() {
     console.log("SUBMITTED");
@@ -71,14 +114,24 @@ export class ReportCardsComponent implements OnInit {
     console.log(newAthlete);
     this.selectedAthlete = newAthlete;
 
-    for(let i=0; i<this.introsBase.length; i++) {
-      this.intros[i] = this.introsBase[i].replace('~!NAME!~', newAthlete.first_name);
+    for(let i=0; i<this.commentsBase.length; i++) {
+      if(this.commentsBase[i].comment.includes('~!NAME!~')) {
+        this.commentsActive[i].comment = this.commentsBase[i].comment.replace('~!NAME!~', newAthlete.first_name);
+      }
     }
+
+    console.log(this.commentsActive);
   }
 
   updateSelectLevel(newLevel: Level) {
     console.log(newLevel);
     this.level = newLevel;
+
+    this.data.getLevelEvents(newLevel.id).subscribe(
+      (data: Event[]) => {
+        this.events = data;
+      }
+    )
   }
 
   onEventsChange(events: Event[]) {
@@ -87,9 +140,18 @@ export class ReportCardsComponent implements OnInit {
   }
 
   submitClick() {
-    const MAX_CHARACTERS = 250;
-    if (this.comment.length > MAX_CHARACTERS) {
-      this.dialog.openSnackBar('Comment too long. The message must be ' + MAX_CHARACTERS + ' characters or less. Yours currently is ' + this.comment.length + '.');
+    if (this.selectedIntroComment === this.UNSELECTED) {
+      this.dialog.openSnackBar('Intro comment required!');
+      return;
+    }
+    
+    if (this.selectedSkillComment === this.UNSELECTED) {
+      this.dialog.openSnackBar('Skill/Goal comment required!');
+      return;
+    }
+    
+    if (this.selectedClosingComment === this.UNSELECTED) {
+      this.dialog.openSnackBar('Closing comment required!');
       return;
     }
 
@@ -110,12 +172,6 @@ export class ReportCardsComponent implements OnInit {
       }
       console.log(dayOfWeek);
 
-      console.log(this.comment);
-      if(typeof this.comment === 'undefined' || this.comment.length === 0) {
-        this.dialog.openSnackBar('Comment required!');
-        return;
-      }
-
       if(typeof this.level.events === 'undefined') {
         this.dialog.openSnackBar('Please select a ranking for all skills.');
         return;
@@ -133,7 +189,7 @@ export class ReportCardsComponent implements OnInit {
         return;
       }
 
-      this.addReportCard(dayOfWeek);
+      this.addReportCardComment(dayOfWeek);
     });
   }
 
@@ -157,12 +213,39 @@ export class ReportCardsComponent implements OnInit {
     return errors;
   }
 
-  addReportCard(dayOfWeek: string) {
+  addReportCardComment(dayOfWeek: string) {
+    let comment: ReportCardComments = {
+      intro_comment_id: this.selectedIntroComment,
+      skill_comment_id: this.selectedSkillComment,
+      event_id: this.selectedEvent,
+      skill_id: this.selectedSkill,
+      closing_comment_id: this.selectedClosingComment
+    }
+
+    let addedReportCardComment: ReportCardComments;
+    this.data.addReportCardComment(comment).subscribe(
+      (data: ReportCardComments) => {
+        addedReportCardComment = data;
+        this.addReportCard(dayOfWeek, addedReportCardComment);
+      },
+      (err: ErrorApi) => {
+        console.error(err);
+        let message = 'Error Unknown...';
+        if(err.error !== undefined) {
+          message = err.error.message;
+        }
+        this.dialog.openSnackBar(message)
+        return;
+      }
+    )
+  }
+
+  addReportCard(dayOfWeek: string, addedReportCardComment: ReportCardComments) {
     let reportCard = {} as ReportCard;
     reportCard.submitted_by = this.auth.user.id;
     reportCard.athletes_id = this.selectedAthlete.id;
     reportCard.levels_id = this.level.id;
-    reportCard.comment = this.comment;
+    reportCard.comment = addedReportCardComment.id;
     reportCard.day_of_week = dayOfWeek;
     reportCard.session = this.session;
     reportCard.status = this.getReportCardStatus(reportCard);

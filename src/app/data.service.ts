@@ -13,6 +13,8 @@ import { LevelGroups } from './interfaces/level-groups';
 import { ReportCardMod } from './interfaces/report-card-mod';
 import { ReportCardModComponent } from './interfaces/report-card-mod-component';
 import { Athlete } from './interfaces/athlete';
+import { Comments } from './interfaces/comments';
+import { ReportCardComments } from './interfaces/report-card-comments';
 
 @Injectable({
   providedIn: 'root'
@@ -128,6 +130,18 @@ export class DataService {
 
   getAthletesRecentReportCards(athleteId: number) {
     return this.http.get(this.baseUrl + '/get-athletes-recent-report-cards/' + athleteId);
+  }
+
+  getComments() {
+    return this.http.get(this.baseUrl + '/comments');
+  }
+
+  addComment(comment: Comments) {
+    return this.http.post(this.baseUrl + '/comments', comment);
+  }
+
+  addReportCardComment(reportCardComment: ReportCardComments) {
+    return this.http.post(this.baseUrl + '/report-cards-comments', reportCardComment);
   }
 
   addReportCard(reportCard: ReportCard) {
