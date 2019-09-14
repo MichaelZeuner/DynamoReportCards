@@ -23,7 +23,7 @@ import { ReportCardEventsComponent } from './report-cards/events.component';
 import { SkillsComponent } from './report-cards/skills.component';
 import { CompletedReportCardsComponent } from './completed-report-cards/completed-report-cards.component';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
-import { ReportCardPanelComponent, RequiredModificationsDialog } from './approve-report-cards/report-card-panel.component';
+import { ReportCardPanelComponent } from './approve-report-cards/report-card-panel.component';
 import { UsersComponent } from './users/users.component';
 import { LevelsComponent } from './levels/levels.component';
 import { EventsComponent } from './events/events.component';
@@ -42,7 +42,6 @@ import { AthletesComponent } from './athletes/athletes.component';
     ApproveReportCardsComponent,
     LoginComponent,
     MainNavComponent,
-    RequiredModificationsDialog,
     MainLayoutComponent,
     LoginLayoutComponent,
     AthletesSelectComponent,
@@ -96,7 +95,6 @@ import { AthletesComponent } from './athletes/athletes.component';
     MatDatepickerModule,
   ],
   entryComponents: [
-    RequiredModificationsDialog,
     MatConfirmDialogComponent,
     MatSelectDialogComponent,
     DayOfWeekDialog

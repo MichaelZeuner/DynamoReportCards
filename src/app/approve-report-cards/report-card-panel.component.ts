@@ -14,6 +14,7 @@ import { ReportCardModComponent } from '../interfaces/report-card-mod-component'
 import { Skill } from '../interfaces/skill';
 import { Comments } from '../interfaces/comments';
 import { Event } from '../interfaces/event';
+import { ReportCardComments } from '../interfaces/report-card-comments';
 
 interface ChangedComponents {
   id: number,
@@ -76,8 +77,7 @@ interface ChangedComponents {
 
       <mat-form-field  class="w-75">
         <mat-label>Skill</mat-label>
-
-        <mat-select (selectionChange)="skillChanged($event.value)" [disabled]="skills.length === 0" [(ngModel)]="selectedSkillCommentSkill" name="skillCommentSkill">
+        <mat-select (selectionChange)="updateComments()" [disabled]="skills.length === 0" [(ngModel)]="selectedSkillCommentSkill" name="skillCommentSkill">
           <mat-option *ngFor="let skill of skills" [value]="skill.id">{{skill.name}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -113,15 +113,15 @@ interface ChangedComponents {
         <button mat-raised-button color="primary" class="mr-1"
         (click)="generateReportCard(reportCard.athlete.id)">Preview Last Report Card</button>
 
-        <button *ngIf="modifications === '' && changedComponents.length === 0" 
+        <button *ngIf="generateUnmodifiedCommentIdString() === generateCurrentCommentIdString() && changedComponents.length === 0" 
           mat-raised-button color="accent" class="mr-1"
           (click)="putReportCard()">Complete Report Card</button>
-        <button *ngIf="modifications !== '' || changedComponents.length > 0" 
+        <button *ngIf="generateUnmodifiedCommentIdString() !== generateCurrentCommentIdString() || changedComponents.length > 0" 
           mat-raised-button color="accent" class="mr-1" 
           (click)="submitReportCard()">Complete Report Card with Changes</button>
-        <button *ngIf="modifications !== '' || changedComponents.length > 0" 
+        <button *ngIf="generateUnmodifiedCommentIdString() !== generateCurrentCommentIdString() || changedComponents.length > 0" 
           mat-raised-button color="warn" class="mr-1"
-          (click)="sendReportCardBack()">Send Report Card Back</button>
+          (click)="sendReportCardBackPrepComments()">Send Report Card Back</button>
     </div>
         
   </mat-expansion-panel>
@@ -138,7 +138,6 @@ export class ReportCardPanelComponent implements OnInit {
   @Output() reportCardApprovedChanged = new EventEmitter<ReportCard>();
   changedComponents: ChangedComponents[] = [];
   
-  modifications: string = '';
   panelOpenState: boolean;
   attemptsAtLevel: number = 0;
 
@@ -146,9 +145,7 @@ export class ReportCardPanelComponent implements OnInit {
   public commentsActive: Comments[] = [];
   
   public events: Event[] = [];
-  selectedEvent: number;
   public skills: Skill[] = [];
-  selectedSkill: number;
 
   selectedIntroComment: number;
   selectedSkillComment: number;
@@ -161,6 +158,34 @@ export class ReportCardPanelComponent implements OnInit {
   constructor(private data: DataService, public matDialog: MatDialog, 
     private auth: AuthService, private dialog: DialogService, 
     public printService: PrintService) { }
+
+    generateCommentIdString(introComment: number, event: number, skill: number, skillComment: number, closingComment: number) {
+      return introComment 
+        + "~" + event 
+        + "~" + skill 
+        + "~" + skillComment 
+        + "~" + closingComment;
+    }
+
+    generateUnmodifiedCommentIdString() {
+      return this.generateCommentIdString(
+        this.reportCard.card_comments.intro_comment_id,
+        this.reportCard.card_comments.event_id,
+        this.reportCard.card_comments.skill_id,
+        this.reportCard.card_comments.skill_comment_id,
+        this.reportCard.card_comments.closing_comment_id
+      );
+    }
+
+    generateCurrentCommentIdString() {
+      return this.generateCommentIdString(
+        this.selectedIntroComment,
+        this.selectedSkillCommentEvent,
+        this.selectedSkillCommentSkill,
+        this.selectedSkillComment,
+        this.selectedClosingComment
+      );
+    }
 
   ngOnInit() {
     this.selectedIntroComment = this.reportCard.card_comments.intro_comment_id;
@@ -204,15 +229,15 @@ export class ReportCardPanelComponent implements OnInit {
   updateComments() {
     let skillName: string, eventName: string;
     for(let i=0; i<this.events.length; i++) {
-      if(this.events[i].id === this.selectedEvent) {
+      if(this.events[i].id === this.selectedSkillCommentEvent) {
         eventName = this.events[i].name; 
         break;
       }
     }
  
-    console.log('Selected Skill: ' + this.selectedSkill);
+    console.log('Selected Skill: ' + this.selectedSkillCommentSkill);
     for(let i=0; i<this.skills.length; i++) {
-      if(this.skills[i].id === this.selectedSkill) {
+      if(this.skills[i].id === this.selectedSkillCommentSkill) {
        skillName = this.skills[i].name; 
        break;
       }
@@ -224,6 +249,7 @@ export class ReportCardPanelComponent implements OnInit {
     if(typeof skillName === 'undefined') {
       this.skillsDisabled = true;
       this.selectedSkillComment = -1;
+      return;
     } else {
       this.skillsDisabled = false;
     }
@@ -237,82 +263,88 @@ export class ReportCardPanelComponent implements OnInit {
   }
 
   eventChanged(eventId: number) {
-    this.selectedEvent = eventId;
+    this.selectedSkillCommentEvent = eventId;
     this.data.getEventSkills(this.reportCard.level.id, eventId).subscribe(
      (data: Skill[]) => {
        this.skills = data;
        console.log(data);
-       this.skillChanged(this.reportCard.card_comments.skill_id);
+       this.updateComments();
      }
    )
 
   }
 
- skillChanged(skillId: number) {
-   this.selectedSkill = skillId;
-    this.updateComments();
+ generateReportCurrentCardComment() : ReportCardComments {
+    return {
+      intro_comment_id: this.selectedIntroComment,
+      event_id: this.selectedSkillCommentEvent,
+      skill_id: this.selectedSkillCommentSkill,
+      skill_comment_id: this.selectedSkillComment,
+      closing_comment_id: this.selectedClosingComment
+    };
  }
 
-  openDialog(comment: string): void {
-    console.log(comment);
-    const dialogRef = this.matDialog.open(RequiredModificationsDialog, {
-      width: '500px',
-      data: { comment: comment, modifications: this.modifications }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if(typeof result === 'undefined') {
-        result = '';
-      }
-      this.modifications = result;
-      console.log('new comment:' + this.modifications);
-    });
-  }
-
-  sendReportCardBack() {
-    if(this.modifications === '') {
-      this.dialog.openSnackBar('A modification note is required before sending a report card back.');
+ sendReportCardBackPrepComments() {
+    if(this.generateCurrentCommentIdString().indexOf('-1') !== -1) {
+      this.dialog.openSnackBar('All comment options must be selected!');
       return;
     }
 
     this.dialog.openConfirmDialog('Are you sure you wish to send the report card back to the coach for modications?')
     .afterClosed().subscribe(res =>{
       if(res){
-        let reportCardMod: ReportCardMod = {
-          report_cards_id: this.reportCard.id,
-          comment_modifications: this.modifications
-        }
-    
-        this.data.addReportCardMod(reportCardMod).subscribe(
-          (data: ReportCardMod) => {
-            console.log('About to emit reportcard');
-            this.reportCardApprovedChanged.emit(this.reportCard);
-            
-            console.log(data);
-            for(let i=0; i<this.changedComponents.length; i++) {
-              let reportCardModComponent: ReportCardModComponent = {
-                report_cards_components_id: this.changedComponents[i].id,
-                suggested_rank: this.changedComponents[i].rank
-              }
-              this.data.addReportCardModComponent(reportCardModComponent).subscribe(
-                (componentData: ReportCardModComponent) => {
-                  console.log(componentData);
-                },
-                (err: ErrorApi) => {
-                  console.error(err.error.message);
-                }
-              )
+        if(this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) { 
+          let newComment: ReportCardComments = this.generateReportCurrentCardComment();
+          this.data.addReportCardComment(newComment).subscribe(
+            (data: ReportCardComments) => {
+              this.sendReportCardBack(data.id);
+            },
+            (err: ErrorApi) => {
+              console.error(err.error.message);
+              this.dialog.openSnackBar(err.error.message);
             }
-          },
-          (err: ErrorApi) => {
-            console.error(err.error.message);
+          );
+
+          } else {
+            this.sendReportCardBack(this.reportCard.comment);
           }
-        )
       }
     });
 
     
+  }
+
+  sendReportCardBack(commentModId: number) {
+    let reportCardMod: ReportCardMod = {
+      report_cards_id: this.reportCard.id,
+      comment_modifications: commentModId
+    }
+
+    this.data.addReportCardMod(reportCardMod).subscribe(
+      (data: ReportCardMod) => {
+        console.log('About to emit reportcard');
+        this.reportCardApprovedChanged.emit(this.reportCard);
+        
+        console.log(data);
+        for(let i=0; i<this.changedComponents.length; i++) {
+          let reportCardModComponent: ReportCardModComponent = {
+            report_cards_components_id: this.changedComponents[i].id,
+            suggested_rank: this.changedComponents[i].rank
+          }
+          this.data.addReportCardModComponent(reportCardModComponent).subscribe(
+            (componentData: ReportCardModComponent) => {
+              console.log(componentData);
+            },
+            (err: ErrorApi) => {
+              console.error(err.error.message);
+            }
+          )
+        }
+      },
+      (err: ErrorApi) => {
+        console.error(err.error.message);
+      }
+    )
   }
 
   submitReportCard() {
@@ -330,8 +362,21 @@ export class ReportCardPanelComponent implements OnInit {
   }
 
   putReportCard() {
-    //FIXME: this should take in the comment number and select it in the correct drop downs
-    if(this.modifications !== '') { /*this.reportCard.comment = this.modifications;*/ }
+    if(this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) { 
+      if(this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) { 
+        let newComment: ReportCardComments = this.generateReportCurrentCardComment();
+        this.data.addReportCardComment(newComment).subscribe(
+          (data: ReportCardComments) => {
+            this.reportCard.comment = data.id;
+          },
+          (err: ErrorApi) => {
+            console.error(err.error.message);
+            this.dialog.openSnackBar(err.error.message);
+          }
+        );
+
+      }
+    }
 
     this.reportCard.approved = this.auth.user.id;
     this.data.putReportCard(this.reportCard).subscribe(
@@ -394,27 +439,4 @@ export class ReportCardPanelComponent implements OnInit {
     this.printService.printDocument('report-card', reportCardData);
   }
 
-}
-
-export interface DialogData {
-  comment: string;
-  modifications: string;
-}
-
-@Component({
-  selector: 'app-required-modifications-dialog',
-  templateUrl: './required-modifications-dialog.html',
-})
-export class RequiredModificationsDialog {
-
-  constructor(
-    public dialogRef: MatDialogRef<RequiredModificationsDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {
-    console.log('TEST: ' + data.comment);
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
 }

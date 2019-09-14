@@ -3,6 +3,7 @@ import { Level } from './level';
 import { ReportCardComponent } from './report-card-component';
 import { Skill } from './skill';
 import { Event } from './event';
+import { ReportCardComments } from './report-card-comments';
 
 export interface ReportCardSentBack {
     report_cards_mod_id: number,
@@ -10,9 +11,11 @@ export interface ReportCardSentBack {
     submitted_by: number,
     athlete: Athlete,
     level: Level,
-    comment: string,
+    comment: number,
+    card_comments: ReportCardComments,
     status: string,
-    comment_modifications: string,
+    comment_modifications: number,
+    card_mod_comments: ReportCardComments,
     updated_date: string,
     events: Event[],
     components: ReportCardSentBackComponent[]
