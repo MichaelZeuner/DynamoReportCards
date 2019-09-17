@@ -42,6 +42,10 @@
         <mat-icon>directions_run</mat-icon>  
         <span>&nbsp;Athletes</span>
       </a>
+      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/comments">
+        <mat-icon>message</mat-icon>  
+        <span>&nbsp;Comments</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

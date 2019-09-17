@@ -15,17 +15,18 @@ import { Skill } from '../interfaces/skill';
 import { Comments } from '../interfaces/comments';
 import { Event } from '../interfaces/event';
 import { ReportCardComments } from '../interfaces/report-card-comments';
+import { CommonService } from '../shared/common.service';
 
 interface ChangedComponents {
-  id: number,
-  report_cards_id: number,
-  skills_id: number,
-  rank: string
+	id: number;
+	report_cards_id: number;
+	skills_id: number;
+	rank: string;
 }
 
 @Component({
-  selector: 'app-report-card-panel',
-  template: `
+	selector: 'app-report-card-panel',
+	template: `
   <mat-expansion-panel #panel>
     <mat-expansion-panel-header>
     <mat-panel-title>
@@ -126,317 +127,325 @@ interface ChangedComponents {
         
   </mat-expansion-panel>
   `,
-  styles: []
+	styles: []
 })
 export class ReportCardPanelComponent implements OnInit {
+	ATTEMPTS_BEFORE_PASS: number = 2;
 
-  ATTEMPTS_BEFORE_PASS: number = 2;
+	@ViewChild('panel') panel: MatExpansionPanel;
+	@Input() reportCard: ReportCardCompleted;
 
-  @ViewChild('panel') panel: MatExpansionPanel;
-  @Input() reportCard: ReportCardCompleted;
+	@Output() reportCardApprovedChanged = new EventEmitter<ReportCard>();
+	changedComponents: ChangedComponents[] = [];
 
-  @Output() reportCardApprovedChanged = new EventEmitter<ReportCard>();
-  changedComponents: ChangedComponents[] = [];
-  
-  panelOpenState: boolean;
-  attemptsAtLevel: number = 0;
+	panelOpenState: boolean;
+	attemptsAtLevel: number = 0;
 
-  public commentsBase: Comments[] = [];
-  public commentsActive: Comments[] = [];
-  
-  public events: Event[] = [];
-  public skills: Skill[] = [];
+	public commentsBase: Comments[] = [];
+	public commentsActive: Comments[] = [];
 
-  selectedIntroComment: number;
-  selectedSkillComment: number;
-  selectedSkillCommentEvent: number;
-  selectedSkillCommentSkill: number;
-  selectedClosingComment: number;
+	public events: Event[] = [];
+	public skills: Skill[] = [];
 
-  skillsDisabled: boolean;
+	selectedIntroComment: number;
+	selectedSkillComment: number;
+	selectedSkillCommentEvent: number;
+	selectedSkillCommentSkill: number;
+	selectedClosingComment: number;
 
-  constructor(private data: DataService, public matDialog: MatDialog, 
-    private auth: AuthService, private dialog: DialogService, 
-    public printService: PrintService) { }
+	skillsDisabled: boolean;
 
-    generateCommentIdString(introComment: number, event: number, skill: number, skillComment: number, closingComment: number) {
-      return introComment 
-        + "~" + event 
-        + "~" + skill 
-        + "~" + skillComment 
-        + "~" + closingComment;
-    }
+	constructor(
+		private data: DataService,
+		public matDialog: MatDialog,
+		private auth: AuthService,
+		private dialog: DialogService,
+    public printService: PrintService,
+    private comm: CommonService
+	) {}
 
-    generateUnmodifiedCommentIdString() {
-      return this.generateCommentIdString(
-        this.reportCard.card_comments.intro_comment_id,
-        this.reportCard.card_comments.event_id,
-        this.reportCard.card_comments.skill_id,
-        this.reportCard.card_comments.skill_comment_id,
-        this.reportCard.card_comments.closing_comment_id
-      );
-    }
+	generateCommentIdString(
+		introComment: number,
+		event: number,
+		skill: number,
+		skillComment: number,
+		closingComment: number
+	) {
+		return introComment + '~' + event + '~' + skill + '~' + skillComment + '~' + closingComment;
+	}
 
-    generateCurrentCommentIdString() {
-      return this.generateCommentIdString(
-        this.selectedIntroComment,
-        this.selectedSkillCommentEvent,
-        this.selectedSkillCommentSkill,
-        this.selectedSkillComment,
-        this.selectedClosingComment
-      );
-    }
+	generateUnmodifiedCommentIdString() {
+		return this.generateCommentIdString(
+			this.reportCard.card_comments.intro_comment_id,
+			this.reportCard.card_comments.event_id,
+			this.reportCard.card_comments.skill_id,
+			this.reportCard.card_comments.skill_comment_id,
+			this.reportCard.card_comments.closing_comment_id
+		);
+	}
 
-  ngOnInit() {
-    this.selectedIntroComment = this.reportCard.card_comments.intro_comment_id;
-    this.selectedSkillComment = this.reportCard.card_comments.skill_comment_id;
-    this.selectedSkillCommentEvent = this.reportCard.card_comments.event_id;
-    this.selectedSkillCommentSkill = this.reportCard.card_comments.skill_id;
-    this.selectedClosingComment = this.reportCard.card_comments.closing_comment_id;
+	generateCurrentCommentIdString() {
+		return this.generateCommentIdString(
+			this.selectedIntroComment,
+			this.selectedSkillCommentEvent,
+			this.selectedSkillCommentSkill,
+			this.selectedSkillComment,
+			this.selectedClosingComment
+		);
+	}
 
-    console.log('report card in panel');
-    console.log(this.reportCard);
-    this.data.getAthletesAttemptsAtLevel(this.reportCard.athlete.id, this.reportCard.level.id).subscribe(
-      (data: number) => { this.attemptsAtLevel = data; },
-      (err: ErrorApi) => { console.error(err); }
-    );
+	ngOnInit() {
+		this.selectedIntroComment = this.reportCard.card_comments.intro_comment_id;
+		this.selectedSkillComment = this.reportCard.card_comments.skill_comment_id;
+		this.selectedSkillCommentEvent = this.reportCard.card_comments.event_id;
+		this.selectedSkillCommentSkill = this.reportCard.card_comments.skill_id;
+		this.selectedClosingComment = this.reportCard.card_comments.closing_comment_id;
 
-    this.data.getComments().subscribe(
-      (data: Comments[]) => {
-        //this slight hack of stringify followed by parse is a simiple deep copy
-        this.commentsBase = JSON.parse(JSON.stringify(data));
-        this.commentsActive = JSON.parse(JSON.stringify(data));
-        console.log(this.commentsBase);
+		console.log('report card in panel');
+		console.log(this.reportCard);
+		this.data.getAthletesAttemptsAtLevel(this.reportCard.athlete.id, this.reportCard.level.id).subscribe(
+			(data: number) => {
+				this.attemptsAtLevel = data;
+			},
+			(err: ErrorApi) => {
+				console.error(err);
+			}
+		);
 
-        this.data.getLevelEvents(this.reportCard.level.id).subscribe(
-          (data: Event[]) => {
-            this.events = data;
-            this.eventChanged(this.reportCard.card_comments.event_id);
-          }
-        )
-      },
-      (err: ErrorApi) => {
-        console.error(err);
-        let message = 'Error Unknown...';
-        if(err.error !== undefined) {
-          message = err.error.message;
-        }
-        this.dialog.openSnackBar(message)
-      }
-    );
-  }
+		this.data.getComments().subscribe(
+			(data: Comments[]) => {
+				//this slight hack of stringify followed by parse is a simiple deep copy
+				this.commentsBase = JSON.parse(JSON.stringify(data));
+				this.commentsActive = JSON.parse(JSON.stringify(data));
+				console.log(this.commentsBase);
 
-  updateComments() {
-    let skillName: string, eventName: string;
-    for(let i=0; i<this.events.length; i++) {
-      if(this.events[i].id === this.selectedSkillCommentEvent) {
-        eventName = this.events[i].name; 
-        break;
-      }
-    }
- 
-    console.log('Selected Skill: ' + this.selectedSkillCommentSkill);
-    for(let i=0; i<this.skills.length; i++) {
-      if(this.skills[i].id === this.selectedSkillCommentSkill) {
-       skillName = this.skills[i].name; 
-       break;
-      }
-    }
+				this.data.getLevelEvents(this.reportCard.level.id).subscribe((data: Event[]) => {
+					this.events = data;
+					this.eventChanged(this.reportCard.card_comments.event_id);
+				});
+			},
+			(err: ErrorApi) => {
+				console.error(err);
+				let message = 'Error Unknown...';
+				if (err.error !== undefined) {
+					message = err.error.message;
+				}
+				this.dialog.openSnackBar(message);
+			}
+		);
+	}
 
-    console.log(eventName);
-    console.log(skillName);
+	updateComments() {
+		let skillName: string, eventName: string;
+		for (let i = 0; i < this.events.length; i++) {
+			if (this.events[i].id === this.selectedSkillCommentEvent) {
+				eventName = this.events[i].name;
+				break;
+			}
+		}
 
-    if(typeof skillName === 'undefined') {
-      this.skillsDisabled = true;
-      this.selectedSkillComment = -1;
-      return;
-    } else {
-      this.skillsDisabled = false;
-    }
+		for (let i = 0; i < this.skills.length; i++) {
+			if (this.skills[i].id === this.selectedSkillCommentSkill) {
+				skillName = this.skills[i].name;
+				break;
+			}
+		}
 
-    for(let i=0; i<this.commentsBase.length; i++) {
-      this.commentsActive[i].comment = this.commentsBase[i].comment
-        .replace('~!NAME!~', this.reportCard.athlete.first_name)
-        .replace('~!EVENT!~', eventName.toLowerCase())
-        .replace('~!SKILL!~', skillName.replace(/\(.*\)/g, '').toLowerCase());
-    }
-  }
+		if (typeof skillName === 'undefined') {
+			this.skillsDisabled = true;
+			this.selectedSkillComment = -1;
+			return;
+		} else {
+			this.skillsDisabled = false;
+		}
 
-  eventChanged(eventId: number) {
-    this.selectedSkillCommentEvent = eventId;
-    this.data.getEventSkills(this.reportCard.level.id, eventId).subscribe(
-     (data: Skill[]) => {
-       this.skills = data;
-       console.log(data);
-       this.updateComments();
-     }
-   )
+		this.commentsActive = this.comm.updateComments(
+			this.commentsBase,
+			this.reportCard.level.id,
+			this.reportCard.athlete.first_name,
+			eventName,
+			skillName
+		  );
+	}
 
-  }
+	eventChanged(eventId: number) {
+		this.selectedSkillCommentEvent = eventId;
+		this.data.getEventSkills(this.reportCard.level.id, eventId).subscribe((data: Skill[]) => {
+			this.skills = data;
+			console.log(data);
+			this.updateComments();
+		});
+	}
 
- generateReportCurrentCardComment() : ReportCardComments {
-    return {
-      intro_comment_id: this.selectedIntroComment,
-      event_id: this.selectedSkillCommentEvent,
-      skill_id: this.selectedSkillCommentSkill,
-      skill_comment_id: this.selectedSkillComment,
-      closing_comment_id: this.selectedClosingComment
-    };
- }
+	generateReportCurrentCardComment(): ReportCardComments {
+		return {
+			intro_comment_id: this.selectedIntroComment,
+			event_id: this.selectedSkillCommentEvent,
+			skill_id: this.selectedSkillCommentSkill,
+			skill_comment_id: this.selectedSkillComment,
+			closing_comment_id: this.selectedClosingComment
+		};
+	}
 
- sendReportCardBackPrepComments() {
-    if(this.generateCurrentCommentIdString().indexOf('-1') !== -1) {
-      this.dialog.openSnackBar('All comment options must be selected!');
-      return;
-    }
+	sendReportCardBackPrepComments() {
+		if (this.generateCurrentCommentIdString().indexOf('-1') !== -1) {
+			this.dialog.openSnackBar('All comment options must be selected!');
+			return;
+		}
 
-    this.dialog.openConfirmDialog('Are you sure you wish to send the report card back to the coach for modications?')
-    .afterClosed().subscribe(res =>{
-      if(res){
-        if(this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) { 
-          let newComment: ReportCardComments = this.generateReportCurrentCardComment();
-          this.data.addReportCardComment(newComment).subscribe(
-            (data: ReportCardComments) => {
-              this.sendReportCardBack(data.id);
-            },
-            (err: ErrorApi) => {
-              console.error(err.error.message);
-              this.dialog.openSnackBar(err.error.message);
-            }
-          );
+		this.dialog
+			.openConfirmDialog('Are you sure you wish to send the report card back to the coach for modications?')
+			.afterClosed()
+			.subscribe((res) => {
+				if (res) {
+					if (this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) {
+						let newComment: ReportCardComments = this.generateReportCurrentCardComment();
+						this.data.addReportCardComment(newComment).subscribe(
+							(data: ReportCardComments) => {
+								this.sendReportCardBack(data.id);
+							},
+							(err: ErrorApi) => {
+								console.error(err.error.message);
+								this.dialog.openSnackBar(err.error.message);
+							}
+						);
+					} else {
+						this.sendReportCardBack(this.reportCard.comment);
+					}
+				}
+			});
+	}
 
-          } else {
-            this.sendReportCardBack(this.reportCard.comment);
-          }
-      }
-    });
+	sendReportCardBack(commentModId: number) {
+		let reportCardMod: ReportCardMod = {
+			report_cards_id: this.reportCard.id,
+			comment_modifications: commentModId
+		};
 
-    
-  }
+		this.data.addReportCardMod(reportCardMod).subscribe(
+			(data: ReportCardMod) => {
+				console.log('About to emit reportcard');
+				this.reportCardApprovedChanged.emit(this.reportCard);
 
-  sendReportCardBack(commentModId: number) {
-    let reportCardMod: ReportCardMod = {
-      report_cards_id: this.reportCard.id,
-      comment_modifications: commentModId
-    }
+				console.log(data);
+				for (let i = 0; i < this.changedComponents.length; i++) {
+					let reportCardModComponent: ReportCardModComponent = {
+						report_cards_components_id: this.changedComponents[i].id,
+						suggested_rank: this.changedComponents[i].rank
+					};
+					this.data.addReportCardModComponent(reportCardModComponent).subscribe(
+						(componentData: ReportCardModComponent) => {
+							console.log(componentData);
+						},
+						(err: ErrorApi) => {
+							console.error(err.error.message);
+						}
+					);
+				}
+			},
+			(err: ErrorApi) => {
+				console.error(err.error.message);
+			}
+		);
+	}
 
-    this.data.addReportCardMod(reportCardMod).subscribe(
-      (data: ReportCardMod) => {
-        console.log('About to emit reportcard');
-        this.reportCardApprovedChanged.emit(this.reportCard);
-        
-        console.log(data);
-        for(let i=0; i<this.changedComponents.length; i++) {
-          let reportCardModComponent: ReportCardModComponent = {
-            report_cards_components_id: this.changedComponents[i].id,
-            suggested_rank: this.changedComponents[i].rank
-          }
-          this.data.addReportCardModComponent(reportCardModComponent).subscribe(
-            (componentData: ReportCardModComponent) => {
-              console.log(componentData);
-            },
-            (err: ErrorApi) => {
-              console.error(err.error.message);
-            }
-          )
-        }
-      },
-      (err: ErrorApi) => {
-        console.error(err.error.message);
-      }
-    )
-  }
+	submitReportCard() {
+		console.log('submit report card');
+		this.putReportCard();
 
-  submitReportCard() {
-    console.log("submit report card");
-    this.putReportCard();
+		console.log('put changes');
+		for (let i = 0; i < this.changedComponents.length; i++) {
+			const component = this.changedComponents[i];
+			this.data.putReportCardComponent(component).subscribe(
+				(data: ReportCardComponent) => {
+					console.log(data);
+				},
+				(err: ErrorApi) => {
+					console.error(err);
+				}
+			);
+		}
+	}
 
-    console.log("put changes");
-    for(let i=0; i<this.changedComponents.length; i++) {
-      const component = this.changedComponents[i];
-      this.data.putReportCardComponent(component).subscribe(
-        (data: ReportCardComponent) => { console.log(data); },
-        (err: ErrorApi) => { console.error(err); }
-      );
-    }
-  }
+	putReportCard() {
+		if (this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) {
+			if (this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) {
+				let newComment: ReportCardComments = this.generateReportCurrentCardComment();
+				this.data.addReportCardComment(newComment).subscribe(
+					(data: ReportCardComments) => {
+						this.reportCard.comment = data.id;
+					},
+					(err: ErrorApi) => {
+						console.error(err.error.message);
+						this.dialog.openSnackBar(err.error.message);
+					}
+				);
+			}
+		}
 
-  putReportCard() {
-    if(this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) { 
-      if(this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) { 
-        let newComment: ReportCardComments = this.generateReportCurrentCardComment();
-        this.data.addReportCardComment(newComment).subscribe(
-          (data: ReportCardComments) => {
-            this.reportCard.comment = data.id;
-          },
-          (err: ErrorApi) => {
-            console.error(err.error.message);
-            this.dialog.openSnackBar(err.error.message);
-          }
-        );
+		this.reportCard.approved = this.auth.user.id;
+		this.data.putReportCard(this.reportCard).subscribe(
+			(data: ReportCard) => {
+				console.log(data);
+				this.dialog.openSnackBar('Report Card Approved!');
 
-      }
-    }
+				console.log('About to emit reportcard');
+				this.reportCardApprovedChanged.emit(this.reportCard);
+			},
+			(err: ErrorApi) => {
+				console.error(err);
+			}
+		);
+	}
 
-    this.reportCard.approved = this.auth.user.id;
-    this.data.putReportCard(this.reportCard).subscribe(
-      (data: ReportCard) => { 
-        console.log(data); 
-        this.dialog.openSnackBar("Report Card Approved!");
+	reportCardStatusChanged(newStatus: string) {
+		this.reportCard.status = newStatus;
+	}
 
-        console.log('About to emit reportcard');
-        this.reportCardApprovedChanged.emit(this.reportCard);
-      },
-      (err: ErrorApi) => { console.error(err); }
-    );
-  }
+	skillRankChanged(newRank: string, id: number) {
+		for (let x = 0; x < this.reportCard.components.length; x++) {
+			const component = this.reportCard.components[x];
+			if (component.id === id) {
+				if (this.removeComponentChangedIfNeeded(component, newRank)) {
+					return;
+				}
+				if (this.addComponentChangedIfNeeded(component, newRank)) {
+					return;
+				}
+			}
+		}
+	}
 
-  reportCardStatusChanged(newStatus: string) {
-    this.reportCard.status = newStatus;
-  } 
+	removeComponentChangedIfNeeded(component: ReportCardComponentCompleted, newRank: string): boolean {
+		for (let y = 0; y < this.changedComponents.length; y++) {
+			const changedComponent = this.changedComponents[y];
+			if (changedComponent.id === component.id) {
+				if (component.rank === newRank) {
+					this.changedComponents.splice(y, 1);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-  skillRankChanged(newRank: string, id: number) {
+	addComponentChangedIfNeeded(component: ReportCardComponentCompleted, newRank: string): boolean {
+		if (component.rank !== newRank) {
+			this.changedComponents.push({
+				skills_id: component.skills_id,
+				rank: newRank,
+				report_cards_id: this.reportCard.id,
+				id: component.id
+			});
+			return true;
+		}
+		return false;
+	}
 
-    for(let x=0; x<this.reportCard.components.length; x++) {
-      const component = this.reportCard.components[x];
-      if(component.id === id) {
-        if(this.removeComponentChangedIfNeeded(component, newRank)) { return; }
-        if(this.addComponentChangedIfNeeded(component, newRank)) { return; }
-      }
-    }
-  } 
-
-  removeComponentChangedIfNeeded(component: ReportCardComponentCompleted, newRank: string): boolean {
-    for(let y=0; y<this.changedComponents.length; y++) {
-      const changedComponent = this.changedComponents[y];
-      if(changedComponent.id === component.id) {
-        if(component.rank === newRank) {
-          this.changedComponents.splice(y, 1);
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  addComponentChangedIfNeeded(component: ReportCardComponentCompleted, newRank: string): boolean {
-    if(component.rank !== newRank) {
-      this.changedComponents.push({
-        skills_id: component.skills_id, 
-        rank: newRank,
-        report_cards_id: this.reportCard.id,
-        id: component.id
-      });
-      return true;
-    }
-    return false;
-  }
-
-  generateReportCard(athleteId: number) {
-    console.log(athleteId);
-    let reportCardData: string[] = [];
-    reportCardData.push(athleteId.toString());
-    this.printService.printDocument('report-card', reportCardData);
-  }
-
+	generateReportCard(athleteId: number) {
+		console.log(athleteId);
+		let reportCardData: string[] = [];
+		reportCardData.push(athleteId.toString());
+		this.printService.printDocument('report-card', reportCardData);
+	}
 }

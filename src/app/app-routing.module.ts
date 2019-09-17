@@ -15,45 +15,43 @@ import { PrintReportCardComponent } from './print-report-card/print-report-card.
 import { LevelGroupsComponent } from './level-groups/level-groups.component';
 import { SentBackReportCardsComponent } from './sent-back-report-cards/sent-back-report-cards.component';
 import { AthletesComponent } from './athletes/athletes.component';
+import { CommentsComponent } from './comments/comments.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: MainLayoutComponent,
-    canActivate: [AuthGuard],
-    children: [
-      { path: '', component: ReportCardsComponent },
-      { path: 'approve', component: ApproveReportCardsComponent },
-      { path: 'completed', component: CompletedReportCardsComponent },
-      { path: 'level-groups', component: LevelGroupsComponent },
-      { path: 'levels', component: LevelsComponent },
-      { path: 'events', component: EventsComponent },
-      { path: 'users', component: UsersComponent },
-      { path: 'athletes', component: AthletesComponent },
-      { path: 'sent-back-report-cards', component: SentBackReportCardsComponent }
-    ]
-  },
-  {
-    path: '',
-    component: LoginLayoutComponent,
-    children: [
-      { path: 'login', component: LoginComponent }
-    ]
-  },
-  {
-    path: 'print',
-    outlet: 'print',
-    component: PrintLayoutComponent,
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'report-card/:athleteIds', component: PrintReportCardComponent }
-    ]
-  },
-  { path: '**', redirectTo: '' }
+	{
+		path: '',
+		component: MainLayoutComponent,
+		canActivate: [ AuthGuard ],
+		children: [
+			{ path: '', component: ReportCardsComponent },
+			{ path: 'approve', component: ApproveReportCardsComponent },
+			{ path: 'completed', component: CompletedReportCardsComponent },
+			{ path: 'level-groups', component: LevelGroupsComponent },
+			{ path: 'levels', component: LevelsComponent },
+			{ path: 'events', component: EventsComponent },
+			{ path: 'users', component: UsersComponent },
+			{ path: 'athletes', component: AthletesComponent },
+			{ path: 'comments', component: CommentsComponent },
+			{ path: 'sent-back-report-cards', component: SentBackReportCardsComponent }
+		]
+	},
+	{
+		path: '',
+		component: LoginLayoutComponent,
+		children: [ { path: 'login', component: LoginComponent } ]
+	},
+	{
+		path: 'print',
+		outlet: 'print',
+		component: PrintLayoutComponent,
+		canActivate: [ AuthGuard ],
+		children: [ { path: 'report-card/:athleteIds', component: PrintReportCardComponent } ]
+	},
+	{ path: '**', redirectTo: '' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+	imports: [ RouterModule.forRoot(routes) ],
+	exports: [ RouterModule ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

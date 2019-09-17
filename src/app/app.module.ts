@@ -34,6 +34,7 @@ import { LevelGroupsComponent } from './level-groups/level-groups.component';
 import { SentBackReportCardsComponent } from './sent-back-report-cards/sent-back-report-cards.component';
 import { ReportCardModificationPanelComponent } from './sent-back-report-cards/report-card-modification-panel/report-card-modification-panel.component';
 import { AthletesComponent } from './athletes/athletes.component';
+import { CommentsComponent } from './comments/comments.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { AthletesComponent } from './athletes/athletes.component';
     LevelGroupsComponent,
     SentBackReportCardsComponent,
     ReportCardModificationPanelComponent,
-    AthletesComponent
+    AthletesComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,

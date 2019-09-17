@@ -1,0 +1,231 @@
+<div class="m-1">
+  <mat-grid-list cols="12" rowHeight="40px">
+    <div *ngFor="let comment of comments">
+      <ng-container *ngIf="comment.id !== -1">
+        <mat-grid-tile [colspan]="4">
+          <mat-form-field class="w-100">
+            <mat-label>Apply Level</mat-label>
+            <mat-select #levelSelect>
+              <mat-option [value]="0">All</mat-option>
+              <mat-optgroup
+                *ngFor="let group of levelGroups"
+                [label]="group.name"
+              >
+                <mat-option
+                  *ngFor="let level of group.levels"
+                  [value]="level.id"
+                >
+                  {{ group.name }} Level {{ level.number }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2">
+          <button
+            (click)="addLevel(comment.id, levelSelect._value)"
+            mat-raised-button
+            color="primary"
+          >
+            Add Level
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2">
+          <mat-form-field class="w-100">
+            <mat-label>Comment Type</mat-label>
+            <mat-select
+              [(ngModel)]="comment.type"
+              (selectionChange)="putComment(comment.id)"
+            >
+              <mat-option
+                *ngFor="
+                  let type of [
+                    { id: 'INTRO', name: 'Intro' },
+                    { id: 'SKILL', name: 'Skill/Goal' },
+                    { id: 'CLOSING', name: 'Closing' }
+                  ]
+                "
+                [value]="type.id"
+              >
+                {{ type.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2">
+          <button
+            (click)="addAthleteName(commentInput.id, comment.id)"
+            mat-raised-button
+            color="primary"
+          >
+            Athlete Name
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button
+            (click)="addEvent(commentInput.id, comment.id)"
+            mat-raised-button
+            color="primary"
+          >
+            Event
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <button
+            (click)="addSkill(commentInput.id, comment.id)"
+            mat-raised-button
+            color="primary"
+          >
+            Skill
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="12">
+          <mat-form-field class="w-100">
+            <input
+              #commentInput
+              matInput
+              placeholder="Comment"
+              [(ngModel)]="comment.comment"
+              (ngModelChange)="putComment(comment.id)"
+            />
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <div *ngFor="let level of comment.levels">
+          <mat-grid-tile [colspan]="4">
+            <p>{{ level.name }} Level {{ level.level_number }}</p>
+            <a class="delete" (click)="removeLevel(comment.id, level.id)">
+              (x)
+            </a>
+          </mat-grid-tile>
+        </div>
+
+        <mat-grid-tile [colspan]="12" *ngIf="comment.levels.length === 0">
+          <p>Applied to all Levels</p>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="12">
+          <mat-divider class="w-100"></mat-divider>
+        </mat-grid-tile>
+      </ng-container>
+    </div>
+
+    <mat-grid-tile [colspan]="12">
+      <h3>New Comment</h3>
+    </mat-grid-tile>
+    <ng-container *ngIf="comments.length > 0">
+      <mat-grid-tile [colspan]="4">
+        <mat-form-field class="w-100">
+          <mat-label>Apply Level</mat-label>
+          <mat-select #levelSelect>
+            <mat-option [value]="0">All</mat-option>
+            <mat-optgroup
+              *ngFor="let group of levelGroups"
+              [label]="group.name"
+            >
+              <mat-option *ngFor="let level of group.levels" [value]="level.id">
+                {{ group.name }} Level {{ level.number }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile [colspan]="2">
+        <button
+          (click)="addLevel(comments[0].id, levelSelect._value)"
+          mat-raised-button
+          color="primary"
+        >
+          Add Level
+        </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile [colspan]="2">
+        <mat-form-field class="w-100">
+          <mat-label>Comment Type</mat-label>
+          <mat-select [(ngModel)]="comments[0].type">
+            <mat-option
+              *ngFor="
+                let type of [
+                  { id: 'INTRO', name: 'Intro' },
+                  { id: 'SKILL', name: 'Skill/Goal' },
+                  { id: 'CLOSING', name: 'Closing' }
+                ]
+              "
+              [value]="type.id"
+            >
+              {{ type.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile [colspan]="2">
+        <button
+          (click)="addAthleteName(commentInput.id, comments[0].id)"
+          mat-raised-button
+          color="primary"
+        >
+          Athlete Name
+        </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button
+          (click)="addEvent(commentInput.id, comments[0].id)"
+          mat-raised-button
+          color="primary"
+        >
+          Event
+        </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <button
+          (click)="addSkill(commentInput.id, comments[0].id)"
+          mat-raised-button
+          color="primary"
+        >
+          Skill
+        </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile [colspan]="12">
+        <mat-form-field class="w-100">
+          <input
+            matInput
+            #commentInput
+            placeholder="Comment"
+            [(ngModel)]="comments[0].comment"
+          />
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <div *ngFor="let level of comments[0].levels">
+        <mat-grid-tile [colspan]="4">
+          <p>{{ level.name }} Level {{ level.level_number }}</p>
+          <a class="delete" (click)="removeLevel(comments[0].id, level.id)">
+            (x)
+          </a>
+        </mat-grid-tile>
+      </div>
+
+      <mat-grid-tile [colspan]="12" *ngIf="comments[0].levels.length === 0">
+        <p>Applied to all Levels</p>
+      </mat-grid-tile>
+
+      <mat-grid-tile [colspan]="12">
+        <button (click)="addNewComment()" mat-raised-button color="primary">
+          Add Comment
+        </button>
+      </mat-grid-tile>
+    </ng-container>
+  </mat-grid-list>
+</div>
