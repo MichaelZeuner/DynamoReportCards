@@ -204,8 +204,8 @@ export class ReportCardPanelComponent implements OnInit {
 		console.log('report card in panel');
 		console.log(this.reportCard);
 		this.data.getAthletesAttemptsAtLevel(this.reportCard.athlete.id, this.reportCard.level.id).subscribe(
-			(data: number) => {
-				this.attemptsAtLevel = data;
+			(data: ReportCard[]) => {
+				this.attemptsAtLevel = data.length;
 			},
 			(err: ErrorApi) => {
 				console.error(err);

@@ -16,6 +16,7 @@ import { Comments } from "../interfaces/comments";
 import { ReportCardComments } from "../interfaces/report-card-comments";
 import { Skill } from "../interfaces/skill";
 import { CommonService } from "../shared/common.service";
+import { ReportCardCompleted } from '../interfaces/report-card-completed';
 
 @Component({
   selector: "app-report-cards",
@@ -34,6 +35,7 @@ export class ReportCardsComponent implements OnInit {
 
   session: string = "";
   public commentsBase: Comments[] = [];
+  public commentsPreviousRemoved: Comments[] = [];
   public commentsActive: Comments[] = [];
 
   public events: Event[] = [];
@@ -113,7 +115,7 @@ export class ReportCardsComponent implements OnInit {
 
   updateComments() {
     this.commentsActive = this.comm.updateComments(
-      this.commentsBase,
+      this.commentsPreviousRemoved,
       this.level.id,
       this.selectedAthlete.first_name,
       this.eventName,
@@ -124,7 +126,30 @@ export class ReportCardsComponent implements OnInit {
   updateSelectLevel(newLevel: Level) {
     console.log(newLevel);
     this.level = newLevel;
-    this.updateComments();
+    this.data
+      .getAthletesAttemptsAtLevel(this.selectedAthlete.id, newLevel.id)
+      .subscribe(
+        (previousReportCards: ReportCardCompleted[]) => {
+          console.log(previousReportCards);
+          console.log(this.commentsBase);
+          this.commentsPreviousRemoved = this.comm.deepCopy(this.commentsBase);
+          for(let i=this.commentsPreviousRemoved.length-1; i>=0; i--) {
+            for(let x=0; x<previousReportCards.length; x++) {
+              if(this.commentsPreviousRemoved[i].id === previousReportCards[x].card_comments.intro_comment_id 
+                || this.commentsPreviousRemoved[i].id === previousReportCards[x].card_comments.skill_comment_id 
+                || this.commentsPreviousRemoved[i].id === previousReportCards[x].card_comments.closing_comment_id) {
+                this.commentsPreviousRemoved.splice(i, 1);
+                break;
+              }
+            }
+          }
+          console.log(this.commentsPreviousRemoved);
+          this.updateComments();
+        },
+        (err: ErrorApi) => {
+          console.error(err);
+        }
+      );
 
     this.data.getLevelEvents(newLevel.id).subscribe((data: Event[]) => {
       this.events = data;
