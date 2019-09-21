@@ -157,6 +157,13 @@ export class ReportCardsComponent implements OnInit {
   }
 
   onEventsChange(events: Event[]) {
+    let newReportCard: boolean = true;
+    for(let i=0; i<this.level.events.length; i++) {
+      if(typeof this.events[i].skills !== 'undefined') {
+        newReportCard = false;
+      }
+    }
+    
     this.level.events = events;
     console.log(this.level);
   }
