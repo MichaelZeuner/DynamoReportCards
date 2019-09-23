@@ -16,7 +16,7 @@ import { Comments } from "../interfaces/comments";
 import { ReportCardComments } from "../interfaces/report-card-comments";
 import { Skill } from "../interfaces/skill";
 import { CommonService } from "../shared/common.service";
-import { ReportCardCompleted } from '../interfaces/report-card-completed';
+import { ReportCardCompleted } from "../interfaces/report-card-completed";
 
 @Component({
   selector: "app-report-cards",
@@ -43,6 +43,8 @@ export class ReportCardsComponent implements OnInit {
   public skills: Skill[] = [];
   selectedSkill: number;
   public skillsDisabled: Boolean = true;
+
+  partialReportCard: ReportCard;
 
   selectedIntroComment: number = this.UNSELECTED;
   selectedSkillComment: number = this.UNSELECTED;
@@ -133,11 +135,16 @@ export class ReportCardsComponent implements OnInit {
           console.log(previousReportCards);
           console.log(this.commentsBase);
           this.commentsPreviousRemoved = this.comm.deepCopy(this.commentsBase);
-          for(let i=this.commentsPreviousRemoved.length-1; i>=0; i--) {
-            for(let x=0; x<previousReportCards.length; x++) {
-              if(this.commentsPreviousRemoved[i].id === previousReportCards[x].card_comments.intro_comment_id 
-                || this.commentsPreviousRemoved[i].id === previousReportCards[x].card_comments.skill_comment_id 
-                || this.commentsPreviousRemoved[i].id === previousReportCards[x].card_comments.closing_comment_id) {
+          for (let i = this.commentsPreviousRemoved.length - 1; i >= 0; i--) {
+            for (let x = 0; x < previousReportCards.length; x++) {
+              if (
+                this.commentsPreviousRemoved[i].id ===
+                  previousReportCards[x].card_comments.intro_comment_id ||
+                this.commentsPreviousRemoved[i].id ===
+                  previousReportCards[x].card_comments.skill_comment_id ||
+                this.commentsPreviousRemoved[i].id ===
+                  previousReportCards[x].card_comments.closing_comment_id
+              ) {
                 this.commentsPreviousRemoved.splice(i, 1);
                 break;
               }
@@ -158,12 +165,41 @@ export class ReportCardsComponent implements OnInit {
 
   onEventsChange(events: Event[]) {
     let newReportCard: boolean = true;
-    for(let i=0; i<this.level.events.length; i++) {
-      if(typeof this.events[i].skills !== 'undefined') {
-        newReportCard = false;
+    console.log(events);
+    if (typeof this.level.events !== "undefined") {
+      for (let i = 0; i < this.level.events.length; i++) {
+        if (typeof this.level.events[i].skills !== "undefined") {
+          newReportCard = false;
+        }
       }
     }
-    
+
+    if (newReportCard) {
+      this.partialReportCard = {
+        submitted_by: this.auth.user.id,
+        athletes_id: this.selectedAthlete.id,
+        levels_id: this.level.id,
+        comment: 0,
+        day_of_week: "UNSET",
+        session: "UNSET",
+        status: "Partial"
+      };
+      this.data.addReportCard(this.partialReportCard).subscribe(
+        (data: ReportCard) => {
+          console.log(data);
+          this.partialReportCard = data;
+          this.addAllComponentsToReportCard(this.partialReportCard);
+        },
+        (err: ErrorApi) => {
+          console.error(err);
+          this.dialog.openSnackBar(err.message);
+        }
+      );
+    } else {
+      console.log(this.partialReportCard);
+      this.addAllComponentsToReportCard(this.partialReportCard);
+    }
+
     this.level.events = events;
     console.log(this.level);
   }
@@ -273,19 +309,28 @@ export class ReportCardsComponent implements OnInit {
   }
 
   addReportCard(dayOfWeek: string, addedReportCardComment: ReportCardComments) {
-    let reportCard = {} as ReportCard;
-    reportCard.submitted_by = this.auth.user.id;
-    reportCard.athletes_id = this.selectedAthlete.id;
-    reportCard.levels_id = this.level.id;
-    reportCard.comment = addedReportCardComment.id;
-    reportCard.day_of_week = dayOfWeek;
-    reportCard.session = this.session;
+    let reportCard: ReportCard = {
+      submitted_by: this.auth.user.id,
+      athletes_id: this.selectedAthlete.id,
+      levels_id: this.level.id,
+      comment: addedReportCardComment.id,
+      day_of_week: dayOfWeek,
+      session: this.session,
+      status: "unset"
+    };
+
     reportCard.status = this.getReportCardStatus(reportCard);
 
     this.data.addReportCard(reportCard).subscribe(
       (data: ReportCard) => {
         console.log(data);
         this.addAllComponentsToReportCard(data);
+
+        this.athleteSelect.clearAthlete();
+        this.dialog.openSnackBar(
+          "Report card has been submitted for approval!"
+        );
+
         this.mainNav.reloadApprovalNeeded();
       },
       (err: ErrorApi) => {
@@ -319,20 +364,25 @@ export class ReportCardsComponent implements OnInit {
   }
 
   addAllComponentsToReportCard(reportCard: ReportCard) {
-    for (let e = 0; e < this.level.events.length; e++) {
-      const event = this.level.events[e];
-      for (let s = 0; s < event.skills.length; s++) {
-        const skill = event.skills[s];
-        let reportCardComponent = {} as ReportCardComponent;
-        reportCardComponent.report_cards_id = reportCard.id;
-        reportCardComponent.skills_id = skill.id;
-        reportCardComponent.rank = skill.rank;
-        this.addComponentToReportCard(reportCardComponent);
+    this.data.deleteReportCardComponents(reportCard.id).subscribe(() => {
+      if (typeof this.level.events !== "undefined") {
+        for (let e = 0; e < this.level.events.length; e++) {
+          const event = this.level.events[e];
+          if (typeof event.skills !== "undefined") {
+            for (let s = 0; s < event.skills.length; s++) {
+              const skill = event.skills[s];
+              if (typeof skill.rank !== "undefined") {
+                let reportCardComponent = {} as ReportCardComponent;
+                reportCardComponent.report_cards_id = reportCard.id;
+                reportCardComponent.skills_id = skill.id;
+                reportCardComponent.rank = skill.rank;
+                this.addComponentToReportCard(reportCardComponent);
+              }
+            }
+          }
+        }
       }
-    }
-
-    this.athleteSelect.clearAthlete();
-    this.dialog.openSnackBar("Report card has been submitted for approval!");
+    });
   }
 
   addComponentToReportCard(reportCardComponent: ReportCardComponent) {

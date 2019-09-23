@@ -1,5 +1,5 @@
 export interface ReportCard {
-  id: number;
+  id?: number;
   submitted_by: number;
   levels_id: number;
   athletes_id: number;
@@ -7,8 +7,7 @@ export interface ReportCard {
   day_of_week: string;
   session: string;
   status: string;
-  partial: boolean;
-  approved: number;
-  updated_date: string;
-  created_date: string;
+  approved?: number;
+  updated_date?: string;
+  created_date?: string;
 }

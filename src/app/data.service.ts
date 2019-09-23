@@ -185,6 +185,12 @@ export class DataService {
     );
   }
 
+  deleteReportCardComponents(reportCardId: number) {
+    return this.http.get(
+      this.baseUrl + "/delete-report-card-components/" + reportCardId
+    );
+  }
+
   addReportCardMod(reportCardMod: ReportCardMod) {
     return this.http.post(this.baseUrl + "/report-card-mod", reportCardMod);
   }
