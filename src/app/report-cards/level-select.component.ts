@@ -87,13 +87,8 @@ export class LevelSelectComponent {
   protected levels: Level[];
 
   constructor(private data: DataService) {
-    console.log(this._level);
-
     this.data.getLevels().subscribe((data: Level[]) => {
       this.levels = data;
-
-      console.log(this.levels);
-
       this.filteredLevels = this.myControl.valueChanges.pipe(
         startWith(""),
         map(value => this._filter(value))
@@ -118,11 +113,9 @@ export class LevelSelectComponent {
       const level = this.levels[i];
       const fullName = level.name + " Level " + level.level_number;
       if (fullName === searchValue) {
-        console.log("SETTING LEVEL");
         this._level = level;
         break;
       } else {
-        console.log("clear level");
         this._level = null;
       }
     }

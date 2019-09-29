@@ -94,8 +94,6 @@ export class AthletesSelectComponent implements OnInit {
     this.data.getAthletes().subscribe((data: Athlete[]) => {
       this.athletes = data;
 
-      console.log(this.athletes);
-
       this.filteredAthletes = this.myControl.valueChanges.pipe(
         startWith(""),
         map(value => this._filter(value))
@@ -105,7 +103,6 @@ export class AthletesSelectComponent implements OnInit {
 
   private _filter(value: string): Athlete[] {
     const filterValue = value !== null ? value.toLowerCase() : "";
-    console.log(filterValue);
 
     return this.athletes.filter(
       option =>
@@ -127,11 +124,9 @@ export class AthletesSelectComponent implements OnInit {
     for (let i = 0; i < this.athletes.length; i++) {
       const athlete = this.athletes[i];
       if (athlete.first_name + " " + athlete.last_name === searchValue) {
-        console.log("SETTING ATHLETE");
         this._athlete = athlete;
         break;
       } else {
-        console.log("clear athlete");
         this._athlete = null;
       }
     }

@@ -152,6 +152,7 @@ export class ReportCardsComponent implements OnInit {
 
     this.selectedAthlete = partialReportCard.athlete;
     this.partialReportCard = partialReportCard;
+    this.updateCommentsForSlectedAthlete(this.level.id);
     this.newReportCard = false;
   }
 
@@ -218,42 +219,44 @@ export class ReportCardsComponent implements OnInit {
     };
 
     if (this.level !== null) {
-      this.data
-        .getAthletesAttemptsAtLevel(this.selectedAthlete.id, levelId)
-        .subscribe(
-          (previousReportCards: ReportCardCompleted[]) => {
-            console.log(previousReportCards);
-            console.log(this.commentsBase);
-            this.commentsPreviousRemoved = this.comm.deepCopy(
-              this.commentsBase
-            );
-            for (let i = this.commentsPreviousRemoved.length - 1; i >= 0; i--) {
-              for (let x = 0; x < previousReportCards.length; x++) {
-                if (
-                  this.commentsPreviousRemoved[i].id ===
-                    previousReportCards[x].card_comments.intro_comment_id ||
-                  this.commentsPreviousRemoved[i].id ===
-                    previousReportCards[x].card_comments.skill_comment_id ||
-                  this.commentsPreviousRemoved[i].id ===
-                    previousReportCards[x].card_comments.closing_comment_id
-                ) {
-                  this.commentsPreviousRemoved.splice(i, 1);
-                  break;
-                }
-              }
-            }
-            console.log(this.commentsPreviousRemoved);
-            this.updateComments();
-          },
-          (err: ErrorApi) => {
-            console.error(err);
-          }
-        );
+      this.updateCommentsForSlectedAthlete(levelId);
 
       this.data.getLevelEvents(levelId).subscribe((data: Event[]) => {
         this.events = data;
       });
     }
+  }
+
+  updateCommentsForSlectedAthlete(levelId: number) {
+    this.data
+      .getAthletesAttemptsAtLevel(this.selectedAthlete.id, levelId)
+      .subscribe(
+        (previousReportCards: ReportCardCompleted[]) => {
+          console.log(previousReportCards);
+          console.log(this.commentsBase);
+          this.commentsPreviousRemoved = this.comm.deepCopy(this.commentsBase);
+          for (let i = this.commentsPreviousRemoved.length - 1; i >= 0; i--) {
+            for (let x = 0; x < previousReportCards.length; x++) {
+              if (
+                this.commentsPreviousRemoved[i].id ===
+                  previousReportCards[x].card_comments.intro_comment_id ||
+                this.commentsPreviousRemoved[i].id ===
+                  previousReportCards[x].card_comments.skill_comment_id ||
+                this.commentsPreviousRemoved[i].id ===
+                  previousReportCards[x].card_comments.closing_comment_id
+              ) {
+                this.commentsPreviousRemoved.splice(i, 1);
+                break;
+              }
+            }
+          }
+          console.log(this.commentsPreviousRemoved);
+          this.updateComments();
+        },
+        (err: ErrorApi) => {
+          console.error(err);
+        }
+      );
   }
 
   onEventsChange(events: Event[]) {
@@ -279,12 +282,10 @@ export class ReportCardsComponent implements OnInit {
         }
       );
     } else {
-      console.log(this.partialReportCard);
       this.addAllComponentsToReportCard(this.partialReportCard);
     }
 
     this.level.events = events;
-    console.log(this.level);
   }
 
   submitClick() {

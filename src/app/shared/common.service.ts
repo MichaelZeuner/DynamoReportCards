@@ -28,9 +28,12 @@ export class CommonService {
     }
 
     return comment
-      .replace(this.COMMENT_NAME, athlete)
-      .replace(this.COMMENT_SKILL, skill.replace(/\(.*\)/g, "").toLowerCase())
-      .replace(this.COMMENT_EVENT, event.toLowerCase());
+      .replace(new RegExp(this.COMMENT_NAME, "g"), athlete)
+      .replace(
+        new RegExp(this.COMMENT_SKILL, "g"),
+        skill.replace(/\(.*\)/g, "").toLowerCase()
+      )
+      .replace(new RegExp(this.COMMENT_EVENT, "g"), event.toLowerCase());
   }
 
   updateComments(
