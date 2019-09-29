@@ -1,48 +1,63 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Level } from '../interfaces/level';
-import { Event } from '../interfaces/event';
-import { DataService } from '../data.service';
-import { Skill } from '../interfaces/skill';
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Level } from "../interfaces/level";
+import { Event } from "../interfaces/event";
+import { DataService } from "../data.service";
+import { Skill } from "../interfaces/skill";
+import { ReportCard } from "../interfaces/report-card";
+import { ReportCardCompleted } from "../interfaces/report-card-completed";
 
 @Component({
-  selector: 'app-report-card-events',
+  selector: "app-report-card-events",
   template: `
-  <div *ngFor="let event of eventsInternal">
-    <mat-divider></mat-divider>
-    <h3 class="eventTitle" >{{event.name}}</h3>
-    <app-skills [level]="level" [event]="event" (skills)="onSkillsRankChange($event, event)"></app-skills>
-  </div>
+    <div *ngFor="let event of eventsInternal">
+      <mat-divider></mat-divider>
+      <h3 class="eventTitle">{{ event.name }}</h3>
+      <app-skills
+        [level]="level"
+        [event]="event"
+        [reportCard]="reportCard"
+        (skills)="onSkillsRankChange($event, event)"
+      ></app-skills>
+    </div>
   `,
-  styles: [`
+  styles: [
+    `
       .eventTitle {
         margin-bottom: 0;
         padding-top: 1rem;
-    }
-  `]
+      }
+    `
+  ]
 })
 export class ReportCardEventsComponent implements OnInit {
   @Input() public level: Level;
+  @Input() reportCard: ReportCardCompleted;
   @Output() events = new EventEmitter<Event[]>();
   public eventsInternal: Event[];
 
-  //maybe take in a level object
-  constructor(private data: DataService) { }
+  constructor(private data: DataService) {}
 
   ngOnInit() {
-    console.log(this.level);
-
     this.data.getLevelEvents(this.level.id).subscribe((events: Event[]) => {
-      console.log(events);
       this.eventsInternal = events;
+      if (typeof this.level.events !== "undefined") {
+        for (let i = 0; i < this.level.events.length; i++) {
+          for (let x = 0; x < this.eventsInternal.length; x++) {
+            if (this.eventsInternal[x].id === this.level.events[i].id) {
+              this.eventsInternal[x] = this.level.events[i];
+              break;
+            }
+          }
+        }
+      }
     });
   }
 
   onSkillsRankChange(skills: Skill[], event: Event) {
     event.skills = skills;
-    console.log(event);
 
-    for(let i=0; i<this.eventsInternal.length; i++) {
-      if(this.eventsInternal[i].id === event.id) {
+    for (let i = 0; i < this.eventsInternal.length; i++) {
+      if (this.eventsInternal[i].id === event.id) {
         this.eventsInternal[i] = event;
         this.events.emit(this.eventsInternal);
         return;

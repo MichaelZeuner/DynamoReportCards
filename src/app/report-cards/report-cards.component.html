@@ -1,12 +1,25 @@
 <form class="w-100">
   <mat-card class="card">
-    <mat-card-title>Report Cards</mat-card-title>
+    <mat-card-title class="w-100">
+      <span>Report Cards</span>
+      <button
+        mat-raised-button
+        class="float-right"
+        color="warn"
+        (click)="deletePartialReportCard()"
+        *ngIf="newReportCard === false"
+      >
+        Delete Report Card
+      </button>
+    </mat-card-title>
     <mat-card-subtitle class="mb-0"
       >Select athlete to continue</mat-card-subtitle
     >
     <mat-card-content>
       <app-athlete-select
         #athleteSelect
+        [enabled]="newReportCard"
+        [athlete]="selectedAthlete"
         (selectedAthleteChange)="updateSelectAthlete($event)"
       ></app-athlete-select>
     </mat-card-content>
@@ -15,12 +28,15 @@
   <mat-card *ngIf="selectedAthlete">
     <mat-card-content>
       <app-level-select
+        [enabled]="newReportCard"
+        [level]="level"
         (levelChange)="updateSelectLevel($event)"
       ></app-level-select>
 
       <mat-list *ngIf="level">
         <app-report-card-events
           [level]="level"
+          [reportCard]="partialReportCard"
           (events)="onEventsChange($event)"
         ></app-report-card-events>
       </mat-list>
@@ -114,6 +130,7 @@
     <mat-button-toggle-group
       class="w-100"
       #group="matButtonToggleGroup"
+      [value]="partialReportCard.session"
       (click)="sessionChanged(group.value)"
       name="session"
       aria-label="Session"
@@ -147,7 +164,7 @@
     color="accent"
     (click)="submitClick()"
     class="submitButton"
-    *ngIf="level && selectedAthlete"
+    *ngIf="level !== null && selectedAthlete !== null"
   >
     Submit for Approval
   </button>

@@ -1,5 +1,5 @@
 import { DataService } from "../data.service";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, Inject } from "@angular/core";
 import { Athlete } from "../interfaces/athlete";
 import { Level } from "../interfaces/level";
 import { Event } from "../interfaces/event";
@@ -10,13 +10,20 @@ import { MainNavComponent } from "../main-nav/main-nav.component";
 import { AuthService } from "../auth/auth.service";
 import { DialogService } from "../shared/dialog.service";
 import { AthletesSelectComponent } from "./athlete-select.component";
-import { MatDialogRef, MatDialog, MatSelect } from "@angular/material";
+import {
+  MatDialogRef,
+  MatDialog,
+  MatSelect,
+  MAT_DIALOG_DATA
+} from "@angular/material";
 import { PrintService } from "../print.service";
 import { Comments } from "../interfaces/comments";
 import { ReportCardComments } from "../interfaces/report-card-comments";
 import { Skill } from "../interfaces/skill";
 import { CommonService } from "../shared/common.service";
 import { ReportCardCompleted } from "../interfaces/report-card-completed";
+import { SelectDialogInput } from "../mat-select-dialog/select-dialog-input";
+import { SelectDialogOutput } from "../mat-select-dialog/select-dialog-output";
 
 @Component({
   selector: "app-report-cards",
@@ -33,7 +40,6 @@ export class ReportCardsComponent implements OnInit {
   public eventName: string;
   @ViewChild("athleteSelect") athleteSelect: AthletesSelectComponent;
 
-  session: string = "";
   public commentsBase: Comments[] = [];
   public commentsPreviousRemoved: Comments[] = [];
   public commentsActive: Comments[] = [];
@@ -44,7 +50,8 @@ export class ReportCardsComponent implements OnInit {
   selectedSkill: number;
   public skillsDisabled: Boolean = true;
 
-  partialReportCard: ReportCard;
+  newReportCard: boolean = true;
+  partialReportCard: ReportCard = null;
 
   selectedIntroComment: number = this.UNSELECTED;
   selectedSkillComment: number = this.UNSELECTED;
@@ -75,6 +82,77 @@ export class ReportCardsComponent implements OnInit {
         this.dialog.openSnackBar(message);
       }
     );
+
+    this.data.getCoachesInProgressReportCard().subscribe(
+      (partialReportCards: ReportCardCompleted[]) => {
+        console.log(partialReportCards);
+
+        let reportCardSelectInput: SelectDialogInput = {
+          label: "Select a Partialy Created Report Card to Continue",
+          options: [{ id: -1, value: "Create New Report Card" }]
+        };
+        for (let i = 0; i < partialReportCards.length; i++) {
+          reportCardSelectInput.options.push({
+            id: partialReportCards[i].id,
+            value:
+              partialReportCards[i].athlete.first_name +
+              " " +
+              partialReportCards[i].athlete.last_name +
+              " - " +
+              partialReportCards[i].level.name +
+              " Level " +
+              partialReportCards[i].level.level_number
+          });
+        }
+        this.dialog
+          .openSelectDialog(reportCardSelectInput)
+          .afterClosed()
+          .subscribe(res => {
+            console.log(res);
+            if (res) {
+              let result: SelectDialogOutput = res;
+              if (result.id !== -1) {
+                console.log(result.id);
+                console.log(result.value);
+
+                for (let i = 0; i < partialReportCards.length; i++) {
+                  if (partialReportCards[i].id === result.id) {
+                    this.updatePartialReportCard(partialReportCards[i]);
+                  }
+                }
+              }
+            }
+          });
+      },
+      (err: ErrorApi) => {
+        console.error(err);
+      }
+    );
+  }
+
+  updatePartialReportCard(partialReportCard: ReportCardCompleted) {
+    this.level = partialReportCard.level;
+    this.level.events = partialReportCard.events;
+    for (let x = 0; x < this.level.events.length; x++) {
+      let event = this.level.events[x];
+
+      this.level.events[x].skills = [];
+      for (let y = 0; y < partialReportCard.components.length; y++) {
+        let component: any = partialReportCard.components[y];
+        if (event.id === component.skill.events_id) {
+          let skill = component.skill;
+          this.level.events[x].skills.push({
+            id: skill.id,
+            name: skill.name,
+            rank: component.rank
+          });
+        }
+      }
+    }
+
+    this.selectedAthlete = partialReportCard.athlete;
+    this.partialReportCard = partialReportCard;
+    this.newReportCard = false;
   }
 
   eventChanged(eventId: number) {
@@ -126,64 +204,69 @@ export class ReportCardsComponent implements OnInit {
   }
 
   updateSelectLevel(newLevel: Level) {
-    console.log(newLevel);
     this.level = newLevel;
-    this.data
-      .getAthletesAttemptsAtLevel(this.selectedAthlete.id, newLevel.id)
-      .subscribe(
-        (previousReportCards: ReportCardCompleted[]) => {
-          console.log(previousReportCards);
-          console.log(this.commentsBase);
-          this.commentsPreviousRemoved = this.comm.deepCopy(this.commentsBase);
-          for (let i = this.commentsPreviousRemoved.length - 1; i >= 0; i--) {
-            for (let x = 0; x < previousReportCards.length; x++) {
-              if (
-                this.commentsPreviousRemoved[i].id ===
-                  previousReportCards[x].card_comments.intro_comment_id ||
-                this.commentsPreviousRemoved[i].id ===
-                  previousReportCards[x].card_comments.skill_comment_id ||
-                this.commentsPreviousRemoved[i].id ===
-                  previousReportCards[x].card_comments.closing_comment_id
-              ) {
-                this.commentsPreviousRemoved.splice(i, 1);
-                break;
+
+    let levelId: number = this.level === null ? -1 : this.level.id;
+    this.partialReportCard = {
+      submitted_by: this.auth.user.id,
+      athletes_id: this.selectedAthlete.id,
+      levels_id: levelId,
+      comment: 0,
+      day_of_week: "UNSET",
+      session: "UNSET",
+      status: "Partial"
+    };
+
+    if (this.level !== null) {
+      this.data
+        .getAthletesAttemptsAtLevel(this.selectedAthlete.id, levelId)
+        .subscribe(
+          (previousReportCards: ReportCardCompleted[]) => {
+            console.log(previousReportCards);
+            console.log(this.commentsBase);
+            this.commentsPreviousRemoved = this.comm.deepCopy(
+              this.commentsBase
+            );
+            for (let i = this.commentsPreviousRemoved.length - 1; i >= 0; i--) {
+              for (let x = 0; x < previousReportCards.length; x++) {
+                if (
+                  this.commentsPreviousRemoved[i].id ===
+                    previousReportCards[x].card_comments.intro_comment_id ||
+                  this.commentsPreviousRemoved[i].id ===
+                    previousReportCards[x].card_comments.skill_comment_id ||
+                  this.commentsPreviousRemoved[i].id ===
+                    previousReportCards[x].card_comments.closing_comment_id
+                ) {
+                  this.commentsPreviousRemoved.splice(i, 1);
+                  break;
+                }
               }
             }
+            console.log(this.commentsPreviousRemoved);
+            this.updateComments();
+          },
+          (err: ErrorApi) => {
+            console.error(err);
           }
-          console.log(this.commentsPreviousRemoved);
-          this.updateComments();
-        },
-        (err: ErrorApi) => {
-          console.error(err);
-        }
-      );
+        );
 
-    this.data.getLevelEvents(newLevel.id).subscribe((data: Event[]) => {
-      this.events = data;
-    });
+      this.data.getLevelEvents(levelId).subscribe((data: Event[]) => {
+        this.events = data;
+      });
+    }
   }
 
   onEventsChange(events: Event[]) {
-    let newReportCard: boolean = true;
-    console.log(events);
     if (typeof this.level.events !== "undefined") {
       for (let i = 0; i < this.level.events.length; i++) {
         if (typeof this.level.events[i].skills !== "undefined") {
-          newReportCard = false;
+          this.newReportCard = false;
         }
       }
     }
 
-    if (newReportCard) {
-      this.partialReportCard = {
-        submitted_by: this.auth.user.id,
-        athletes_id: this.selectedAthlete.id,
-        levels_id: this.level.id,
-        comment: 0,
-        day_of_week: "UNSET",
-        session: "UNSET",
-        status: "Partial"
-      };
+    if (this.newReportCard) {
+      this.newReportCard = false;
       this.data.addReportCard(this.partialReportCard).subscribe(
         (data: ReportCard) => {
           console.log(data);
@@ -220,7 +303,7 @@ export class ReportCardsComponent implements OnInit {
       return;
     }
 
-    if (this.session === "") {
+    if (this.partialReportCard.session === "") {
       this.dialog.openSnackBar(
         "Please select a session before submitting report card."
       );
@@ -309,39 +392,17 @@ export class ReportCardsComponent implements OnInit {
   }
 
   addReportCard(dayOfWeek: string, addedReportCardComment: ReportCardComments) {
-    let reportCard: ReportCard = {
-      submitted_by: this.auth.user.id,
-      athletes_id: this.selectedAthlete.id,
-      levels_id: this.level.id,
-      comment: addedReportCardComment.id,
-      day_of_week: dayOfWeek,
-      session: this.session,
-      status: "unset"
-    };
-
-    reportCard.status = this.getReportCardStatus(reportCard);
-
-    this.data.addReportCard(reportCard).subscribe(
-      (data: ReportCard) => {
-        console.log(data);
-        this.addAllComponentsToReportCard(data);
-
-        this.athleteSelect.clearAthlete();
-        this.dialog.openSnackBar(
-          "Report card has been submitted for approval!"
-        );
-
-        this.mainNav.reloadApprovalNeeded();
-      },
-      (err: ErrorApi) => {
-        console.error(err);
-        let message = "Error Unknown...";
-        if (err.error !== undefined) {
-          message = err.error.message;
-        }
-        this.dialog.openSnackBar(message);
-      }
+    this.partialReportCard.comment = addedReportCardComment.id;
+    this.partialReportCard.day_of_week = dayOfWeek;
+    this.partialReportCard.status = this.getReportCardStatus(
+      this.partialReportCard
     );
+
+    this.addPutReportCard();
+
+    this.athleteSelect.clearAthlete();
+    this.dialog.openSnackBar("Report card has been submitted for approval!");
+    this.mainNav.reloadApprovalNeeded();
   }
 
   getReportCardStatus(reportCard: ReportCard) {
@@ -387,9 +448,7 @@ export class ReportCardsComponent implements OnInit {
 
   addComponentToReportCard(reportCardComponent: ReportCardComponent) {
     this.data.addReportCardComponent(reportCardComponent).subscribe(
-      (data: ReportCardComponent) => {
-        console.log(data);
-      },
+      (data: ReportCardComponent) => {},
       (err: ErrorApi) => {
         console.error(err);
         let message = "Error Unknown...";
@@ -402,7 +461,50 @@ export class ReportCardsComponent implements OnInit {
   }
 
   sessionChanged(newSession: string) {
-    this.session = newSession;
+    this.partialReportCard.session = newSession;
+    console.log(this.partialReportCard);
+    this.addPutReportCard();
+  }
+
+  deletePartialReportCard() {
+    console.log("DELETEING: " + this.partialReportCard.id);
+    this.data.deleteReportCard(this.partialReportCard.id).subscribe(
+      () => {
+        this.newReportCard = true;
+        this.selectedAthlete = null;
+        this.level = null;
+        this.partialReportCard = null;
+      },
+      (err: ErrorApi) => {
+        console.error(err);
+        this.dialog.openSnackBar(err.error.message);
+      }
+    );
+  }
+
+  addPutReportCard() {
+    if (this.newReportCard) {
+      this.newReportCard = false;
+      this.data.addReportCard(this.partialReportCard).subscribe(
+        (data: ReportCard) => {
+          console.log(data);
+        },
+        (err: ErrorApi) => {
+          console.error(err);
+          this.dialog.openSnackBar(err.message);
+        }
+      );
+    } else {
+      this.data.putReportCard(this.partialReportCard).subscribe(
+        (data: ReportCard) => {
+          console.log(data);
+        },
+        (err: ErrorApi) => {
+          console.error(err);
+          this.dialog.openSnackBar(err.message);
+        }
+      );
+    }
   }
 
   generateReportCard(athleteId: number) {

@@ -171,6 +171,12 @@ export class DataService {
     );
   }
 
+  deleteReportCard(reportCardId: number) {
+    return this.http.delete(
+      this.baseUrl + "/delete-report-card/" + reportCardId
+    );
+  }
+
   addReportCardComponent(reportCardComponent: ReportCardComponent) {
     return this.http.post(
       this.baseUrl + "/report-cards-components",
@@ -248,5 +254,11 @@ export class DataService {
 
   getPrintableReportCard(athleteId: number) {
     return this.http.get(this.baseUrl + "/printable-report-card/" + athleteId);
+  }
+
+  getCoachesInProgressReportCard() {
+    return this.http.get(
+      this.baseUrl + "/coaches-in-progress-cards/" + this.authService.user.id
+    );
   }
 }
