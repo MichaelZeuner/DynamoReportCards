@@ -164,7 +164,7 @@
     color="accent"
     (click)="submitClick()"
     class="submitButton"
-    *ngIf="level !== null && selectedAthlete !== null"
+    *ngIf="level && selectedAthlete"
   >
     Submit for Approval
   </button>
