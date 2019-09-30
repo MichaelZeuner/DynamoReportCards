@@ -101,6 +101,8 @@ export class ReportCardModificationPanelComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.reportCard);
+
     this.selectedIntroComment = this.reportCard.card_mod_comments.intro_comment_id;
     this.selectedSkillComment = this.reportCard.card_mod_comments.skill_comment_id;
     this.selectedSkillCommentEvent = this.reportCard.card_mod_comments.event_id;
@@ -328,7 +330,9 @@ export class ReportCardModificationPanelComponent implements OnInit {
       levels_id: this.reportCard.level.id,
       comment: commentModId,
       approved: null,
-      status: this.reportCard.status
+      status: this.reportCard.status,
+      session: this.reportCard.session,
+      day_of_week: this.reportCard.day_of_week
     };
 
     console.log("Report Card to Send Back:");
