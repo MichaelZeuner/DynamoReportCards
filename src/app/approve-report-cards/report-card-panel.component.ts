@@ -27,7 +27,7 @@ interface ChangedComponents {
 @Component({
 	selector: 'app-report-card-panel',
 	template: `
-  <mat-expansion-panel #panel [expanded]="true">
+  <mat-expansion-panel #panel [expanded]="modifyOnly">
     <mat-expansion-panel-header>
     <mat-panel-title>
         {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
