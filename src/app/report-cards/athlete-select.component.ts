@@ -36,9 +36,18 @@ import { Athlete } from "../interfaces/athlete";
       >
         <mat-option
           *ngFor="let athleteFilter of filteredAthletes | async"
-          [value]="athleteFilter.first_name + ' ' + athleteFilter.last_name"
+          [value]="
+            athleteFilter.first_name +
+            ' ' +
+            athleteFilter.last_name +
+            ' (' +
+            athleteFilter.date_of_birth +
+            ')'
+          "
         >
-          {{ athleteFilter.first_name }} {{ athleteFilter.last_name }}
+          {{ athleteFilter.first_name }} {{ athleteFilter.last_name }} ({{
+            athleteFilter.date_of_birth
+          }})
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -81,13 +90,24 @@ export class AthletesSelectComponent implements OnInit {
   get athleteNameForInput(): string {
     if (this.previousAthlete !== this._athlete) {
       if (this._athlete !== null) {
-        return this._athlete.first_name + " " + this._athlete.last_name;
+        return this.getAthleteNameAndDate(this._athlete);
       } else {
         return "";
       }
     } else {
       return this.myControl.value;
     }
+  }
+
+  getAthleteNameAndDate(athlete: Athlete) {
+    return (
+      athlete.first_name +
+      " " +
+      athlete.last_name +
+      " (" +
+      athlete.date_of_birth +
+      ")"
+    );
   }
 
   ngOnInit() {
@@ -106,11 +126,9 @@ export class AthletesSelectComponent implements OnInit {
 
     return this.athletes.filter(
       option =>
-        (
-          option.first_name.toLowerCase() +
-          " " +
-          option.last_name.toLowerCase()
-        ).indexOf(filterValue) === 0
+        this.getAthleteNameAndDate(option)
+          .toLowerCase()
+          .indexOf(filterValue) === 0
     );
   }
 
@@ -123,7 +141,7 @@ export class AthletesSelectComponent implements OnInit {
     const currentAthlete = this._athlete;
     for (let i = 0; i < this.athletes.length; i++) {
       const athlete = this.athletes[i];
-      if (athlete.first_name + " " + athlete.last_name === searchValue) {
+      if (this.getAthleteNameAndDate(athlete) === searchValue) {
         this._athlete = athlete;
         break;
       } else {

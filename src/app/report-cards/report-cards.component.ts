@@ -97,7 +97,9 @@ export class ReportCardsComponent implements OnInit {
                 partialReportCards[i].athlete.first_name +
                 " " +
                 partialReportCards[i].athlete.last_name +
-                " - " +
+                " (" +
+                partialReportCards[i].athlete.date_of_birth +
+                ") - " +
                 partialReportCards[i].level.name +
                 " Level " +
                 partialReportCards[i].level.level_number

@@ -30,7 +30,7 @@ interface ChangedComponents {
   <mat-expansion-panel #panel [expanded]="modifyOnly">
     <mat-expansion-panel-header>
     <mat-panel-title>
-        {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
+        {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}} ({{reportCard.athlete.date_of_birth}})
     </mat-panel-title>
     <mat-panel-description>
         {{reportCard.level.name}} Level {{reportCard.level.level_number}}

@@ -3,7 +3,7 @@
 
   <ng-container matColumnDef="athlete">
     <th mat-header-cell *matHeaderCellDef> Athlete </th>
-    <td mat-cell *matCellDef="let element"> {{element.athlete.first_name}} {{element.athlete.last_name}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.athlete.first_name}} {{element.athlete.last_name}} ({{element.athlete.date_of_birth}}) </td>
   </ng-container>
 
   <ng-container matColumnDef="level">
