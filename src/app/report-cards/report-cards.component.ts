@@ -264,7 +264,7 @@ export class ReportCardsComponent implements OnInit {
       );
   }
 
-  onEventsChange(events: Event[]) {
+  onEventsChange(event: Event) {
     if (typeof this.level.events !== "undefined") {
       for (let i = 0; i < this.level.events.length; i++) {
         if (typeof this.level.events[i].skills !== "undefined") {
@@ -279,7 +279,7 @@ export class ReportCardsComponent implements OnInit {
         (data: ReportCard) => {
           console.log(data);
           this.partialReportCard = data;
-          this.addAllComponentsToReportCard(this.partialReportCard);
+          this.addAllComponentsToReportCard(event);
         },
         (err: ErrorApi) => {
           console.error(err);
@@ -287,10 +287,27 @@ export class ReportCardsComponent implements OnInit {
         }
       );
     } else {
-      this.addAllComponentsToReportCard(this.partialReportCard);
+      this.addAllComponentsToReportCard(event);
     }
 
-    this.level.events = events;
+    let pushEvent = false;
+    if(typeof this.level.events !== 'undefined') {
+      for (let i = 0; i < this.level.events.length; i++) {
+        if (this.level.events[i].id === event.id) {
+          this.level.events[i] = event;
+          break;
+        }
+        if (i === this.level.events.length - 1) {
+          pushEvent = true;
+        }
+      }
+    } else {
+      this.level.events = [];
+      pushEvent = true;
+    }
+    if (pushEvent) {
+      this.level.events.push(event);
+    }
   }
 
   submitClick() {
@@ -432,31 +449,24 @@ export class ReportCardsComponent implements OnInit {
     }
   }
 
-  addAllComponentsToReportCard(reportCard: ReportCard) {
-    this.data.deleteReportCardComponents(reportCard.id).subscribe(() => {
-      if (typeof this.level.events !== "undefined") {
-        for (let e = 0; e < this.level.events.length; e++) {
-          const event = this.level.events[e];
-          if (typeof event.skills !== "undefined") {
-            for (let s = 0; s < event.skills.length; s++) {
-              const skill = event.skills[s];
-              if (typeof skill.rank !== "undefined") {
-                let reportCardComponent = {} as ReportCardComponent;
-                reportCardComponent.report_cards_id = reportCard.id;
-                reportCardComponent.skills_id = skill.id;
-                reportCardComponent.rank = skill.rank;
-                this.addComponentToReportCard(reportCardComponent);
-              }
-            }
-          }
+  addAllComponentsToReportCard(event: any) {
+    if (typeof event.skills !== "undefined") {
+      for (let s = 0; s < event.skills.length; s++) {
+        const skill = event.skills[s];
+        if (typeof skill.rank !== "undefined") {
+          let reportCardComponent = {} as ReportCardComponent;
+          reportCardComponent.report_cards_id = this.partialReportCard.id;
+          reportCardComponent.skills_id = skill.id;
+          reportCardComponent.rank = skill.rank;
+          this.addComponentToReportCard(reportCardComponent);
         }
       }
-    });
+    }
   }
 
   addComponentToReportCard(reportCardComponent: ReportCardComponent) {
-    this.data.addReportCardComponent(reportCardComponent).subscribe(
-      (data: ReportCardComponent) => {},
+    this.data.addOrUpdateReportCardComponent(reportCardComponent).subscribe(
+      data => {},
       (err: ErrorApi) => {
         console.error(err);
         let message = "Error Unknown...";

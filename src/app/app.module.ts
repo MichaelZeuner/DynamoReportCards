@@ -27,6 +27,7 @@ import {
   MatExpansionModule,
   MatGridListModule,
   MatButtonToggleModule,
+  MatTableModule,
   MatDividerModule,
   MatBadgeModule,
   MatDialogModule,
@@ -46,7 +47,10 @@ import { AthletesSelectComponent } from "./report-cards/athlete-select.component
 import { LevelSelectComponent } from "./report-cards/level-select.component";
 import { ReportCardEventsComponent } from "./report-cards/events.component";
 import { SkillsComponent } from "./report-cards/skills.component";
-import { CompletedReportCardsComponent } from "./completed-report-cards/completed-report-cards.component";
+import {
+  CompletedReportCardsComponent,
+  ModifyReportCardDialog
+} from "./completed-report-cards/completed-report-cards.component";
 import { MatConfirmDialogComponent } from "./mat-confirm-dialog/mat-confirm-dialog.component";
 import { ReportCardPanelComponent } from "./approve-report-cards/report-card-panel.component";
 import { UsersComponent } from "./users/users.component";
@@ -79,6 +83,7 @@ import { CommentsComponent } from "./comments/comments.component";
     MatSelectDialogComponent,
     ReportCardPanelComponent,
     DayOfWeekDialog,
+    ModifyReportCardDialog,
     UsersComponent,
     LevelsComponent,
     EventsComponent,
@@ -113,6 +118,7 @@ import { CommentsComponent } from "./comments/comments.component";
     MatGridListModule,
     MatButtonToggleModule,
     MatDividerModule,
+    MatTableModule,
     MatBadgeModule,
     MatDialogModule,
     MatSelectModule,
@@ -124,7 +130,8 @@ import { CommentsComponent } from "./comments/comments.component";
   entryComponents: [
     MatConfirmDialogComponent,
     MatSelectDialogComponent,
-    DayOfWeekDialog
+    DayOfWeekDialog,
+    ModifyReportCardDialog
   ],
   providers: [
     AuthService,

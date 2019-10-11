@@ -1,0 +1,7 @@
+<div mat-dialog-content>
+    <app-report-card-panel 
+        [reportCard]="reportCard"
+        [modifyOnly]="true"
+        (reportCardApprovedChanged)="reportCardApproved($event)">
+    </app-report-card-panel>
+</div>

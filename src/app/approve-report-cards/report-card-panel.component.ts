@@ -27,7 +27,7 @@ interface ChangedComponents {
 @Component({
 	selector: 'app-report-card-panel',
 	template: `
-  <mat-expansion-panel #panel>
+  <mat-expansion-panel #panel [expanded]="true">
     <mat-expansion-panel-header>
     <mat-panel-title>
         {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
@@ -111,7 +111,7 @@ interface ChangedComponents {
     </mat-button-toggle-group>
 
     <div class="center">
-        <button mat-raised-button color="primary" class="mr-1"
+        <button mat-raised-button color="primary" class="mr-1" *ngIf="!modifyOnly"
         (click)="generateReportCard(reportCard.athlete.id)">Preview Last Report Card</button>
 
         <button *ngIf="generateUnmodifiedCommentIdString() === generateCurrentCommentIdString() && changedComponents.length === 0" 
@@ -120,7 +120,7 @@ interface ChangedComponents {
         <button *ngIf="generateUnmodifiedCommentIdString() !== generateCurrentCommentIdString() || changedComponents.length > 0" 
           mat-raised-button color="accent" class="mr-1" 
           (click)="submitReportCard()">Complete Report Card with Changes</button>
-        <button *ngIf="generateUnmodifiedCommentIdString() !== generateCurrentCommentIdString() || changedComponents.length > 0" 
+        <button *ngIf="(generateUnmodifiedCommentIdString() !== generateCurrentCommentIdString() || changedComponents.length > 0) && !modifyOnly" 
           mat-raised-button color="warn" class="mr-1"
           (click)="sendReportCardBackPrepComments()">Send Report Card Back</button>
     </div>
@@ -134,6 +134,7 @@ export class ReportCardPanelComponent implements OnInit {
 
 	@ViewChild('panel') panel: MatExpansionPanel;
 	@Input() reportCard: ReportCardCompleted;
+	@Input() modifyOnly: Boolean = false;
 
 	@Output() reportCardApprovedChanged = new EventEmitter<ReportCard>();
 	changedComponents: ChangedComponents[] = [];

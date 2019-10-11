@@ -1,42 +1,51 @@
-<mat-grid-list cols="3" rowHeight="25px">
-  <mat-grid-tile [colspan]="3" [rowspan]="2" *ngIf="reportCards.length === 0">
-      <h1>No Report Cards have been approved.</h1>
-  </mat-grid-tile>
 
-  <div *ngFor="let reportCard of reportCards">
-    <mat-grid-tile>
-      <b>Athlete:</b>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}}
-    </mat-grid-tile>
-    <mat-grid-tile [rowspan]="3">
-      <button mat-raised-button (click)="generateReportCard(reportCard.athlete.id)" color="primary">Generate Report Card</button>
-    </mat-grid-tile>
-    
-    <mat-grid-tile>
-      <b>Level:</b>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      {{reportCard.level.name}} Level {{reportCard.level.level_number}}
-    </mat-grid-tile>
-    
-    <mat-grid-tile>
-      <b>Approved By:</b>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      {{reportCard.approved_first_name}} {{reportCard.approved_last_name}}
-    </mat-grid-tile>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <mat-grid-tile>
-      <b>Submitted By:</b>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      {{reportCard.submitted_first_name}} {{reportCard.submitted_last_name}}
-    </mat-grid-tile>
+  <ng-container matColumnDef="athlete">
+    <th mat-header-cell *matHeaderCellDef> Athlete </th>
+    <td mat-cell *matCellDef="let element"> {{element.athlete.first_name}} {{element.athlete.last_name}} </td>
+  </ng-container>
 
-    <mat-grid-tile [colspan]="3">
-      <mat-divider style="width: 100%;"></mat-divider>
-    </mat-grid-tile>
-  </div>
-</mat-grid-list>
+  <ng-container matColumnDef="level">
+    <th mat-header-cell *matHeaderCellDef> Level </th>
+    <td mat-cell *matCellDef="let element"> {{element.level.name}} Level {{element.level.level_number}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="submitted_by">
+    <th mat-header-cell *matHeaderCellDef> Submitted By </th>
+    <td mat-cell *matCellDef="let element"> {{element.submitted_first_name}} {{element.submitted_last_name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="approved_by">
+    <th mat-header-cell *matHeaderCellDef> Approved By </th>
+    <td mat-cell *matCellDef="let element"> {{element.approved_first_name}} {{element.approved_last_name}} </td>
+  </ng-container>
+  
+  <ng-container matColumnDef="generate_btn">
+    <th mat-header-cell *matHeaderCellDef> Generate Report Card</th>
+    <td mat-cell *matCellDef="let element"> <button
+      mat-raised-button
+      (click)="generateReportCard(element.athlete.id)"
+      color="primary"
+    >
+      Generate Report Card
+    </button> </td>
+  </ng-container>
+  
+  <ng-container matColumnDef="modify_btn" *ngIf="
+    authService.user.access === 'ADMIN' ||
+    authService.user.access === 'SUPERVISOR'
+  ">
+    <th mat-header-cell *matHeaderCellDef> Modify Report Card</th>
+    <td mat-cell *matCellDef="let element"> <button
+      mat-raised-button
+      (click)="modifyReportCard(element)"
+      color="accent"
+    >
+      Modify
+    </button> </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

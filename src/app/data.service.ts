@@ -15,6 +15,8 @@ import { ReportCardModComponent } from "./interfaces/report-card-mod-component";
 import { Athlete } from "./interfaces/athlete";
 import { Comments } from "./interfaces/comments";
 import { ReportCardComments } from "./interfaces/report-card-comments";
+import { Observable } from "rxjs";
+import { ReportCardCompleted } from "./interfaces/report-card-completed";
 
 @Injectable({
   providedIn: "root"
@@ -177,6 +179,13 @@ export class DataService {
     );
   }
 
+  addOrUpdateReportCardComponent(reportCardComponent: ReportCardComponent) {
+    return this.http.post(
+      this.baseUrl + "/add-or-update-report-cards-components",
+      reportCardComponent
+    );
+  }
+
   addReportCardComponent(reportCardComponent: ReportCardComponent) {
     return this.http.post(
       this.baseUrl + "/report-cards-components",
@@ -246,8 +255,8 @@ export class DataService {
     );
   }
 
-  getReportCardsCompleted() {
-    return this.http.get(
+  getReportCardsCompleted(): Observable<ReportCardCompleted[]> {
+    return this.http.get<ReportCardCompleted[]>(
       this.baseUrl + "/report-cards-completed/" + this.authService.user.id
     );
   }

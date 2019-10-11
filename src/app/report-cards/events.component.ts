@@ -32,7 +32,7 @@ import { ReportCardCompleted } from "../interfaces/report-card-completed";
 export class ReportCardEventsComponent implements OnInit {
   @Input() public level: Level;
   @Input() reportCard: ReportCardCompleted;
-  @Output() events = new EventEmitter<Event[]>();
+  @Output() events = new EventEmitter<Event>();
   public eventsInternal: Event[];
 
   constructor(private data: DataService) {}
@@ -59,7 +59,7 @@ export class ReportCardEventsComponent implements OnInit {
     for (let i = 0; i < this.eventsInternal.length; i++) {
       if (this.eventsInternal[i].id === event.id) {
         this.eventsInternal[i] = event;
-        this.events.emit(this.eventsInternal);
+        this.events.emit(event);
         return;
       }
     }
