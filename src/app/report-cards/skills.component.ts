@@ -10,7 +10,7 @@ import { ReportCardCompleted } from "../interfaces/report-card-completed";
   selector: "app-skills",
   template: `
     <mat-list-item *ngFor="let skill of skillsInternal">
-      <span>{{ skill.name }}</span>
+      <span class="skillName">{{ skill.name }}</span>
       <span class="fill-remaining-space"></span>
       <mat-button-toggle-group
         #group="matButtonToggleGroup"
@@ -28,7 +28,7 @@ import { ReportCardCompleted } from "../interfaces/report-card-completed";
       </mat-button-toggle-group>
     </mat-list-item>
   `,
-  styles: []
+  styles: [".skillName { max-width: 70%;  }"]
 })
 export class SkillsComponent implements OnInit {
   @Input() event: Event;

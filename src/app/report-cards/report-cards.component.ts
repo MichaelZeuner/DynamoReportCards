@@ -231,6 +231,7 @@ export class ReportCardsComponent implements OnInit {
   }
 
   updateSelectLevel(newLevel: Level) {
+    console.log(newLevel);
     this.level = newLevel;
 
     let levelId: number = this.level === null ? -1 : this.level.id;
@@ -248,6 +249,7 @@ export class ReportCardsComponent implements OnInit {
       this.updateCommentsForSlectedAthlete(levelId);
 
       this.data.getLevelEvents(levelId).subscribe((data: Event[]) => {
+        console.log(data);
         this.events = data;
       });
     }
@@ -258,8 +260,6 @@ export class ReportCardsComponent implements OnInit {
       .getAthletesAttemptsAtLevel(this.selectedAthlete.id, levelId)
       .subscribe(
         (previousReportCards: ReportCardCompleted[]) => {
-          console.log(previousReportCards);
-          console.log(this.commentsBase);
           this.commentsPreviousRemoved = this.comm.deepCopy(this.commentsBase);
           for (let i = this.commentsPreviousRemoved.length - 1; i >= 0; i--) {
             for (let x = 0; x < previousReportCards.length; x++) {
@@ -276,7 +276,6 @@ export class ReportCardsComponent implements OnInit {
               }
             }
           }
-          console.log(this.commentsPreviousRemoved);
           this.updateComments();
         },
         (err: ErrorApi) => {

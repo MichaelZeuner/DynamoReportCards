@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  SimpleChanges
+} from "@angular/core";
 import { Level } from "../interfaces/level";
 import { Event } from "../interfaces/event";
 import { DataService } from "../data.service";
@@ -37,7 +44,19 @@ export class ReportCardEventsComponent implements OnInit {
 
   constructor(private data: DataService) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (let propName in changes) {
+      if (propName === "level") {
+        console.log("New Level", changes[propName].currentValue);
+        this.level = changes[propName].currentValue;
+        this.setLevel();
+      }
+    }
+  }
+
+  setLevel() {
     this.data.getLevelEvents(this.level.id).subscribe((events: Event[]) => {
       this.eventsInternal = events;
       if (typeof this.level.events !== "undefined") {
