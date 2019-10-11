@@ -131,6 +131,7 @@ interface ChangedComponents {
 })
 export class ReportCardPanelComponent implements OnInit {
 	ATTEMPTS_BEFORE_PASS: number = 2;
+	MAX_LEARNING_FOR_COMPLETED: number = 1;
 
 	@ViewChild('panel') panel: MatExpansionPanel;
 	@Input() reportCard: ReportCardCompleted;
@@ -407,23 +408,56 @@ export class ReportCardPanelComponent implements OnInit {
 		for (let x = 0; x < this.reportCard.components.length; x++) {
 			const component = this.reportCard.components[x];
 			if (component.id === id) {
-				if (this.removeComponentChangedIfNeeded(component, newRank)) {
+				if (this.removeOrUpdateComponentChangedIfNeeded(component, newRank)) {
+					this.countSkillsLearning();
 					return;
 				}
 				if (this.addComponentChangedIfNeeded(component, newRank)) {
+					this.countSkillsLearning();
 					return;
 				}
 			}
 		}
 	}
 
-	removeComponentChangedIfNeeded(component: ReportCardComponentCompleted, newRank: string): boolean {
+	countSkillsLearning() {
+		let numberOfSkillsLearning: number = 0;
+		let isChanged: boolean = false;
+		for(let i=0; i<this.reportCard.components.length; i++) {
+			isChanged = false;
+			for(let x=0; x<this.changedComponents.length; x++) {
+				if(this.reportCard.components[i].id === this.changedComponents[x].id) {
+					isChanged = true;
+					if(this.changedComponents[x].rank === this.comm.SKILL_RANK_LEARNING) {
+						numberOfSkillsLearning++;
+					}
+					break;
+				}
+			}
+
+			if(isChanged === false) {
+				if(this.reportCard.components[i].rank === this.comm.SKILL_RANK_LEARNING) {
+					numberOfSkillsLearning++;
+				}
+			}
+		}
+
+		if(numberOfSkillsLearning > this.comm.MAX_LEARNING_FOR_COMPLETED) {
+			this.reportCard.status = this.comm.STATUS_IN_PROGRESS;
+		} else {
+			this.reportCard.status = this.comm.STATUS_COMPLETED;
+		}
+	}
+
+	removeOrUpdateComponentChangedIfNeeded(component: ReportCardComponentCompleted, newRank: string): boolean {
 		for (let y = 0; y < this.changedComponents.length; y++) {
 			const changedComponent = this.changedComponents[y];
 			if (changedComponent.id === component.id) {
 				if (component.rank === newRank) {
 					this.changedComponents.splice(y, 1);
 					return true;
+				} else {
+					this.changedComponents[y].rank = newRank;
 				}
 			}
 		}

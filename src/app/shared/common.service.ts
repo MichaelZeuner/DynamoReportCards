@@ -12,6 +12,12 @@ export class CommonService {
   public COMMENT_EVENT: string = "~!EVENT!~";
   public COMMENT_SKILL: string = "~!SKILL!~";
 
+  public SKILL_RANK_LEARNING: string = "LEARNING";
+
+  public STATUS_IN_PROGRESS: string = "In Progress";
+  public STATUS_COMPLETED: string = "Completed";
+  public MAX_LEARNING_FOR_COMPLETED: number = 1;
+
   deepCopy(input: any): any {
     return JSON.parse(JSON.stringify(input));
   }

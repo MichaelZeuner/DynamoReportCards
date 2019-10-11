@@ -1,6 +1,7 @@
 import { ReportCardComments } from "./report-card-comments";
 
 export interface PrintableReportCard {
+  max_level: number;
   levels: PrintableLevel[];
   events: PrintableEvent[];
   coachComments: PrintableCoachComments[];

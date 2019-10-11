@@ -32,7 +32,6 @@ import { SelectDialogOutput } from "../mat-select-dialog/select-dialog-output";
 })
 export class ReportCardsComponent implements OnInit {
   UNSELECTED: number = -1;
-  MAX_LEARNING_FOR_COMPLETED: number = 1;
 
   public level: Level;
   public selectedAthlete: Athlete;
@@ -131,6 +130,28 @@ export class ReportCardsComponent implements OnInit {
     );
   }
 
+  getSessionByCurrentMonth(): string {
+    const month = new Date().getMonth();
+    switch (month) {
+      case 12:
+      case 1:
+      case 2:
+        return "WINTER";
+      case 3:
+      case 4:
+      case 5:
+        return "SPRING";
+      case 6:
+      case 7:
+      case 8:
+        return "SUMMER";
+      case 9:
+      case 10:
+      case 11:
+        return "FALL";
+    }
+  }
+
   updatePartialReportCard(partialReportCard: ReportCardCompleted) {
     this.level = partialReportCard.level;
     this.level.events = partialReportCard.events;
@@ -219,7 +240,7 @@ export class ReportCardsComponent implements OnInit {
       levels_id: levelId,
       comment: 0,
       day_of_week: "UNSET",
-      session: "UNSET",
+      session: this.getSessionByCurrentMonth(),
       status: "Partial"
     };
 
@@ -291,7 +312,7 @@ export class ReportCardsComponent implements OnInit {
     }
 
     let pushEvent = false;
-    if(typeof this.level.events !== 'undefined') {
+    if (typeof this.level.events !== "undefined") {
       for (let i = 0; i < this.level.events.length; i++) {
         if (this.level.events[i].id === event.id) {
           this.level.events[i] = event;
@@ -437,15 +458,15 @@ export class ReportCardsComponent implements OnInit {
       for (let s = 0; s < event.skills.length; s++) {
         const skill = event.skills[s];
         console.log(skill.rank);
-        if (skill.rank === "LEARNING") {
+        if (skill.rank === this.comm.SKILL_RANK_LEARNING) {
           learningCounter++;
         }
       }
     }
-    if (learningCounter > this.MAX_LEARNING_FOR_COMPLETED) {
-      return "In Progress";
+    if (learningCounter > this.comm.MAX_LEARNING_FOR_COMPLETED) {
+      return this.comm.STATUS_IN_PROGRESS;
     } else {
-      return "Completed";
+      return this.comm.STATUS_COMPLETED;
     }
   }
 
