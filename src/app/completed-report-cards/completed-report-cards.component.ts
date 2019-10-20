@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, ViewChild } from "@angular/core";
 import { DataService } from "../data.service";
 import { ReportCardCompleted } from "../interfaces/report-card-completed";
 import { ReportCard } from "../interfaces/report-card";
@@ -6,6 +6,8 @@ import { ErrorApi } from "../interfaces/error-api";
 import { PrintService } from "../print.service";
 import { AuthService } from "../auth/auth.service";
 import { Observable } from "rxjs";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material";
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from "@angular/material";
 import { DialogService } from "../shared/dialog.service";
 
@@ -33,7 +35,8 @@ export class CompletedReportCardsComponent implements OnInit {
   public reportCards: ReportCardCompleted[] = [];
 
   displayedColumns: string[];
-  dataSource: Observable<ReportCardCompleted[]>;
+  dataSource = new MatTableDataSource();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private data: DataService,
@@ -58,10 +61,14 @@ export class CompletedReportCardsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataSource = this.data.getReportCardsCompleted();
+    this.updateReportCards();
+  }
 
+  updateReportCards() {
     this.data.getReportCardsCompleted().subscribe(
       (data: ReportCardCompleted[]) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
         this.reportCards = data;
         console.log(this.reportCards);
       },
@@ -86,7 +93,7 @@ export class CompletedReportCardsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      this.dataSource = this.data.getReportCardsCompleted();
+      this.updateReportCards();
     });
   }
 }

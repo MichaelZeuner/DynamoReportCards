@@ -35,7 +35,9 @@ import {
   MatCheckboxModule,
   MatSelectModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatProgressBarModule,
+  MatPaginatorModule
 } from "@angular/material";
 import { MainNavComponent } from "./main-nav/main-nav.component";
 import { LayoutModule } from "@angular/cdk/layout";
@@ -125,7 +127,9 @@ import { CommentsComponent } from "./comments/comments.component";
     MatSnackBarModule,
     MatCheckboxModule,
     MatNativeDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatProgressBarModule,
+    MatPaginatorModule
   ],
   entryComponents: [
     MatConfirmDialogComponent,

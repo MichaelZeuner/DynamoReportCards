@@ -1,56 +1,88 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
-import { User } from '../interfaces/user';
-import { ErrorApi } from '../interfaces/error-api';
-import { MatInput, MatButtonToggle, MatButtonToggleGroup } from '@angular/material';
-import { DialogService } from '../shared/dialog.service';
+import { Component, OnInit } from "@angular/core";
+import { DataService } from "../data.service";
+import { User } from "../interfaces/user";
+import { ErrorApi } from "../interfaces/error-api";
+import {
+  MatInput,
+  MatButtonToggle,
+  MatButtonToggleGroup,
+  PageEvent
+} from "@angular/material";
+import { DialogService } from "../shared/dialog.service";
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  selector: "app-users",
+  templateUrl: "./users.component.html",
+  styleUrls: ["./users.component.scss"]
 })
 export class UsersComponent implements OnInit {
-
+  public usersBase: User[] = [];
   public users: User[] = [];
+  public usersDisplayed: User[] = [];
+  public pageinatorIndex: number = 0;
+  public pageinatorSize: number = 10;
 
-  constructor(private data: DataService, private dialog: DialogService) { }
+  constructor(private data: DataService, private dialog: DialogService) {}
 
   ngOnInit() {
-    this.data.getUsers().subscribe(
-      (data: User[]) => { 
-        this.users = data; 
-        console.log(this.users);
-      }
-    );
-  }
-
-  deleteUser(id: number, firstName: string, lastName: string) {
-    this.dialog.openConfirmDialog('Are you sure you wish to remove the user "' + firstName + ' ' + lastName + '"?')
-    .afterClosed().subscribe(res =>{
-      if(res){
-        this.data.deleteUser(id).subscribe(() => {
-          for(let i=0; i<this.users.length; i++) {
-            const currentUser = this.users[i];
-            if(currentUser.id === id) {
-              this.dialog.openSnackBar("User deleted!");
-              this.users.splice(i, 1);
-              return;
-            }
-          }
-        });
-      }
+    this.data.getUsers().subscribe((data: User[]) => {
+      this.usersBase = data;
+      this.users = this.usersBase;
+      console.log(this.users);
+      this.refreshPage();
     });
   }
 
-  createUser(firstName: MatInput, 
-              lastName: MatInput, 
-              username: MatInput, 
-              email: MatInput, 
-              password: MatInput, 
-              passwordConfirm: MatInput,
-              accessLevel: MatButtonToggleGroup) {
-    if(this.checkInput(true, firstName, lastName, username, email, password, passwordConfirm, accessLevel) === false) { return; }
+  deleteUser(id: number, firstName: string, lastName: string) {
+    this.dialog
+      .openConfirmDialog(
+        'Are you sure you wish to remove the user "' +
+          firstName +
+          " " +
+          lastName +
+          '"?'
+      )
+      .afterClosed()
+      .subscribe(res => {
+        if (res) {
+          this.data.deleteUser(id).subscribe(() => {
+            for (let i = 0; i < this.usersBase.length; i++) {
+              const currentUser = this.usersBase[i];
+              if (currentUser.id === id) {
+                this.dialog.openSnackBar("User deleted!");
+                this.usersBase.splice(i, 1);
+                this.refreshPage();
+                return;
+              }
+            }
+          });
+        }
+      });
+  }
+
+  createUser(
+    firstName: MatInput,
+    lastName: MatInput,
+    username: MatInput,
+    email: MatInput,
+    password: MatInput,
+    passwordConfirm: MatInput,
+    accessLevel: MatButtonToggleGroup
+  ) {
+    if (
+      this.checkInput(
+        true,
+        firstName,
+        lastName,
+        username,
+        email,
+        password,
+        passwordConfirm,
+        accessLevel
+      ) === false
+    ) {
+      return;
+    }
 
     let user: User = {
       username: username.value,
@@ -59,32 +91,46 @@ export class UsersComponent implements OnInit {
       access: accessLevel.value,
       first_name: firstName.value,
       last_name: lastName.value
-    }
+    };
 
     console.log(user);
-    this.data.addUser(user).subscribe(
-      (data: User) => {
-        this.users.push(data);
-        firstName.value = '';
-        lastName.value = '';
-        username.value = '';
-        email.value = '';
-        password.value = '';
-        passwordConfirm.value = '';
-        this.dialog.openSnackBar('User Created!');
-      }
-    )
+    this.data.addUser(user).subscribe((data: User) => {
+      this.usersBase.push(data);
+      firstName.value = "";
+      lastName.value = "";
+      username.value = "";
+      email.value = "";
+      password.value = "";
+      passwordConfirm.value = "";
+      this.dialog.openSnackBar("User Created!");
+    });
+    this.refreshPage();
   }
 
-  updateUser( id: number,
-              firstName: MatInput, 
-              lastName: MatInput, 
-              username: MatInput, 
-              email: MatInput, 
-              password: MatInput, 
-              passwordConfirm: MatInput,
-              accessLevel: MatButtonToggleGroup) {
-    if(this.checkInput(false, firstName, lastName, username, email, password, passwordConfirm, accessLevel) === false) { return; }
+  updateUser(
+    id: number,
+    firstName: MatInput,
+    lastName: MatInput,
+    username: MatInput,
+    email: MatInput,
+    password: MatInput,
+    passwordConfirm: MatInput,
+    accessLevel: MatButtonToggleGroup
+  ) {
+    if (
+      this.checkInput(
+        false,
+        firstName,
+        lastName,
+        username,
+        email,
+        password,
+        passwordConfirm,
+        accessLevel
+      ) === false
+    ) {
+      return;
+    }
     let user: User = {
       id: id,
       username: username.value,
@@ -93,15 +139,15 @@ export class UsersComponent implements OnInit {
       access: accessLevel.value,
       first_name: firstName.value,
       last_name: lastName.value
-    }
+    };
 
     this.data.putUser(user).subscribe(
-      (data: User) => { 
-        console.log(data); 
-        this.dialog.openSnackBar('User Updated!');
+      (data: User) => {
+        console.log(data);
+        this.dialog.openSnackBar("User Updated!");
       },
-      (error: ErrorApi) => { 
-        console.log(error); 
+      (error: ErrorApi) => {
+        console.log(error);
         this.dialog.openSnackBar(error.error.message);
       }
     );
@@ -109,52 +155,97 @@ export class UsersComponent implements OnInit {
     console.log(user);
   }
 
-  checkInput(passwordRequired: boolean,
-              firstName: MatInput, 
-              lastName: MatInput, 
-              username: MatInput, 
-              email: MatInput, 
-              password: MatInput, 
-              passwordConfirm: MatInput,
-              accessLevel: MatButtonToggleGroup) {
-    if(firstName.value === '') {
-      this.dialog.openSnackBar('First Name required!');
+  checkInput(
+    passwordRequired: boolean,
+    firstName: MatInput,
+    lastName: MatInput,
+    username: MatInput,
+    email: MatInput,
+    password: MatInput,
+    passwordConfirm: MatInput,
+    accessLevel: MatButtonToggleGroup
+  ) {
+    if (firstName.value === "") {
+      this.dialog.openSnackBar("First Name required!");
       firstName.focus();
       return false;
     }
-    if(lastName.value === '') {
-      this.dialog.openSnackBar('Last Name required!');
+    if (lastName.value === "") {
+      this.dialog.openSnackBar("Last Name required!");
       lastName.focus();
       return false;
     }
-    if(username.value === '') {
-      this.dialog.openSnackBar('Username required!');
+    if (username.value === "") {
+      this.dialog.openSnackBar("Username required!");
       username.focus();
       return false;
     }
-    if(email.value === '') {
-      this.dialog.openSnackBar('Email required!');
+    if (email.value === "") {
+      this.dialog.openSnackBar("Email required!");
       email.focus();
       return false;
     }
-    if(password.value === '' && passwordRequired) {
-      this.dialog.openSnackBar('Password required!');
+    if (password.value === "" && passwordRequired) {
+      this.dialog.openSnackBar("Password required!");
       password.focus();
       return false;
     }
-    if(passwordConfirm.value === '' && passwordRequired) {
-      this.dialog.openSnackBar('Password Confirm required!');
+    if (passwordConfirm.value === "" && passwordRequired) {
+      this.dialog.openSnackBar("Password Confirm required!");
       passwordConfirm.focus();
       return false;
     }
-    if(typeof accessLevel.value === 'undefined') {
-      this.dialog.openSnackBar('Access Level required!');
+    if (typeof accessLevel.value === "undefined") {
+      this.dialog.openSnackBar("Access Level required!");
       return false;
     }
-    if(password.value !== passwordConfirm.value) {
+    if (password.value !== passwordConfirm.value) {
       this.dialog.openSnackBar("Password and Confirm Password do not match.");
       return false;
     }
     return true;
+  }
+
+  searchUsers(firstName: MatInput, lastName: MatInput) {
+    if (firstName === null || lastName === null) {
+      this.users = this.usersBase;
+    } else {
+      this.users = [];
+      for (let i = 0; i < this.usersBase.length; i++) {
+        if (
+          this.usersBase[i].first_name
+            .toUpperCase()
+            .indexOf(firstName.value.toUpperCase()) > -1 &&
+          this.usersBase[i].last_name
+            .toUpperCase()
+            .indexOf(lastName.value.toUpperCase()) > -1
+        ) {
+          this.users.push(this.usersBase[i]);
+        }
+      }
+    }
+    this.refreshPage();
+  }
+
+  refreshPage() {
+    this.pageinatorIndex = 0;
+    this.pageChanged(null);
+  }
+
+  pageChanged(event: PageEvent) {
+    const startingIndex: number =
+      event !== null ? event.pageIndex * event.pageSize : 0;
+    let endingIndex: number =
+      event !== null
+        ? (event.pageIndex + 1) * event.pageSize
+        : this.pageinatorSize;
+    if (endingIndex > this.users.length) {
+      endingIndex = this.users.length;
+    }
+
+    this.usersDisplayed = [];
+    for (let i = startingIndex; i < endingIndex; i++) {
+      this.usersDisplayed.push(this.users[i]);
+    }
   }
 }

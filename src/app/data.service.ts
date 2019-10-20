@@ -65,6 +65,10 @@ export class DataService {
     return this.http.delete(this.baseUrl + "/athletes/" + id);
   }
 
+  addAthleteIfNew(athlete: Athlete) {
+    return this.http.post(this.baseUrl + "/add-athlete-if-new", athlete);
+  }
+
   getLevelEvents(levelId: number) {
     return this.http.get(this.baseUrl + `/level-events/${levelId}`);
   }
