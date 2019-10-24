@@ -9,6 +9,7 @@ import {
   PageEvent
 } from "@angular/material";
 import { DialogService } from "../shared/dialog.service";
+import { MainNavComponent } from "../main-nav/main-nav.component";
 
 @Component({
   selector: "app-users",
@@ -22,15 +23,26 @@ export class UsersComponent implements OnInit {
   public pageinatorIndex: number = 0;
   public pageinatorSize: number = 10;
 
-  constructor(private data: DataService, private dialog: DialogService) {}
+  constructor(
+    private data: DataService,
+    private dialog: DialogService,
+    private mainNav: MainNavComponent
+  ) {}
 
   ngOnInit() {
-    this.data.getUsers().subscribe((data: User[]) => {
-      this.usersBase = data;
-      this.users = this.usersBase;
-      console.log(this.users);
-      this.refreshPage();
-    });
+    this.mainNav.displayLoading = true;
+    this.data.getUsers().subscribe(
+      (data: User[]) => {
+        this.mainNav.displayLoading = false;
+        this.usersBase = data;
+        this.users = this.usersBase;
+        console.log(this.users);
+        this.refreshPage();
+      },
+      () => {
+        this.mainNav.displayLoading = false;
+      }
+    );
   }
 
   deleteUser(id: number, firstName: string, lastName: string) {
@@ -45,17 +57,24 @@ export class UsersComponent implements OnInit {
       .afterClosed()
       .subscribe(res => {
         if (res) {
-          this.data.deleteUser(id).subscribe(() => {
-            for (let i = 0; i < this.usersBase.length; i++) {
-              const currentUser = this.usersBase[i];
-              if (currentUser.id === id) {
-                this.dialog.openSnackBar("User deleted!");
-                this.usersBase.splice(i, 1);
-                this.refreshPage();
-                return;
+          this.mainNav.displayLoading = true;
+          this.data.deleteUser(id).subscribe(
+            () => {
+              this.mainNav.displayLoading = false;
+              for (let i = 0; i < this.usersBase.length; i++) {
+                const currentUser = this.usersBase[i];
+                if (currentUser.id === id) {
+                  this.dialog.openSnackBar("User deleted!");
+                  this.usersBase.splice(i, 1);
+                  this.refreshPage();
+                  return;
+                }
               }
+            },
+            () => {
+              this.mainNav.displayLoading = false;
             }
-          });
+          );
         }
       });
   }
@@ -94,16 +113,23 @@ export class UsersComponent implements OnInit {
     };
 
     console.log(user);
-    this.data.addUser(user).subscribe((data: User) => {
-      this.usersBase.push(data);
-      firstName.value = "";
-      lastName.value = "";
-      username.value = "";
-      email.value = "";
-      password.value = "";
-      passwordConfirm.value = "";
-      this.dialog.openSnackBar("User Created!");
-    });
+    this.mainNav.displayLoading = true;
+    this.data.addUser(user).subscribe(
+      (data: User) => {
+        this.mainNav.displayLoading = false;
+        this.usersBase.push(data);
+        firstName.value = "";
+        lastName.value = "";
+        username.value = "";
+        email.value = "";
+        password.value = "";
+        passwordConfirm.value = "";
+        this.dialog.openSnackBar("User Created!");
+      },
+      () => {
+        this.mainNav.displayLoading = false;
+      }
+    );
     this.refreshPage();
   }
 
@@ -141,13 +167,16 @@ export class UsersComponent implements OnInit {
       last_name: lastName.value
     };
 
+    this.mainNav.displayLoading = true;
     this.data.putUser(user).subscribe(
       (data: User) => {
+        this.mainNav.displayLoading = false;
         console.log(data);
         this.dialog.openSnackBar("User Updated!");
       },
       (error: ErrorApi) => {
         console.log(error);
+        this.mainNav.displayLoading = false;
         this.dialog.openSnackBar(error.error.message);
       }
     );

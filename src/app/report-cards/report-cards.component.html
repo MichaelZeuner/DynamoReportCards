@@ -28,6 +28,7 @@
   <mat-card *ngIf="selectedAthlete">
     <mat-card-content>
       <app-level-select
+        #levelSelect
         [enabled]="newReportCard"
         [level]="level"
         (levelChange)="updateSelectLevel($event)"

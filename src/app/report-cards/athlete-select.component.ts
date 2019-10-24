@@ -2,7 +2,6 @@ import { DataService } from "../data.service";
 import {
   Component,
   OnInit,
-  Inject,
   Input,
   Output,
   EventEmitter,
@@ -24,7 +23,7 @@ import { Athlete } from "../interfaces/athlete";
         aria-label="Athletes Name"
         matInput
         [value]="athleteNameForInput"
-        [formControl]="myControl"
+        [formControl]="myControlAthlete"
         [matAutocomplete]="auto"
         (input)="onAthleteChange($event.target.value)"
       />
@@ -36,18 +35,9 @@ import { Athlete } from "../interfaces/athlete";
       >
         <mat-option
           *ngFor="let athleteFilter of filteredAthletes | async"
-          [value]="
-            athleteFilter.first_name +
-            ' ' +
-            athleteFilter.last_name +
-            ' (' +
-            athleteFilter.date_of_birth +
-            ')'
-          "
+          [value]="getAthleteNameAndDate(athleteFilter)"
         >
-          {{ athleteFilter.first_name }} {{ athleteFilter.last_name }} ({{
-            athleteFilter.date_of_birth
-          }})
+          {{ getAthleteNameAndDate(athleteFilter) }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -58,7 +48,7 @@ export class AthletesSelectComponent implements OnInit {
   @Output() selectedAthleteChange = new EventEmitter<Athlete>();
   @ViewChild("athleteName") athleteName;
 
-  public myControl = new FormControl();
+  public myControlAthlete = new FormControl();
   public filteredAthletes: Observable<Athlete[]>;
 
   protected athletes: Athlete[];
@@ -71,9 +61,9 @@ export class AthletesSelectComponent implements OnInit {
   @Input()
   set enabled(enabled: Boolean) {
     if (enabled) {
-      this.myControl.enable();
+      this.myControlAthlete.enable();
     } else {
-      this.myControl.disable();
+      this.myControlAthlete.disable();
     }
   }
 
@@ -95,7 +85,7 @@ export class AthletesSelectComponent implements OnInit {
         return "";
       }
     } else {
-      return this.myControl.value;
+      return this.myControlAthlete.value;
     }
   }
 
@@ -114,7 +104,7 @@ export class AthletesSelectComponent implements OnInit {
     this.data.getAthletes().subscribe((data: Athlete[]) => {
       this.athletes = data;
 
-      this.filteredAthletes = this.myControl.valueChanges.pipe(
+      this.filteredAthletes = this.myControlAthlete.valueChanges.pipe(
         startWith(""),
         map(value => this._filter(value))
       );
@@ -123,6 +113,7 @@ export class AthletesSelectComponent implements OnInit {
 
   private _filter(value: string): Athlete[] {
     const filterValue = value !== null ? value.toLowerCase() : "";
+    console.log("filter value", filterValue);
 
     return this.athletes.filter(
       option =>

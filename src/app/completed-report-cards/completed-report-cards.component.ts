@@ -10,6 +10,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material";
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from "@angular/material";
 import { DialogService } from "../shared/dialog.service";
+import { MainNavComponent } from "../main-nav/main-nav.component";
 
 export interface Tile {
   color: string;
@@ -42,7 +43,8 @@ export class CompletedReportCardsComponent implements OnInit {
     private data: DataService,
     public printService: PrintService,
     public authService: AuthService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
+    private nav: MainNavComponent
   ) {
     this.displayedColumns = [
       "athlete",
@@ -65,14 +67,18 @@ export class CompletedReportCardsComponent implements OnInit {
   }
 
   updateReportCards() {
+    this.nav.displayLoading = true;
     this.data.getReportCardsCompleted().subscribe(
       (data: ReportCardCompleted[]) => {
+        this.nav.displayLoading = false;
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.reportCards = data;
         console.log(this.reportCards);
       },
-      (err: ErrorApi) => {}
+      (err: ErrorApi) => {
+        this.nav.displayLoading = false;
+      }
     );
   }
 
@@ -110,7 +116,7 @@ export class ModifyReportCardDialog {
     @Inject(MAT_DIALOG_DATA) public data,
     private dialog: DialogService
   ) {
-    console.log("TEST: Created I guess");
+    console.log("Report Card: ", data);
     this.reportCard = data;
   }
 

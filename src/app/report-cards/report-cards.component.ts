@@ -24,6 +24,7 @@ import { CommonService } from "../shared/common.service";
 import { ReportCardCompleted } from "../interfaces/report-card-completed";
 import { SelectDialogInput } from "../mat-select-dialog/select-dialog-input";
 import { SelectDialogOutput } from "../mat-select-dialog/select-dialog-output";
+import { LevelSelectComponent } from "./level-select.component";
 
 @Component({
   selector: "app-report-cards",
@@ -38,6 +39,7 @@ export class ReportCardsComponent implements OnInit {
   public skillName: string;
   public eventName: string;
   @ViewChild("athleteSelect") athleteSelect: AthletesSelectComponent;
+  @ViewChild("levelSelect") levelSelect: LevelSelectComponent;
 
   public commentsBase: Comments[] = [];
   public commentsPreviousRemoved: Comments[] = [];
@@ -67,6 +69,7 @@ export class ReportCardsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.mainNav.displayLoading = true;
     this.data.getComments().subscribe(
       (data: Comments[]) => {
         this.commentsBase = this.comm.deepCopy(data);
@@ -84,6 +87,7 @@ export class ReportCardsComponent implements OnInit {
 
     this.data.getCoachesInProgressReportCard().subscribe(
       (partialReportCards: ReportCardCompleted[]) => {
+        this.mainNav.displayLoading = false;
         console.log(partialReportCards);
         if (partialReportCards.length > 0) {
           let reportCardSelectInput: SelectDialogInput = {
@@ -128,6 +132,7 @@ export class ReportCardsComponent implements OnInit {
       },
       (err: ErrorApi) => {
         console.error(err);
+        this.mainNav.displayLoading = false;
       }
     );
   }
@@ -174,9 +179,16 @@ export class ReportCardsComponent implements OnInit {
       }
     }
 
-    this.data.getLevelEvents(this.level.id).subscribe((data: Event[]) => {
-      this.events = data;
-    });
+    this.mainNav.displayLoading = true;
+    this.data.getLevelEvents(this.level.id).subscribe(
+      (data: Event[]) => {
+        this.mainNav.displayLoading = false;
+        this.events = data;
+      },
+      () => {
+        this.mainNav.displayLoading = false;
+      }
+    );
 
     this.selectedAthlete = partialReportCard.athlete;
     this.partialReportCard = partialReportCard;
@@ -186,11 +198,16 @@ export class ReportCardsComponent implements OnInit {
 
   eventChanged(eventId: number) {
     this.selectedEvent = eventId;
-    this.data
-      .getEventSkills(this.level.id, eventId)
-      .subscribe((data: Skill[]) => {
+    this.mainNav.displayLoading = true;
+    this.data.getEventSkills(this.level.id, eventId).subscribe(
+      (data: Skill[]) => {
+        this.mainNav.displayLoading = false;
         this.skills = data;
-      });
+      },
+      () => {
+        this.mainNav.displayLoading = false;
+      }
+    );
   }
 
   skillChanged(skillId: number) {
@@ -250,18 +267,27 @@ export class ReportCardsComponent implements OnInit {
     if (this.level !== null) {
       this.updateCommentsForSlectedAthlete(levelId);
 
-      this.data.getLevelEvents(levelId).subscribe((data: Event[]) => {
-        console.log(data);
-        this.events = data;
-      });
+      this.mainNav.displayLoading = true;
+      this.data.getLevelEvents(levelId).subscribe(
+        (data: Event[]) => {
+          this.mainNav.displayLoading = false;
+          console.log(data);
+          this.events = data;
+        },
+        () => {
+          this.mainNav.displayLoading = false;
+        }
+      );
     }
   }
 
   updateCommentsForSlectedAthlete(levelId: number) {
+    this.mainNav.displayLoading = true;
     this.data
       .getAthletesAttemptsAtLevel(this.selectedAthlete.id, levelId)
       .subscribe(
         (previousReportCards: ReportCardCompleted[]) => {
+          this.mainNav.displayLoading = false;
           this.commentsPreviousRemoved = this.comm.deepCopy(this.commentsBase);
           for (let i = this.commentsPreviousRemoved.length - 1; i >= 0; i--) {
             for (let x = 0; x < previousReportCards.length; x++) {
@@ -282,6 +308,7 @@ export class ReportCardsComponent implements OnInit {
         },
         (err: ErrorApi) => {
           console.error(err);
+          this.mainNav.displayLoading = false;
         }
       );
   }
@@ -297,14 +324,17 @@ export class ReportCardsComponent implements OnInit {
 
     if (this.newReportCard) {
       this.newReportCard = false;
+      this.mainNav.displayLoading = true;
       this.data.addReportCard(this.partialReportCard).subscribe(
         (data: ReportCard) => {
+          this.mainNav.displayLoading = false;
           console.log(data);
           this.partialReportCard = data;
           this.addAllComponentsToReportCard(event);
         },
         (err: ErrorApi) => {
           console.error(err);
+          this.mainNav.displayLoading = false;
           this.dialog.openSnackBar(err.message);
         }
       );
@@ -419,13 +449,16 @@ export class ReportCardsComponent implements OnInit {
     };
 
     let addedReportCardComment: ReportCardComments;
+    this.mainNav.displayLoading = true;
     this.data.addReportCardComment(comment).subscribe(
       (data: ReportCardComments) => {
+        this.mainNav.displayLoading = false;
         addedReportCardComment = data;
         this.addReportCard(dayOfWeek, addedReportCardComment);
       },
       (err: ErrorApi) => {
         console.error(err);
+        this.mainNav.displayLoading = false;
         let message = "Error Unknown...";
         if (err.error !== undefined) {
           message = err.error.message;
@@ -446,6 +479,7 @@ export class ReportCardsComponent implements OnInit {
     this.addPutReportCard();
 
     this.athleteSelect.clearAthlete();
+    this.levelSelect.clearLevel();
     this.dialog.openSnackBar("Report card has been submitted for approval!");
     this.mainNav.reloadApprovalNeeded();
 
@@ -487,10 +521,14 @@ export class ReportCardsComponent implements OnInit {
   }
 
   addComponentToReportCard(reportCardComponent: ReportCardComponent) {
+    this.mainNav.displayLoading = true;
     this.data.addOrUpdateReportCardComponent(reportCardComponent).subscribe(
-      data => {},
+      data => {
+        this.mainNav.displayLoading = false;
+      },
       (err: ErrorApi) => {
         console.error(err);
+        this.mainNav.displayLoading = false;
         let message = "Error Unknown...";
         if (err.error !== undefined) {
           message = err.error.message;
@@ -508,12 +546,15 @@ export class ReportCardsComponent implements OnInit {
 
   deletePartialReportCard() {
     console.log("DELETEING: " + this.partialReportCard.id);
+    this.mainNav.displayLoading = true;
     this.data.deleteReportCard(this.partialReportCard.id).subscribe(
       () => {
+        this.mainNav.displayLoading = false;
         this.clearPartialReportCard();
       },
       (err: ErrorApi) => {
         console.error(err);
+        this.mainNav.displayLoading = false;
         this.dialog.openSnackBar(err.error.message);
       }
     );
@@ -529,22 +570,28 @@ export class ReportCardsComponent implements OnInit {
   addPutReportCard() {
     if (this.newReportCard) {
       this.newReportCard = false;
+      this.mainNav.displayLoading = true;
       this.data.addReportCard(this.partialReportCard).subscribe(
         (data: ReportCard) => {
+          this.mainNav.displayLoading = false;
           console.log(data);
         },
         (err: ErrorApi) => {
           console.error(err);
+          this.mainNav.displayLoading = false;
           this.dialog.openSnackBar(err.message);
         }
       );
     } else {
+      this.mainNav.displayLoading = true;
       this.data.putReportCard(this.partialReportCard).subscribe(
         (data: ReportCard) => {
+          this.mainNav.displayLoading = false;
           console.log(data);
         },
         (err: ErrorApi) => {
           console.error(err);
+          this.mainNav.displayLoading = false;
           this.dialog.openSnackBar(err.message);
         }
       );

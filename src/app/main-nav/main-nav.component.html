@@ -1,49 +1,106 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer fixedInViewport="true"
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="!(isHandset$ | async)"
-      class="sidenav">
+  <mat-sidenav
+    #drawer
+    fixedInViewport="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)"
+    class="sidenav"
+  >
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
       <a (click)="closeNav()" mat-list-item routerLink="/">
         <mat-icon>assignment</mat-icon>
         &nbsp;Report Cards
       </a>
-      <a (click)="closeNav()" mat-list-item routerLink="/sent-back-report-cards">
+      <a
+        (click)="closeNav()"
+        mat-list-item
+        routerLink="/sent-back-report-cards"
+      >
         <mat-icon>build</mat-icon>
-        <span matBadge="{{sentBackReportCards}}" matBadgeColor="accent" [matBadgeHidden]="sentBackReportCards == 0" matBadgeOverlap="false">&nbsp;Sent Back Cards</span>
+        <span
+          matBadge="{{ sentBackReportCards }}"
+          matBadgeColor="accent"
+          [matBadgeHidden]="sentBackReportCards == 0"
+          matBadgeOverlap="false"
+          >&nbsp;Sent Back Cards</span
+        >
       </a>
       <a (click)="closeNav()" mat-list-item routerLink="/completed">
         <mat-icon>list</mat-icon>
         <span>&nbsp;All Completed</span>
       </a>
-      <a *ngIf="authService.user.access === 'ADMIN' || authService.user.access === 'SUPERVISOR'" (click)="closeNav()" mat-list-item routerLink="/approve">
-        <mat-icon>check</mat-icon>  
-        <span matBadge="{{count}}" matBadgeColor="accent" [matBadgeHidden]="count == 0" matBadgeOverlap="false">&nbsp;Approve Report Cards</span>
+      <a
+        *ngIf="
+          authService.user.access === 'ADMIN' ||
+          authService.user.access === 'SUPERVISOR'
+        "
+        (click)="closeNav()"
+        mat-list-item
+        routerLink="/approve"
+      >
+        <mat-icon>check</mat-icon>
+        <span
+          matBadge="{{ count }}"
+          matBadgeColor="accent"
+          [matBadgeHidden]="count == 0"
+          matBadgeOverlap="false"
+          >&nbsp;Approve Report Cards</span
+        >
       </a>
-      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/level-groups">
-        <mat-icon>description</mat-icon>  
+      <a
+        *ngIf="authService.user.access === 'ADMIN'"
+        (click)="closeNav()"
+        mat-list-item
+        routerLink="/level-groups"
+      >
+        <mat-icon>description</mat-icon>
         <span>&nbsp;Level Groups</span>
       </a>
-      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/levels">
-        <mat-icon>gavel</mat-icon>  
+      <a
+        *ngIf="authService.user.access === 'ADMIN'"
+        (click)="closeNav()"
+        mat-list-item
+        routerLink="/levels"
+      >
+        <mat-icon>gavel</mat-icon>
         <span>&nbsp;Levels</span>
       </a>
-      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/events">
-        <mat-icon>rowing</mat-icon>  
+      <a
+        *ngIf="authService.user.access === 'ADMIN'"
+        (click)="closeNav()"
+        mat-list-item
+        routerLink="/events"
+      >
+        <mat-icon>rowing</mat-icon>
         <span>&nbsp;Events</span>
       </a>
-      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/users">
-        <mat-icon>face</mat-icon>  
+      <a
+        *ngIf="authService.user.access === 'ADMIN'"
+        (click)="closeNav()"
+        mat-list-item
+        routerLink="/users"
+      >
+        <mat-icon>face</mat-icon>
         <span>&nbsp;Users</span>
       </a>
-      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/athletes">
-        <mat-icon>directions_run</mat-icon>  
+      <a
+        *ngIf="authService.user.access === 'ADMIN'"
+        (click)="closeNav()"
+        mat-list-item
+        routerLink="/athletes"
+      >
+        <mat-icon>directions_run</mat-icon>
         <span>&nbsp;Athletes</span>
       </a>
-      <a *ngIf="authService.user.access === 'ADMIN'" (click)="closeNav()" mat-list-item routerLink="/comments">
-        <mat-icon>message</mat-icon>  
+      <a
+        *ngIf="authService.user.access === 'ADMIN'"
+        (click)="closeNav()"
+        mat-list-item
+        routerLink="/comments"
+      >
+        <mat-icon>message</mat-icon>
         <span>&nbsp;Comments</span>
       </a>
     </mat-nav-list>
@@ -55,17 +112,24 @@
         aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
+        *ngIf="isHandset$ | async"
+      >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Welcome {{user.first_name}} {{user.last_name}} to Dynamo Report Cards</span>
+      <span
+        >Welcome {{ user.first_name }} {{ user.last_name }} to Dynamo Report
+        Cards</span
+      >
       <span class="fill-remaining-space"></span>
-      <button mat-raised-button color="primary" (click)="onLogout()">Logout</button>
-
-
+      <button mat-raised-button color="primary" (click)="onLogout()">
+        Logout
+      </button>
     </mat-toolbar>
-    
-    <ng-content></ng-content>
 
+    <mat-progress-bar
+      mode="indeterminate"
+      *ngIf="displayLoading"
+    ></mat-progress-bar>
+    <ng-content></ng-content>
   </mat-sidenav-content>
 </mat-sidenav-container>

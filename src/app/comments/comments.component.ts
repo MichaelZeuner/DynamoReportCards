@@ -7,6 +7,7 @@ import { DialogService } from "../shared/dialog.service";
 import { element } from "@angular/core/src/render3";
 import { Comments } from "../interfaces/comments";
 import { CommonService } from "../shared/common.service";
+import { MainNavComponent } from "../main-nav/main-nav.component";
 
 @Component({
   selector: "app-comments",
@@ -31,13 +32,16 @@ export class CommentsComponent implements OnInit {
   constructor(
     public data: DataService,
     public dialog: DialogService,
-    public comm: CommonService
+    public comm: CommonService,
+    public nav: MainNavComponent
   ) {}
 
   ngOnInit() {
     this.createLevelGroupArray();
+    this.nav.displayLoading = true;
     this.data.getComments().subscribe(
       (data: Comments[]) => {
+        this.nav.displayLoading = false;
         this.comments.push(this.comm.deepCopy(this.NEW_COMMENT_OBJ));
         for (let i = 0; i < data.length; i++) {
           this.comments.push(data[i]);
@@ -52,8 +56,10 @@ export class CommentsComponent implements OnInit {
   }
 
   createLevelGroupArray() {
+    this.nav.displayLoading = true;
     this.data.getLevels().subscribe(
       (data: Level[]) => {
+        this.nav.displayLoading = false;
         this.levels = data;
         for (let i = 0; i < data.length; i++) {
           let groupFound = false;
@@ -158,8 +164,10 @@ export class CommentsComponent implements OnInit {
       if (this.comments[i].id === commentId) {
         const commentToPut = this.comments[i];
         console.log(commentToPut);
+        this.nav.displayLoading = true;
         this.data.putComment(commentToPut).subscribe(
           (data: Comments[]) => {
+            this.nav.displayLoading = false;
             console.log(data);
             this.dialog.openSnackBar("Comment Updated!");
           },
@@ -183,8 +191,10 @@ export class CommentsComponent implements OnInit {
       return;
     }
 
+    this.nav.displayLoading = true;
     this.data.addComment(this.comments[0]).subscribe(
       (data: Comments) => {
+        this.nav.displayLoading = false;
         console.log("Added Comment:");
         console.log(data);
         this.comments.push(data);

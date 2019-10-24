@@ -1,12 +1,11 @@
-
 <section class="level-groups-section">
-    <mat-checkbox 
-      *ngFor="let levelGroup of allLevelGroups"
-      class="level-groups-margin" 
-      checked="true"
-      (change)="adjustDisplayedLevelGroups(levelGroup.id)">
-      {{levelGroup.name}}
-    </mat-checkbox>
+  <mat-checkbox
+    *ngFor="let levelGroup of allLevelGroups"
+    class="level-groups-margin"
+    (change)="adjustDisplayedLevelGroups(levelGroup.id)"
+  >
+    {{ levelGroup.name }}
+  </mat-checkbox>
 </section>
 
 <mat-grid-list cols="6" rowHeight="40px" class="m-1">
@@ -14,40 +13,66 @@
     <ng-container *ngIf="levelGroupsToShow.includes(level.level_groups_id)">
       <mat-grid-tile [colspan]="4">
         <mat-form-field class="levelName w-100">
-          <label>{{level.name}} Level </label>
-          <input type="number" maxlength="2" (change)="levelChanged(level, $event.target.value)" matInput value="{{level.level_number}}">
+          <label>{{ level.name }} Level </label>
+          <input
+            type="number"
+            maxlength="2"
+            (change)="levelChanged(level, $event.target.value)"
+            matInput
+            value="{{ level.level_number }}"
+          />
         </mat-form-field>
       </mat-grid-tile>
       <mat-grid-tile>
-        <button mat-raised-button (click)="changeLevelGroup(level)" color="primary">Change Group</button>
+        <button
+          mat-raised-button
+          (click)="changeLevelGroup(level)"
+          color="primary"
+        >
+          Change Group
+        </button>
       </mat-grid-tile>
       <mat-grid-tile>
-        <button mat-raised-button (click)="deleteLevel(level)" color="warn">Remove Level</button>
+        <button mat-raised-button (click)="deleteLevel(level)" color="warn">
+          Remove Level
+        </button>
       </mat-grid-tile>
-      
+
       <div *ngFor="let event of level.events">
         <mat-grid-tile [colspan]="6" class="ml-1">
-          <b class="w-100">{{event.name}}</b>
+          <b class="w-100">{{ event.name }}</b>
         </mat-grid-tile>
 
         <div *ngFor="let skill of event.skills">
-            <mat-grid-tile [colspan]="5" class="ml-1">
-              <mat-form-field class="w-100">
-                <input (keyup)="skillChanged(skill, event, level, $event.target.value)" matInput value="{{skill.name}}">
-              </mat-form-field>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <button (click)="deleteSkill(skill)" mat-raised-button color="warn">Remove Skill</button>
-            </mat-grid-tile>
-        </div>      
+          <mat-grid-tile [colspan]="5" class="ml-1">
+            <mat-form-field class="w-100">
+              <input
+                (keyup)="skillChanged(skill, event, level, $event.target.value)"
+                matInput
+                value="{{ skill.name }}"
+              />
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <button (click)="deleteSkill(skill)" mat-raised-button color="warn">
+              Remove Skill
+            </button>
+          </mat-grid-tile>
+        </div>
 
         <mat-grid-tile [colspan]="5" class="ml-1">
           <mat-form-field class="w-100">
-            <input matInput #newSkill>
+            <input matInput #newSkill />
           </mat-form-field>
         </mat-grid-tile>
         <mat-grid-tile>
-          <button (click)="addSkill(newSkill, event, level)" mat-raised-button color="primary">Add Skill</button>
+          <button
+            (click)="addSkill(newSkill, event, level)"
+            mat-raised-button
+            color="primary"
+          >
+            Add Skill
+          </button>
         </mat-grid-tile>
       </div>
 
@@ -63,15 +88,18 @@
 
   <mat-grid-tile [colspan]="4">
     <mat-form-field class="levelName w-100">
-      <label>{{newLevelGroup.value}} Level </label>
-      <input type="number" maxlength="2" #levelNumber matInput>
+      <label>{{ newLevelGroup.value }} Level </label>
+      <input type="number" maxlength="2" #levelNumber matInput />
     </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-raised-button (click)="changeNewLevelGroup()" color="primary">Change Group</button>
+    <button mat-raised-button (click)="changeNewLevelGroup()" color="primary">
+      Change Group
+    </button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-raised-button (click)="addLevel(levelNumber)" color="primary">Add Level</button>
+    <button mat-raised-button (click)="addLevel(levelNumber)" color="primary">
+      Add Level
+    </button>
   </mat-grid-tile>
 </mat-grid-list>
-      

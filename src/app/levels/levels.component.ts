@@ -12,6 +12,7 @@ import { LevelGroups } from "../interfaces/level-groups";
 import { SelectDialogInput } from "../mat-select-dialog/select-dialog-input";
 import { count } from "rxjs/operators";
 import { SelectDialogOutput } from "../mat-select-dialog/select-dialog-output";
+import { MainNavComponent } from "../main-nav/main-nav.component";
 
 interface FullLevel extends Level {
   events: FullEvent[];
@@ -38,16 +39,17 @@ export class LevelsComponent implements OnInit {
   public allLevelGroups: LevelGroups[] = [];
   public levelGroupsToShow: number[] = [];
 
-  constructor(private data: DataService, private dialog: DialogService) {}
+  constructor(
+    private data: DataService,
+    private dialog: DialogService,
+    private nav: MainNavComponent
+  ) {}
 
   ngOnInit() {
+    this.nav.displayLoading = true;
     this.data.getLevelGroups().subscribe((levelGroups: LevelGroups[]) => {
       this.allLevelGroups = levelGroups;
       console.log(this.allLevelGroups);
-
-      for (let i = 0; i < levelGroups.length; i++) {
-        this.levelGroupsToShow.push(levelGroups[i].id);
-      }
     });
 
     this.data.getEvents().subscribe((events: Event[]) => {
@@ -129,6 +131,8 @@ export class LevelsComponent implements OnInit {
             const skill = skills[x];
             this.levels[currentLevel].events[currentEvent].skills.push(skill);
           }
+
+          this.nav.displayLoading = false;
         });
     }
 

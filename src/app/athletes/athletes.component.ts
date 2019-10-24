@@ -4,6 +4,7 @@ import { DataService } from "../data.service";
 import { DialogService } from "../shared/dialog.service";
 import { MatInput, MatDatepicker, PageEvent } from "@angular/material";
 import { ErrorApi } from "../interfaces/error-api";
+import { MainNavComponent } from "../main-nav/main-nav.component";
 
 @Component({
   selector: "app-athletes",
@@ -22,10 +23,16 @@ export class AthletesComponent implements OnInit {
   public pageinatorIndex: number = 0;
   public pageinatorSize: number = 10;
 
-  constructor(private data: DataService, private dialog: DialogService) {}
+  constructor(
+    private data: DataService,
+    private dialog: DialogService,
+    private nav: MainNavComponent
+  ) {}
 
   ngOnInit() {
+    this.nav.displayLoading = true;
     this.data.getAthletes().subscribe((data: Athlete[]) => {
+      this.nav.displayLoading = false;
       this.athletesBase = data;
       console.log(this.athletesBase);
 
@@ -54,7 +61,9 @@ export class AthletesComponent implements OnInit {
       .afterClosed()
       .subscribe(res => {
         if (res) {
+          this.nav.displayLoading = true;
           this.data.deleteAthlete(id).subscribe(() => {
+            this.nav.displayLoading = false;
             for (let i = 0; i < this.athletesBase.length; i++) {
               const currentAthlete = this.athletesBase[i];
               if (currentAthlete.id === id) {
@@ -90,8 +99,10 @@ export class AthletesComponent implements OnInit {
       date_of_birth: dateOfBirth
     };
 
+    this.nav.displayLoading = true;
     this.data.addAthlete(athlete).subscribe(
       (data: Athlete) => {
+        this.nav.displayLoading = false;
         this.athletesBase.push(data);
         firstName.value = "";
         lastName.value = "";
@@ -170,8 +181,10 @@ export class AthletesComponent implements OnInit {
       date_of_birth: dateOfBirth
     };
 
+    this.nav.displayLoading = true;
     this.data.putAthlete(athlete).subscribe(
       (data: Athlete) => {
+        this.nav.displayLoading = false;
         console.log(data);
         this.dialog.openSnackBar("Athlete Updated!");
       },

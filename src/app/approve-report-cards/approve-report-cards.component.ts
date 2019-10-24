@@ -46,15 +46,20 @@ export class ApproveReportCardsComponent implements OnInit {
   }
 
   refreshReportCardsData() {
-    this.data
-      .getReportCardsNeedingApproval()
-      .subscribe((data: ReportCardCompleted[]) => {
+    this.mainNav.displayLoading = true;
+    this.data.getReportCardsNeedingApproval().subscribe(
+      (data: ReportCardCompleted[]) => {
         console.log(data);
         this.reportCardsFull = data;
         this.reportCards = [];
         this.sumCounters();
         this.adjustDisplayedCards();
-      });
+        this.mainNav.displayLoading = false;
+      },
+      () => {
+        this.mainNav.displayLoading = false;
+      }
+    );
   }
 
   sumCounters() {

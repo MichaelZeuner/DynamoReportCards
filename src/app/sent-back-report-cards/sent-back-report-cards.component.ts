@@ -15,12 +15,15 @@ export class SentBackReportCardsComponent implements OnInit {
   constructor(private data: DataService, private mainNav: MainNavComponent) {}
 
   ngOnInit() {
+    this.mainNav.displayLoading = true;
     this.data.getReportCardsSentBack().subscribe(
       (data: ReportCardSentBack[]) => {
+        this.mainNav.displayLoading = false;
         this.reportCards = data;
         console.log(this.reportCards);
       },
       (err: ErrorApi) => {
+        this.mainNav.displayLoading = false;
         console.error(err);
       }
     );

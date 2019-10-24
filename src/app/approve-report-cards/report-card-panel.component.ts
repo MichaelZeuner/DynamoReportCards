@@ -16,6 +16,7 @@ import { Comments } from '../interfaces/comments';
 import { Event } from '../interfaces/event';
 import { ReportCardComments } from '../interfaces/report-card-comments';
 import { CommonService } from '../shared/common.service';
+import { MainNavComponent } from '../main-nav/main-nav.component';
 
 interface ChangedComponents {
 	id: number;
