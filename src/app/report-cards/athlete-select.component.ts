@@ -89,12 +89,21 @@ export class AthletesSelectComponent implements OnInit {
     }
   }
 
+  getAge(dateOfBirthStr: string): string {
+    const dateOfBirth: Date = new Date(dateOfBirthStr);
+    const ageDifMs = Date.now() - dateOfBirth.getTime();
+    const ageDate = new Date(ageDifMs);
+    return Math.abs(ageDate.getUTCFullYear() - 1970).toString();
+  }
+
   getAthleteNameAndDate(athlete: Athlete) {
     return (
       athlete.first_name +
       " " +
       athlete.last_name +
       " (" +
+      this.getAge(athlete.date_of_birth) +
+      ": " +
       athlete.date_of_birth +
       ")"
     );
