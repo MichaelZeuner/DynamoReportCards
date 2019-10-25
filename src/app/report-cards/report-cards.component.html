@@ -34,6 +34,10 @@
         (levelChange)="updateSelectLevel($event)"
       ></app-level-select>
 
+      <button
+      mat-raised-button
+      color="primary"
+      (click)="setAllMastered()">All Mastered</button>
       <mat-list *ngIf="level">
         <app-report-card-events
           [level]="level"

@@ -69,12 +69,12 @@ export class DataService {
     return this.http.post(this.baseUrl + "/add-athlete-if-new", athlete);
   }
 
-  getLevelEvents(levelId: number) {
-    return this.http.get(this.baseUrl + `/level-events/${levelId}`);
+  getLevelEvents(levelId: number): Observable<Event[]> {
+    return this.http.get<Event[]>(this.baseUrl + `/level-events/${levelId}`);
   }
 
-  getEventSkills(levelId: number, eventId: number) {
-    return this.http.get(
+  getEventSkills(levelId: number, eventId: number): Observable<Skill[]> {
+    return this.http.get<Skill[]>(
       this.baseUrl + `/level-event-skills/${levelId}/${eventId}`
     );
   }

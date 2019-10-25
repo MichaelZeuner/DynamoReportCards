@@ -362,6 +362,31 @@ export class ReportCardsComponent implements OnInit {
     }
   }
 
+  setAllMastered() {
+    console.log("Set all mastered");
+
+    console.log(this.level);
+    this.data.getLevelEvents(this.level.id).subscribe((events: Event[]) => {
+      if (this.level.events.length !== events.length) {
+      }
+    });
+
+    for (let e = 0; e < this.level.events.length; e++) {
+      const event = this.level.events[e];
+
+      if (typeof event.skills === "undefined") {
+        continue;
+      }
+
+      for (let s = 0; s < event.skills.length; s++) {
+        const skill = event.skills[s];
+        console.log(skill.rank);
+        if (typeof skill.rank === "undefined") {
+        }
+      }
+    }
+  }
+
   submitClick() {
     if (this.selectedIntroComment === this.UNSELECTED) {
       this.dialog.openSnackBar("Intro comment required!");
@@ -389,7 +414,7 @@ export class ReportCardsComponent implements OnInit {
       width: "400px"
     });
 
-    dialogRef.afterClosed().subscribe(dayOfWeek => {
+    dialogRef.afterClosed().subscribe(async dayOfWeek => {
       console.log("The dialog was closed");
       if (typeof dayOfWeek === "undefined") {
         this.dialog.openSnackBar(
@@ -404,7 +429,7 @@ export class ReportCardsComponent implements OnInit {
         return;
       }
 
-      let errors = this.getErrors();
+      let errors = await this.getErrors();
       if (errors.length > 0) {
         let error: string = `Please select rankings for the following: ${errors[0]}`;
         for (let i = 1; i < errors.length; i++) {
@@ -419,20 +444,35 @@ export class ReportCardsComponent implements OnInit {
     });
   }
 
-  getErrors(): string[] {
+  async getErrors(): Promise<string[]> {
     let errors: string[] = [];
-    for (let e = 0; e < this.level.events.length; e++) {
-      const event = this.level.events[e];
 
-      if (typeof event.skills === "undefined") {
-        errors.push(`all the skills in ${event.name}`);
-        continue;
+    const events: Event[] = await this.data
+      .getLevelEvents(this.level.id)
+      .toPromise();
+    if (this.level.events.length !== events.length) {
+      for (let i = 0; i < events.length; i++) {
+        for (let x = 0; x < this.level.events.length; x++) {
+          if (this.level.events[x].id === events[i].id) {
+            break;
+          }
+        }
+        errors.push(`all the skills in ${events[i].name}`);
       }
+    }
 
-      for (let s = 0; s < event.skills.length; s++) {
-        const skill = event.skills[s];
-        if (typeof skill.rank === "undefined") {
-          errors.push(`${skill.name} in ${event.name}`);
+    for (let i = 0; i < this.level.events.length; i++) {
+      const skills: Skill[] = await this.data
+        .getEventSkills(this.level.id, this.level.events[i].id)
+        .toPromise();
+      if (this.level.events[i].skills.length !== skills.length) {
+        for (let x = 0; x < skills.length; x++) {
+          for (let y = 0; y < this.level.events[i].skills.length; y++) {
+            if (this.level.events[i].skills[y].id === skills[x].id) {
+              break;
+            }
+          }
+          errors.push(`${skills[x].name} in ${this.level.events[i].name}`);
         }
       }
     }
