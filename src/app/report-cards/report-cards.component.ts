@@ -447,17 +447,22 @@ export class ReportCardsComponent implements OnInit {
   async getErrors(): Promise<string[]> {
     let errors: string[] = [];
 
+    let pushRequired: boolean;
     const events: Event[] = await this.data
       .getLevelEvents(this.level.id)
       .toPromise();
     if (this.level.events.length !== events.length) {
       for (let i = 0; i < events.length; i++) {
+        pushRequired = true;
         for (let x = 0; x < this.level.events.length; x++) {
           if (this.level.events[x].id === events[i].id) {
+            pushRequired = false;
             break;
           }
         }
-        errors.push(`all the skills in ${events[i].name}`);
+        if (pushRequired) {
+          errors.push(`all the skills in ${events[i].name}`);
+        }
       }
     }
 
@@ -467,12 +472,16 @@ export class ReportCardsComponent implements OnInit {
         .toPromise();
       if (this.level.events[i].skills.length !== skills.length) {
         for (let x = 0; x < skills.length; x++) {
+          pushRequired = true;
           for (let y = 0; y < this.level.events[i].skills.length; y++) {
             if (this.level.events[i].skills[y].id === skills[x].id) {
+              pushRequired = false;
               break;
             }
           }
-          errors.push(`${skills[x].name} in ${this.level.events[i].name}`);
+          if (pushRequired) {
+            errors.push(`${skills[x].name} in ${this.level.events[i].name}`);
+          }
         }
       }
     }
