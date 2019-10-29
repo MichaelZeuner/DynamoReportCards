@@ -313,6 +313,21 @@ export class ReportCardsComponent implements OnInit {
       );
   }
 
+  async addEventComponents(event: Event) {
+    let currentLoadingState = this.mainNav.displayLoading;
+    if (this.newReportCard) {
+      this.newReportCard = false;
+      this.mainNav.displayLoading = true;
+      this.partialReportCard = await this.data
+        .addReportCard(this.partialReportCard)
+        .toPromise();
+
+      this.mainNav.displayLoading = currentLoadingState;
+    }
+
+    await this.addAllComponentsToReportCard(event);
+  }
+
   onEventsChange(event: Event) {
     if (typeof this.level.events !== "undefined") {
       for (let i = 0; i < this.level.events.length; i++) {
@@ -322,25 +337,7 @@ export class ReportCardsComponent implements OnInit {
       }
     }
 
-    if (this.newReportCard) {
-      this.newReportCard = false;
-      this.mainNav.displayLoading = true;
-      this.data.addReportCard(this.partialReportCard).subscribe(
-        (data: ReportCard) => {
-          this.mainNav.displayLoading = false;
-          console.log(data);
-          this.partialReportCard = data;
-          this.addAllComponentsToReportCard(event);
-        },
-        (err: ErrorApi) => {
-          console.error(err);
-          this.mainNav.displayLoading = false;
-          this.dialog.openSnackBar(err.message);
-        }
-      );
-    } else {
-      this.addAllComponentsToReportCard(event);
-    }
+    this.addEventComponents(event);
 
     let pushEvent = false;
     if (typeof this.level.events !== "undefined") {
@@ -362,29 +359,37 @@ export class ReportCardsComponent implements OnInit {
     }
   }
 
-  setAllMastered() {
+  async setAllMastered() {
+    this.mainNav.displayLoading = true;
     console.log("Set all mastered");
 
     console.log(this.level);
-    this.data.getLevelEvents(this.level.id).subscribe((events: Event[]) => {
-      if (this.level.events.length !== events.length) {
+    this.level.events = await this.data
+      .getLevelEvents(this.level.id)
+      .toPromise();
+    for (let i = 0; i < this.level.events.length; i++) {
+      this.level.events[i].skills = await this.data
+        .getEventSkills(this.level.id, this.level.events[i].id)
+        .toPromise();
+      for (let x = 0; x < this.level.events[i].skills.length; x++) {
+        this.level.events[i].skills[x].rank = "MASTERED";
       }
-    });
+      await this.addEventComponents(this.level.events[i]);
+    }
 
-    for (let e = 0; e < this.level.events.length; e++) {
-      const event = this.level.events[e];
+    let partialReportCards: ReportCardCompleted[] = await this.data
+      .getCoachesInProgressReportCard()
+      .toPromise();
 
-      if (typeof event.skills === "undefined") {
-        continue;
-      }
-
-      for (let s = 0; s < event.skills.length; s++) {
-        const skill = event.skills[s];
-        console.log(skill.rank);
-        if (typeof skill.rank === "undefined") {
-        }
+    for (let i = 0; i < partialReportCards.length; i++) {
+      if (partialReportCards[i].id === this.partialReportCard.id) {
+        this.updatePartialReportCard(partialReportCards[i]);
+        break;
       }
     }
+
+    this.dialog.openSnackBar("All skills set to Mastered");
+    this.mainNav.displayLoading = false;
   }
 
   submitClick() {
@@ -554,7 +559,8 @@ export class ReportCardsComponent implements OnInit {
     }
   }
 
-  addAllComponentsToReportCard(event: any) {
+  async addAllComponentsToReportCard(event: any) {
+    let currentLoadingState = this.mainNav.displayLoading;
     if (typeof event.skills !== "undefined") {
       for (let s = 0; s < event.skills.length; s++) {
         const skill = event.skills[s];
@@ -563,28 +569,15 @@ export class ReportCardsComponent implements OnInit {
           reportCardComponent.report_cards_id = this.partialReportCard.id;
           reportCardComponent.skills_id = skill.id;
           reportCardComponent.rank = skill.rank;
-          this.addComponentToReportCard(reportCardComponent);
+
+          this.mainNav.displayLoading = true;
+          await this.data
+            .addOrUpdateReportCardComponent(reportCardComponent)
+            .toPromise();
+          this.mainNav.displayLoading = currentLoadingState;
         }
       }
     }
-  }
-
-  addComponentToReportCard(reportCardComponent: ReportCardComponent) {
-    this.mainNav.displayLoading = true;
-    this.data.addOrUpdateReportCardComponent(reportCardComponent).subscribe(
-      data => {
-        this.mainNav.displayLoading = false;
-      },
-      (err: ErrorApi) => {
-        console.error(err);
-        this.mainNav.displayLoading = false;
-        let message = "Error Unknown...";
-        if (err.error !== undefined) {
-          message = err.error.message;
-        }
-        this.dialog.openSnackBar(message);
-      }
-    );
   }
 
   sessionChanged(newSession: string) {

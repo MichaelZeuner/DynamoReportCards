@@ -67,6 +67,10 @@ body {
   float: right;
 }
 
+.bring-to-front {
+  z-index: 999;
+}
+
 .pointer {
   cursor: pointer;
 }

@@ -167,7 +167,10 @@ export class DataService {
   }
 
   addReportCard(reportCard: ReportCard) {
-    return this.http.post(this.baseUrl + "/report-cards", reportCard);
+    return this.http.post<ReportCard>(
+      this.baseUrl + "/report-cards",
+      reportCard
+    );
   }
 
   putReportCard(reportCard: ReportCard) {
@@ -270,7 +273,7 @@ export class DataService {
   }
 
   getCoachesInProgressReportCard() {
-    return this.http.get(
+    return this.http.get<ReportCardCompleted[]>(
       this.baseUrl + "/coaches-in-progress-cards/" + this.authService.user.id
     );
   }

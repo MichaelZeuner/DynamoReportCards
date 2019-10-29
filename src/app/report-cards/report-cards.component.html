@@ -35,7 +35,9 @@
       ></app-level-select>
 
       <button
+      *ngIf="level && selectedAthlete"
       mat-raised-button
+      class="float-right bring-to-front"
       color="primary"
       (click)="setAllMastered()">All Mastered</button>
       <mat-list *ngIf="level">
