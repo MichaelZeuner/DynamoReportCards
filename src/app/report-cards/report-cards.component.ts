@@ -590,7 +590,17 @@ export class ReportCardsComponent implements OnInit {
     this.addPutReportCard();
   }
 
-  deletePartialReportCard() {
+  async deletePartialReportCard() {
+    let deleteReportCard = await this.dialog
+      .openConfirmDialog(
+        "Are you sure you wish to delete this partial report card? This cannot be undone!"
+      )
+      .afterClosed()
+      .toPromise();
+    if (deleteReportCard === false) {
+      return;
+    }
+
     console.log("DELETEING: " + this.partialReportCard.id);
     this.mainNav.displayLoading = true;
     this.data.deleteReportCard(this.partialReportCard.id).subscribe(
