@@ -105,7 +105,7 @@ interface ChangedComponents {
         </mat-select>
       </mat-form-field>
 
-    <p *ngIf="attemptsAtLevel >= ATTEMPTS_BEFORE_PASS" class="mb-0"><i>*The level has been attempted {{attemptsAtLevel}} times prior. The athlete should pass regardless of the number of skills still learning.*</i></p>
+    <p *ngIf="attemptsAtLevel > ATTEMPTS_BEFORE_PASS" class="mb-0"><b><u><i><font color="red">*The level has been attempted {{attemptsAtLevel}} times prior. The athlete should pass regardless of the number of skills still learning.*</font></i></u></b></p>
     <mat-button-toggle-group class="w-100 m-1" #groupStatus="matButtonToggleGroup"  [value]="attemptsAtLevel >= ATTEMPTS_BEFORE_PASS ? 'Completed' : reportCard.status" (click)="reportCardStatusChanged(groupStatus.value)" name="reportCardStatus" aria-label="Report Card Status">
         <mat-button-toggle value="In Progress" class="btnToggle w-50">In Progress</mat-button-toggle>
         <mat-button-toggle value="Completed" class="btnToggle w-50">Completed</mat-button-toggle>
