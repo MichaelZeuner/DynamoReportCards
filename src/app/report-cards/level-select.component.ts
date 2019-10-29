@@ -81,18 +81,18 @@ export class LevelSelectComponent implements OnInit {
 
   get levelNameForInput(): string {
     if (this.previousLevel !== this._level) {
-      if (this._level !== null) {
-        return this.getLevelToString(this._level);
-      } else {
-        return "";
-      }
+      return this.getLevelToString(this._level);
     } else {
       return this.myControlLevel.value;
     }
   }
 
   getLevelToString(level: Level) {
-    return level.name + " Level " + level.level_number;
+    if(level !== null) {
+      return level.name + " Level " + level.level_number;
+    } else {
+      return "";
+    }
   }
 
   ngOnInit() {
