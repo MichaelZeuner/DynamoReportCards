@@ -4,6 +4,8 @@ import { PrintService } from "../print.service";
 import { DataService } from "../data.service";
 import { ReportCardCompleted } from "../interfaces/report-card-completed";
 import { PrintableReportCard } from "../interfaces/printable-report-card";
+import { ErrorApi } from "../interfaces/error-api";
+import { DialogService } from "../shared/dialog.service";
 
 @Component({
   selector: "app-print-report-card",
@@ -19,16 +21,16 @@ export class PrintReportCardComponent implements OnInit {
   constructor(
     route: ActivatedRoute,
     private printService: PrintService,
-    private data: DataService
+    private data: DataService,
+    private dialog: DialogService
   ) {
     this.athleteIds = route.snapshot.params["athleteIds"].split(",");
   }
 
   ngOnInit() {
     if (this.athleteIds.length >= 0) {
-      this.data
-        .getPrintableReportCard(+this.athleteIds[0])
-        .subscribe((data: PrintableReportCard) => {
+      this.data.getPrintableReportCard(+this.athleteIds[0]).subscribe(
+        (data: PrintableReportCard) => {
           console.log(data);
           this.printableReportCard = data;
           this.levelBase = this.printableReportCard.levels[0].name
@@ -36,7 +38,12 @@ export class PrintReportCardComponent implements OnInit {
             .toUpperCase();
           this.printService.onDataReady();
           this.reportCardLoaded = Promise.resolve(true);
-        });
+        },
+        (err: ErrorApi) => {
+          console.error(err);
+          this.dialog.openSnackBar("No previous report cards found...");
+        }
+      );
     }
   }
 
