@@ -27,6 +27,18 @@
 
   <mat-card *ngIf="selectedAthlete">
     <mat-card-content>
+      <div class="w-100 flexbox">
+        <span class="fill-remaining-space"></span>
+        <button mat-raised-button (click)="setLevelText('Kinder')">Kinder</button>
+        <span class="fill-remaining-space"></span>
+        <button mat-raised-button (click)="setLevelText('Womens')">Womens</button>
+        <span class="fill-remaining-space"></span>
+        <button mat-raised-button (click)="setLevelText('Mens')">Mens</button>
+        <span class="fill-remaining-space"></span>
+        <button mat-raised-button (click)="setLevelText('Tumbling')">Tumbling</button>
+        <span class="fill-remaining-space"></span>
+      </div>
+
       <app-level-select
         #levelSelect
         [enabled]="newReportCard"

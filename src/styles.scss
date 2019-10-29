@@ -59,6 +59,10 @@ body {
   padding: 1rem !important;
 }
 
+.flexbox {
+  display: flex;
+}
+
 .fill-remaining-space {
   flex: 1 1 auto;
 }

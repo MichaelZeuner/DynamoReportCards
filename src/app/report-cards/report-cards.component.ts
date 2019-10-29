@@ -249,6 +249,10 @@ export class ReportCardsComponent implements OnInit {
     );
   }
 
+  setLevelText(text: string) {
+    this.levelSelect.myControlLevel.setValue(text);
+  }
+
   updateSelectLevel(newLevel: Level) {
     console.log(newLevel);
     this.level = newLevel;
