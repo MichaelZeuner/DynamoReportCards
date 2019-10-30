@@ -25,6 +25,7 @@ import { ReportCardCompleted } from "../interfaces/report-card-completed";
 import { SelectDialogInput } from "../mat-select-dialog/select-dialog-input";
 import { SelectDialogOutput } from "../mat-select-dialog/select-dialog-output";
 import { LevelSelectComponent } from "./level-select.component";
+import { RecentSimilarReportCards } from "../recent-similar-report-cards";
 
 @Component({
   selector: "app-report-cards",
@@ -253,7 +254,50 @@ export class ReportCardsComponent implements OnInit {
     this.levelSelect.myControlLevel.setValue(text);
   }
 
-  updateSelectLevel(newLevel: Level) {
+  async cancelReportCard(level: Level, athlete: Athlete): Promise<Boolean> {
+    let recent: RecentSimilarReportCards;
+    recent = await this.data
+      .getRecentSimilarReportCard(athlete.id, level.id)
+      .toPromise();
+    if (recent.recentlyDone) {
+      let message;
+      if (recent.type === "Partial") {
+        message =
+          "A report card has already been started for " +
+          athlete.first_name +
+          " level " +
+          level.name +
+          " Level " +
+          level.level_number +
+          ".";
+      } else {
+        message =
+          "A report card was already completed " + recent.type + " days ago.";
+      }
+      let ret = await this.dialog
+      .openConfirmDialog(
+        message + " Would you like to cancel this report card? (Yes)"
+      )
+      .afterClosed()
+      .toPromise();
+      return ret;
+    } else {
+      return false;
+    }
+  }
+
+  async updateSelectLevel(newLevel: Level) {
+    if(newLevel === null) { return; }
+
+    if (await this.cancelReportCard(newLevel, this.selectedAthlete)) {
+      console.log('CANCELED');
+      this.athleteSelect.clearAthlete();
+      this.levelSelect.clearLevel();
+      this.clearPartialReportCard();
+      return;
+    }
+    console.log('KEEP MOVING!');
+
     console.log(newLevel);
     this.level = newLevel;
 

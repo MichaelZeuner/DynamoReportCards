@@ -133,7 +133,7 @@ export class AthletesSelectComponent implements OnInit {
   }
 
   public clearAthlete() {
-    this.athleteName.nativeElement.value = "";
+    this.myControlAthlete.setValue("");
     this.onAthleteChange("");
   }
 

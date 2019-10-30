@@ -17,6 +17,7 @@ import { Comments } from "./interfaces/comments";
 import { ReportCardComments } from "./interfaces/report-card-comments";
 import { Observable } from "rxjs";
 import { ReportCardCompleted } from "./interfaces/report-card-completed";
+import { RecentSimilarReportCards } from "./recent-similar-report-cards";
 
 @Injectable({
   providedIn: "root"
@@ -157,6 +158,15 @@ export class DataService {
 
   addComment(comment: Comments) {
     return this.http.post(this.baseUrl + "/add-comments", comment);
+  }
+
+  getRecentSimilarReportCard(
+    athleteId: number,
+    levelId: number
+  ): Observable<RecentSimilarReportCards> {
+    return this.http.get<RecentSimilarReportCards>(
+      this.baseUrl + "/recent-similar-report-cards/" + athleteId + "/" + levelId
+    );
   }
 
   addReportCardComment(reportCardComment: ReportCardComments) {
