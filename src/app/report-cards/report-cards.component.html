@@ -29,13 +29,19 @@
     <mat-card-content>
       <div class="w-100 flexbox">
         <span class="fill-remaining-space"></span>
-        <button mat-raised-button (click)="setLevelText('Kinder')">Kinder</button>
+        <button mat-raised-button (click)="setLevelText('Kinder')">
+          Kinder
+        </button>
         <span class="fill-remaining-space"></span>
-        <button mat-raised-button (click)="setLevelText('Womens')">Womens</button>
+        <button mat-raised-button (click)="setLevelText('Womens')">
+          Womens
+        </button>
         <span class="fill-remaining-space"></span>
         <button mat-raised-button (click)="setLevelText('Mens')">Mens</button>
         <span class="fill-remaining-space"></span>
-        <button mat-raised-button (click)="setLevelText('Tumbling')">Tumbling</button>
+        <button mat-raised-button (click)="setLevelText('Tumbling')">
+          Tumbling
+        </button>
         <span class="fill-remaining-space"></span>
       </div>
 
@@ -47,11 +53,14 @@
       ></app-level-select>
 
       <button
-      *ngIf="level && selectedAthlete"
-      mat-raised-button
-      class="float-right bring-to-front"
-      color="primary"
-      (click)="setAllMastered()">All Mastered</button>
+        *ngIf="level && selectedAthlete"
+        mat-raised-button
+        class="float-right bring-to-front"
+        color="primary"
+        (click)="setAllMastered()"
+      >
+        All Mastered
+      </button>
       <mat-list *ngIf="level">
         <app-report-card-events
           [level]="level"
@@ -172,9 +181,9 @@
   <button
     mat-raised-button
     color="primary"
-    (click)="generateReportCard(selectedAthlete.id)"
+    (click)="generateReportCard(selectedAthlete.id, level.level_groups_id)"
     class="previewReportCardButton"
-    *ngIf="selectedAthlete"
+    *ngIf="selectedAthlete && level"
   >
     Preview Report Card
   </button>

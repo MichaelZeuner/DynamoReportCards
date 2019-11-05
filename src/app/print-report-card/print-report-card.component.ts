@@ -13,7 +13,7 @@ import { DialogService } from "../shared/dialog.service";
   styleUrls: ["./print-report-card.component.scss"]
 })
 export class PrintReportCardComponent implements OnInit {
-  athleteIds: string[];
+  printData: string[];
   reportCardLoaded: Promise<boolean>;
   printableReportCard: PrintableReportCard;
   levelBase: string;
@@ -24,26 +24,30 @@ export class PrintReportCardComponent implements OnInit {
     private data: DataService,
     private dialog: DialogService
   ) {
-    this.athleteIds = route.snapshot.params["athleteIds"].split(",");
+    console.log(route.snapshot.params);
+    this.printData = route.snapshot.params["printData"].split(",");
+    console.log(this.printData);
   }
 
   ngOnInit() {
-    if (this.athleteIds.length >= 0) {
-      this.data.getPrintableReportCard(+this.athleteIds[0]).subscribe(
-        (data: PrintableReportCard) => {
-          console.log(data);
-          this.printableReportCard = data;
-          this.levelBase = this.printableReportCard.levels[0].name
-            .split(" ")[0]
-            .toUpperCase();
-          this.printService.onDataReady();
-          this.reportCardLoaded = Promise.resolve(true);
-        },
-        (err: ErrorApi) => {
-          console.error(err);
-          this.dialog.openSnackBar("No previous report cards found...");
-        }
-      );
+    if (this.printData.length >= 0) {
+      this.data
+        .getPrintableReportCard(+this.printData[0], +this.printData[1])
+        .subscribe(
+          (data: PrintableReportCard) => {
+            console.log(data);
+            this.printableReportCard = data;
+            this.levelBase = this.printableReportCard.levels[0].name
+              .split(" ")[0]
+              .toUpperCase();
+            this.printService.onDataReady();
+            this.reportCardLoaded = Promise.resolve(true);
+          },
+          (err: ErrorApi) => {
+            console.error(err);
+            this.dialog.openSnackBar("No previous report cards found...");
+          }
+        );
     }
   }
 

@@ -278,8 +278,10 @@ export class DataService {
     );
   }
 
-  getPrintableReportCard(athleteId: number) {
-    return this.http.get(this.baseUrl + "/printable-report-card/" + athleteId);
+  getPrintableReportCard(athleteId: number, levelId: number) {
+    return this.http.get(
+      this.baseUrl + "/printable-report-card/" + athleteId + "/" + levelId
+    );
   }
 
   getCoachesInProgressReportCard() {

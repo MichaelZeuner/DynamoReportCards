@@ -275,11 +275,11 @@ export class ReportCardsComponent implements OnInit {
           "A report card was already completed " + recent.type + " days ago.";
       }
       let ret = await this.dialog
-      .openConfirmDialog(
-        message + " Would you like to cancel this report card? (Yes)"
-      )
-      .afterClosed()
-      .toPromise();
+        .openConfirmDialog(
+          message + " Would you like to cancel this report card? (Yes)"
+        )
+        .afterClosed()
+        .toPromise();
       return ret;
     } else {
       return false;
@@ -287,16 +287,18 @@ export class ReportCardsComponent implements OnInit {
   }
 
   async updateSelectLevel(newLevel: Level) {
-    if(newLevel === null) { return; }
+    if (newLevel === null) {
+      return;
+    }
 
     if (await this.cancelReportCard(newLevel, this.selectedAthlete)) {
-      console.log('CANCELED');
+      console.log("CANCELED");
       this.athleteSelect.clearAthlete();
       this.levelSelect.clearLevel();
       this.clearPartialReportCard();
       return;
     }
-    console.log('KEEP MOVING!');
+    console.log("KEEP MOVING!");
 
     console.log(newLevel);
     this.level = newLevel;
@@ -698,10 +700,11 @@ export class ReportCardsComponent implements OnInit {
     }
   }
 
-  generateReportCard(athleteId: number) {
+  generateReportCard(athleteId: number, levelGroupId: number) {
     console.log(athleteId);
     let reportCardData: string[] = [];
     reportCardData.push(athleteId.toString());
+    reportCardData.push(levelGroupId.toString());
     this.printService.printDocument("report-card", reportCardData);
   }
 }

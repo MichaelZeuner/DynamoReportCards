@@ -82,10 +82,11 @@ export class CompletedReportCardsComponent implements OnInit {
     );
   }
 
-  generateReportCard(athleteId: number) {
+  generateReportCard(athleteId: number, levelGroupId: number) {
     console.log(athleteId);
     let reportCardData: string[] = [];
     reportCardData.push(athleteId.toString());
+    reportCardData.push(levelGroupId.toString());
     this.printService.printDocument("report-card", reportCardData);
   }
 
