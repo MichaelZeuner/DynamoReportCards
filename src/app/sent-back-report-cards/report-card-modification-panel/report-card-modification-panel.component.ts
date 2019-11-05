@@ -274,7 +274,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
   }
 
   generateReportCard(athleteId: number, levelGroupId: number) {
-    console.log(athleteId);
+    console.log("LevelGroupId:", levelGroupId);
     let reportCardData: string[] = [];
     reportCardData.push(athleteId.toString());
     reportCardData.push(levelGroupId.toString());

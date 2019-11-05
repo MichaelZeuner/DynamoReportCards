@@ -113,7 +113,7 @@ interface ChangedComponents {
 
     <div class="center">
         <button mat-raised-button color="primary" class="mr-1" *ngIf="!modifyOnly"
-        (click)="generateReportCard(reportCard.athlete.id)">Preview Last Report Card</button>
+        (click)="generateReportCard(reportCard.athlete.id, reportCard.level.level_groups_id)">Preview Last Report Card</button>
 
         <button *ngIf="generateUnmodifiedCommentIdString() === generateCurrentCommentIdString() && changedComponents.length === 0" 
           mat-raised-button color="accent" class="mr-1"
@@ -478,10 +478,11 @@ export class ReportCardPanelComponent implements OnInit {
 		return false;
 	}
 
-	generateReportCard(athleteId: number) {
-		console.log(athleteId);
+	generateReportCard(athleteId: number, levelGroupdId: number) {
+		console.log('level group id: ', levelGroupdId);
 		let reportCardData: string[] = [];
 		reportCardData.push(athleteId.toString());
+		reportCardData.push(levelGroupdId.toString());
 		this.printService.printDocument('report-card', reportCardData);
 	}
 }
