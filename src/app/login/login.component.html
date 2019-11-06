@@ -4,15 +4,20 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
         <p>Please login to continue</p>
         <mat-form-field class="full-width-input">
-          <input matInput placeholder="User" formControlName="username" required>
-          <mat-error *ngIf="isFieldInvalid('username')">
-            Please inform your user name
+          <input matInput placeholder="Email" formControlName="email" />
+          <mat-error *ngIf="isFieldInvalid('email')">
+            Please enter your email
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width-input">
-          <input matInput type="password" placeholder="Password" formControlName="password" required>
+          <input
+            matInput
+            type="password"
+            placeholder="Password"
+            formControlName="password"
+          />
           <mat-error *ngIf="isFieldInvalid('password')">
-            Please inform your password
+            Please enter your password
           </mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" type="submit">Login</button>
