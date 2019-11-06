@@ -82,7 +82,6 @@ export class UsersComponent implements OnInit {
   createUser(
     firstName: MatInput,
     lastName: MatInput,
-    username: MatInput,
     email: MatInput,
     password: MatInput,
     passwordConfirm: MatInput,
@@ -93,7 +92,6 @@ export class UsersComponent implements OnInit {
         true,
         firstName,
         lastName,
-        username,
         email,
         password,
         passwordConfirm,
@@ -104,7 +102,6 @@ export class UsersComponent implements OnInit {
     }
 
     let user: User = {
-      username: username.value,
       email: email.value,
       password: password.value,
       access: accessLevel.value,
@@ -120,7 +117,6 @@ export class UsersComponent implements OnInit {
         this.usersBase.push(data);
         firstName.value = "";
         lastName.value = "";
-        username.value = "";
         email.value = "";
         password.value = "";
         passwordConfirm.value = "";
@@ -137,7 +133,6 @@ export class UsersComponent implements OnInit {
     id: number,
     firstName: MatInput,
     lastName: MatInput,
-    username: MatInput,
     email: MatInput,
     password: MatInput,
     passwordConfirm: MatInput,
@@ -148,7 +143,6 @@ export class UsersComponent implements OnInit {
         false,
         firstName,
         lastName,
-        username,
         email,
         password,
         passwordConfirm,
@@ -159,7 +153,6 @@ export class UsersComponent implements OnInit {
     }
     let user: User = {
       id: id,
-      username: username.value,
       email: email.value,
       password: password.value,
       access: accessLevel.value,
@@ -188,7 +181,6 @@ export class UsersComponent implements OnInit {
     passwordRequired: boolean,
     firstName: MatInput,
     lastName: MatInput,
-    username: MatInput,
     email: MatInput,
     password: MatInput,
     passwordConfirm: MatInput,
@@ -202,11 +194,6 @@ export class UsersComponent implements OnInit {
     if (lastName.value === "") {
       this.dialog.openSnackBar("Last Name required!");
       lastName.focus();
-      return false;
-    }
-    if (username.value === "") {
-      this.dialog.openSnackBar("Username required!");
-      username.focus();
       return false;
     }
     if (email.value === "") {
