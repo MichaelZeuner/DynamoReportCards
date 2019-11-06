@@ -170,7 +170,9 @@ export class UsersComponent implements OnInit {
       (error: ErrorApi) => {
         console.log(error);
         this.mainNav.displayLoading = false;
-        this.dialog.openSnackBar(error.error.message);
+        this.dialog.openSnackBar(
+          "Failed to Update User. Likely cause is a duplicated email address."
+        );
       }
     );
 
