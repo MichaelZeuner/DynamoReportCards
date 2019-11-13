@@ -20,6 +20,8 @@ interface PrintableCoachComments {
   level_name: string;
   level_number: number;
   first_name: string;
+  s_level_number: number;
+  s_first_name: string;
   last_name: string;
   updated_date: string;
   session: string;

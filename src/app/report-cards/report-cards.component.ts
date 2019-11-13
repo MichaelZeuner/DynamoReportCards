@@ -26,6 +26,7 @@ import { SelectDialogInput } from "../mat-select-dialog/select-dialog-input";
 import { SelectDialogOutput } from "../mat-select-dialog/select-dialog-output";
 import { LevelSelectComponent } from "./level-select.component";
 import { RecentSimilarReportCards } from "../recent-similar-report-cards";
+import { User } from "../interfaces/user";
 
 @Component({
   selector: "app-report-cards",
@@ -37,6 +38,7 @@ export class ReportCardsComponent implements OnInit {
 
   public level: Level;
   public selectedAthlete: Athlete;
+  public selectedSecondaryCoach: User;
   public skillName: string;
   public eventName: string;
   @ViewChild("athleteSelect") athleteSelect: AthletesSelectComponent;
@@ -161,6 +163,7 @@ export class ReportCardsComponent implements OnInit {
   }
 
   updatePartialReportCard(partialReportCard: ReportCardCompleted) {
+    console.log("LOADING REPORTCARD:", partialReportCard);
     this.level = partialReportCard.level;
     this.level.events = partialReportCard.events;
     for (let x = 0; x < this.level.events.length; x++) {
@@ -191,6 +194,7 @@ export class ReportCardsComponent implements OnInit {
       }
     );
 
+    this.selectedSecondaryCoach = partialReportCard.secondary_coach;
     this.selectedAthlete = partialReportCard.athlete;
     this.partialReportCard = partialReportCard;
     this.updateCommentsForSlectedAthlete(this.level.id);
@@ -234,6 +238,12 @@ export class ReportCardsComponent implements OnInit {
 
   submitForApproval() {
     console.log("SUBMITTED");
+  }
+
+  updateSelectSecondaryCoach(newSecondaryCoach: User) {
+    this.selectedSecondaryCoach = newSecondaryCoach;
+    this.partialReportCard.secondary_coach_id = newSecondaryCoach.id;
+    this.addPutReportCard();
   }
 
   updateSelectAthlete(newAthlete: Athlete) {
@@ -306,6 +316,7 @@ export class ReportCardsComponent implements OnInit {
     let levelId: number = this.level === null ? -1 : this.level.id;
     this.partialReportCard = {
       submitted_by: this.auth.user.id,
+      secondary_coach_id: null,
       athletes_id: this.selectedAthlete.id,
       levels_id: levelId,
       comment: 0,

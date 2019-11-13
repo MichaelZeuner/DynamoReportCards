@@ -153,7 +153,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="spacingForButton" *ngIf="level && selectedAthlete">
+  <mat-card *ngIf="level && selectedAthlete">
     <h3>Session:</h3>
     <mat-button-toggle-group
       class="w-100"
@@ -174,6 +174,16 @@
       >
       <mat-button-toggle value="FALL" class="btnToggle">Fall</mat-button-toggle>
     </mat-button-toggle-group>
+  </mat-card>
+
+  <mat-card class="spacingForButton" *ngIf="level && selectedAthlete">
+    <mat-card-content>
+      <app-user-select
+        #secondaryCoachSelect
+        [user]="selectedSecondaryCoach"
+        (selectedUserChange)="updateSelectSecondaryCoach($event)"
+      ></app-user-select>
+    </mat-card-content>
   </mat-card>
 
   <p></p>

@@ -5,10 +5,12 @@ import { Skill } from "./skill";
 import { ReportCard } from "./report-card";
 import { Event } from "./event";
 import { ReportCardComments } from "./report-card-comments";
+import { User } from "./user";
 
 export interface ReportCardCompleted extends ReportCard {
   components: ReportCardComponentCompleted[];
   athlete: Athlete;
+  secondary_coach: User;
   submitted_first_name: string;
   submitted_last_name: string;
   approved_first_name: string;

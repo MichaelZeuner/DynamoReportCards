@@ -66,6 +66,7 @@ import { SentBackReportCardsComponent } from "./sent-back-report-cards/sent-back
 import { ReportCardModificationPanelComponent } from "./sent-back-report-cards/report-card-modification-panel/report-card-modification-panel.component";
 import { AthletesComponent } from "./athletes/athletes.component";
 import { CommentsComponent } from "./comments/comments.component";
+import { UserSelectComponent } from "./report-cards/user-select.component";
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { CommentsComponent } from "./comments/comments.component";
     MainLayoutComponent,
     LoginLayoutComponent,
     AthletesSelectComponent,
+    UserSelectComponent,
     LevelSelectComponent,
     ReportCardEventsComponent,
     SkillsComponent,

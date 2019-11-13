@@ -17,6 +17,7 @@ import { Event } from '../interfaces/event';
 import { ReportCardComments } from '../interfaces/report-card-comments';
 import { CommonService } from '../shared/common.service';
 import { MainNavComponent } from '../main-nav/main-nav.component';
+import { User } from '../interfaces/user';
 
 interface ChangedComponents {
 	id: number;
@@ -110,6 +111,13 @@ interface ChangedComponents {
         <mat-button-toggle value="In Progress" class="btnToggle w-50">In Progress</mat-button-toggle>
         <mat-button-toggle value="Completed" class="btnToggle w-50">Completed</mat-button-toggle>
     </mat-button-toggle-group>
+
+    <h4>Secondary Coach</h4>
+	<app-user-select
+		#secondaryCoachSelect
+		[user]="reportCard.secondary_coach"
+		(selectedUserChange)="updateSelectSecondaryCoach($event)"
+	></app-user-select>
 
     <div class="center">
         <button mat-raised-button color="primary" class="mr-1" *ngIf="!modifyOnly"
@@ -271,6 +279,12 @@ export class ReportCardPanelComponent implements OnInit {
 		  );
 	}
 
+	updateSelectSecondaryCoach(newSecondaryCoach: User) {
+    if(newSecondaryCoach !== null) {
+      this.reportCard.secondary_coach_id = newSecondaryCoach.id;
+    }
+	}
+
 	eventChanged(eventId: number) {
 		this.selectedSkillCommentEvent = eventId;
 		this.data.getEventSkills(this.reportCard.level.id, eventId).subscribe((data: Skill[]) => {
@@ -386,7 +400,8 @@ export class ReportCardPanelComponent implements OnInit {
 			}
 		}
 
-		this.reportCard.approved = this.auth.user.id;
+    this.reportCard.approved = this.auth.user.id;
+    console.log("Report Card", this.reportCard);
 		this.data.putReportCard(this.reportCard).subscribe(
 			(data: ReportCard) => {
 				console.log(data);

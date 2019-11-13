@@ -18,7 +18,7 @@
               <ng-container *ngIf="comment.level_name !== 'empty'">
                 <p>LEVEL: {{comment.level_name}} Level {{comment.level_number}} ({{comment.status}})</p>
                 <p>Session: {{comment.session}} {{comment.updated_date.split('-')[0]}}</p>
-                <p>Coach: {{comment.first_name}} {{comment.last_name[0]}}</p>
+                <p>Coach: {{comment.first_name}} {{comment.last_name[0]}} <span *ngIf="comment.s_first_name !== null"> + {{comment.s_first_name}} {{comment.s_last_name}}</span></p>
                 <p>COMMENTS: {{comment.comment}}</p>
               </ng-container>
             </td>
