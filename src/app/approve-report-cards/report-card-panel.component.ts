@@ -97,6 +97,16 @@ interface ChangedComponents {
       </mat-form-field>
 
       <mat-form-field  class="w-100">
+        <mat-label>Personality</mat-label>
+        <mat-select [(ngModel)]="selectedPersonalityComment" name="personalityComment">
+          <mat-option [value]="-1">None</mat-option>
+          <ng-container *ngFor="let commentActive of commentsActive">
+            <mat-option *ngIf="commentActive.type === 'PERSONALITY'" [value]="commentActive.id">{{commentActive.comment}}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field  class="w-100">
         <mat-label>Closing</mat-label>
         <mat-select [(ngModel)]="selectedClosingComment" name="closingComment">
           <mat-option [value]="-1">None</mat-option>
@@ -162,6 +172,7 @@ export class ReportCardPanelComponent implements OnInit {
 	selectedSkillComment: number;
 	selectedSkillCommentEvent: number;
 	selectedSkillCommentSkill: number;
+	selectedPersonalityComment: number;
 	selectedClosingComment: number;
 
 	skillsDisabled: boolean;
@@ -180,9 +191,10 @@ export class ReportCardPanelComponent implements OnInit {
 		event: number,
 		skill: number,
 		skillComment: number,
+		personalityComment: number,
 		closingComment: number
 	) {
-		return introComment + '~' + event + '~' + skill + '~' + skillComment + '~' + closingComment;
+		return introComment + '~' + event + '~' + skill + '~' + skillComment + '~' + personalityComment + '~' + closingComment;
 	}
 
 	generateUnmodifiedCommentIdString() {
@@ -191,6 +203,7 @@ export class ReportCardPanelComponent implements OnInit {
 			this.reportCard.card_comments.event_id,
 			this.reportCard.card_comments.skill_id,
 			this.reportCard.card_comments.skill_comment_id,
+			this.reportCard.card_comments.personality_comment_id,
 			this.reportCard.card_comments.closing_comment_id
 		);
 	}
@@ -201,6 +214,7 @@ export class ReportCardPanelComponent implements OnInit {
 			this.selectedSkillCommentEvent,
 			this.selectedSkillCommentSkill,
 			this.selectedSkillComment,
+			this.selectedPersonalityComment,
 			this.selectedClosingComment
 		);
 	}
@@ -210,6 +224,7 @@ export class ReportCardPanelComponent implements OnInit {
 		this.selectedSkillComment = this.reportCard.card_comments.skill_comment_id;
 		this.selectedSkillCommentEvent = this.reportCard.card_comments.event_id;
 		this.selectedSkillCommentSkill = this.reportCard.card_comments.skill_id;
+		this.selectedPersonalityComment = this.reportCard.card_comments.personality_comment_id;
 		this.selectedClosingComment = this.reportCard.card_comments.closing_comment_id;
 
 		console.log('report card in panel');
@@ -300,6 +315,7 @@ export class ReportCardPanelComponent implements OnInit {
 			event_id: this.selectedSkillCommentEvent,
 			skill_id: this.selectedSkillCommentSkill,
 			skill_comment_id: this.selectedSkillComment,
+			personality_comment_id: this.selectedPersonalityComment,
 			closing_comment_id: this.selectedClosingComment
 		};
 	}

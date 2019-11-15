@@ -9,6 +9,7 @@ export interface ReportCardSentBack {
   report_cards_mod_id: number;
   report_cards_id: number;
   submitted_by: number;
+  secondary_coach_id: number;
   athlete: Athlete;
   level: Level;
   comment: number;

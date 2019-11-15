@@ -60,6 +60,7 @@ export class ReportCardsComponent implements OnInit {
   selectedIntroComment: number = this.UNSELECTED;
   selectedSkillComment: number = this.UNSELECTED;
   selectedClosingComment: number = this.UNSELECTED;
+  selectedPersonalityComment: number = this.UNSELECTED;
 
   constructor(
     private data: DataService,
@@ -357,8 +358,10 @@ export class ReportCardsComponent implements OnInit {
                   previousReportCards[x].card_comments.intro_comment_id ||
                 this.commentsPreviousRemoved[i].id ===
                   previousReportCards[x].card_comments.skill_comment_id ||
-                this.commentsPreviousRemoved[i].id ===
-                  previousReportCards[x].card_comments.closing_comment_id
+                  this.commentsPreviousRemoved[i].id ===
+                    previousReportCards[x].card_comments.personality_comment_id||
+                    this.commentsPreviousRemoved[i].id ===
+                      previousReportCards[x].card_comments.closing_comment_id
               ) {
                 this.commentsPreviousRemoved.splice(i, 1);
                 break;
@@ -464,6 +467,11 @@ export class ReportCardsComponent implements OnInit {
       return;
     }
 
+    if (this.selectedPersonalityComment === this.UNSELECTED) {
+      this.dialog.openSnackBar("Personality comment required!");
+      return;
+    }
+
     if (this.selectedClosingComment === this.UNSELECTED) {
       this.dialog.openSnackBar("Closing comment required!");
       return;
@@ -560,6 +568,7 @@ export class ReportCardsComponent implements OnInit {
       skill_comment_id: this.selectedSkillComment,
       event_id: this.selectedEvent,
       skill_id: this.selectedSkill,
+      personality_comment_id: this.selectedPersonalityComment,
       closing_comment_id: this.selectedClosingComment
     };
 

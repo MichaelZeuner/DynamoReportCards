@@ -138,6 +138,23 @@
       </mat-form-field>
 
       <mat-form-field class="w-100">
+        <mat-label>Personality</mat-label>
+        <mat-select
+          [(ngModel)]="selectedPersonalityComment"
+          name="personalityComment"
+        >
+          <mat-option [value]="-1">None</mat-option>
+          <ng-container *ngFor="let commentActive of commentsActive">
+            <mat-option
+              *ngIf="commentActive.type === 'PERSONALITY'"
+              [value]="commentActive.id"
+              >{{ commentActive.comment }}</mat-option
+            >
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
         <mat-label>Closing</mat-label>
         <mat-select [(ngModel)]="selectedClosingComment" name="closingComment">
           <mat-option [value]="-1">None</mat-option>
@@ -178,6 +195,7 @@
 
   <mat-card class="spacingForButton" *ngIf="level && selectedAthlete">
     <mat-card-content>
+        <h3>Secondary Coach:</h3>
       <app-user-select
         #secondaryCoachSelect
         [user]="selectedSecondaryCoach"

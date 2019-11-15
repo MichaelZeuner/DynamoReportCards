@@ -39,16 +39,7 @@
               [(ngModel)]="comment.type"
               (selectionChange)="putComment(comment.id)"
             >
-              <mat-option
-                *ngFor="
-                  let type of [
-                    { id: 'INTRO', name: 'Intro' },
-                    { id: 'SKILL', name: 'Skill/Goal' },
-                    { id: 'CLOSING', name: 'Closing' }
-                  ]
-                "
-                [value]="type.id"
-              >
+              <mat-option *ngFor="let type of commentTypes" [value]="type.id">
                 {{ type.name }}
               </mat-option>
             </mat-select>
@@ -151,16 +142,7 @@
         <mat-form-field class="w-100">
           <mat-label>Comment Type</mat-label>
           <mat-select [(ngModel)]="comments[0].type">
-            <mat-option
-              *ngFor="
-                let type of [
-                  { id: 'INTRO', name: 'Intro' },
-                  { id: 'SKILL', name: 'Skill/Goal' },
-                  { id: 'CLOSING', name: 'Closing' }
-                ]
-              "
-              [value]="type.id"
-            >
+            <mat-option *ngFor="let type of commentTypes" [value]="type.id">
               {{ type.name }}
             </mat-option>
           </mat-select>

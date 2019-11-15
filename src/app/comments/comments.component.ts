@@ -24,6 +24,13 @@ export class CommentsComponent implements OnInit {
     type: ""
   };
 
+  commentTypes: any[] = [
+    { id: "INTRO", name: "Intro" },
+    { id: "SKILL", name: "Skill/Goal" },
+    { id: "PERSONALITY", name: "Personality" },
+    { id: "CLOSING", name: "Closing" }
+  ];
+
   comments: Comments[] = [];
   levels: Level[] = [];
 

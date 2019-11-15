@@ -43,12 +43,14 @@ export class ReportCardModificationPanelComponent implements OnInit {
   selectedSkillComment: number = this.UNSELECTED;
   selectedSkillCommentEvent: number = this.UNSELECTED;
   selectedSkillCommentSkill: number = this.UNSELECTED;
+  selectedPersonalityComment: number = this.UNSELECTED;
   selectedClosingComment: number = this.UNSELECTED;
 
   prevIntro: string;
   prevEvent: string;
   prevSkill: string;
   prevGoal: string;
+  prevPersonality: string;
   prevClosing: string;
 
   skillsDisabled: boolean = false;
@@ -65,6 +67,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
     event: number,
     skill: number,
     skillComment: number,
+    personalityComment: number,
     closingComment: number
   ) {
     return (
@@ -76,6 +79,8 @@ export class ReportCardModificationPanelComponent implements OnInit {
       "~" +
       skillComment +
       "~" +
+      personalityComment +
+      "~" +
       closingComment
     );
   }
@@ -86,6 +91,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
       this.reportCard.card_mod_comments.event_id,
       this.reportCard.card_mod_comments.skill_id,
       this.reportCard.card_mod_comments.skill_comment_id,
+      this.reportCard.card_mod_comments.personality_comment_id,
       this.reportCard.card_mod_comments.closing_comment_id
     );
   }
@@ -96,6 +102,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
       this.selectedSkillCommentEvent,
       this.selectedSkillCommentSkill,
       this.selectedSkillComment,
+      this.selectedPersonalityComment,
       this.selectedClosingComment
     );
   }
@@ -107,6 +114,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
     this.selectedSkillComment = this.reportCard.card_mod_comments.skill_comment_id;
     this.selectedSkillCommentEvent = this.reportCard.card_mod_comments.event_id;
     this.selectedSkillCommentSkill = this.reportCard.card_mod_comments.skill_id;
+    this.selectedPersonalityComment = this.reportCard.card_mod_comments.personality_comment_id;
     this.selectedClosingComment = this.reportCard.card_mod_comments.closing_comment_id;
 
     this.data.getComments().subscribe(
@@ -181,6 +189,18 @@ export class ReportCardModificationPanelComponent implements OnInit {
                   this.reportCard.card_comments.skill_comment_id
                 ) {
                   this.prevGoal = this.comm.replaceComment(
+                    this.commentsBase[i].comment,
+                    this.reportCard.athlete.first_name,
+                    this.prevEvent,
+                    this.prevSkill
+                  );
+                }
+
+                if (
+                  this.commentsBase[i].id ===
+                  this.reportCard.card_comments.personality_comment_id
+                ) {
+                  this.prevPersonality = this.comm.replaceComment(
                     this.commentsBase[i].comment,
                     this.reportCard.athlete.first_name,
                     this.prevEvent,
@@ -269,6 +289,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
       event_id: this.selectedSkillCommentEvent,
       skill_id: this.selectedSkillCommentSkill,
       skill_comment_id: this.selectedSkillComment,
+      personality_comment_id: this.selectedPersonalityComment,
       closing_comment_id: this.selectedClosingComment
     };
   }
@@ -327,6 +348,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
   updateReportCard(commentModId: number) {
     let sendBackReportCard: any = {
       id: this.reportCard.report_cards_id,
+      secondary_coach_id: this.reportCard.secondary_coach_id,
       athletes_id: this.reportCard.athlete.id,
       levels_id: this.reportCard.level.id,
       comment: commentModId,
