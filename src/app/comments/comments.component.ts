@@ -8,6 +8,7 @@ import { element } from "@angular/core/src/render3";
 import { Comments } from "../interfaces/comments";
 import { CommonService } from "../shared/common.service";
 import { MainNavComponent } from "../main-nav/main-nav.component";
+import { PageEvent } from "@angular/material";
 
 @Component({
   selector: "app-comments",
@@ -27,14 +28,22 @@ export class CommentsComponent implements OnInit {
   commentTypes: any[] = [
     { id: "INTRO", name: "Intro" },
     { id: "SKILL", name: "Skill/Goal" },
-    { id: "PERSONALITY", name: "Personality" },
-    { id: "CLOSING", name: "Closing" }
+    { id: "CLOSING", name: "Closing" },
+    { id: "PERSONALITY_BRAVE", name: "Personality: Brave" },
+    { id: "PERSONALITY_ENERGY", name: "Personality: Energy" },
+    { id: "PERSONALITY_GENERAL", name: "Personality: General" },
+    { id: "PERSONALITY_STRENGTH", name: "Personality: Strength" },
+    { id: "PERSONALITY_SOCIAL", name: "Personality: Social" }
   ];
 
   comments: Comments[] = [];
+  commentsDisplayed: Comments[] = [];
   levels: Level[] = [];
 
   levelGroups = [];
+
+  public pageinatorIndex: number = 0;
+  public pageinatorSize: number = 10;
 
   constructor(
     public data: DataService,
@@ -54,6 +63,7 @@ export class CommentsComponent implements OnInit {
           this.comments.push(data[i]);
         }
         console.log(this.comments);
+        this.refreshPage();
       },
       (err: ErrorApi) => {
         console.error(err);
@@ -254,5 +264,27 @@ export class CommentsComponent implements OnInit {
       this.comm.COMMENT_SKILL,
       commentId
     );
+  }
+
+  refreshPage() {
+    this.pageinatorIndex = 0;
+    this.pageChanged(null);
+  }
+
+  pageChanged(event: PageEvent) {
+    const startingIndex: number =
+      event !== null ? event.pageIndex * event.pageSize : 0;
+    let endingIndex: number =
+      event !== null
+        ? (event.pageIndex + 1) * event.pageSize
+        : this.pageinatorSize;
+    if (endingIndex > this.comments.length) {
+      endingIndex = this.comments.length;
+    }
+
+    this.commentsDisplayed = [];
+    for (let i = startingIndex; i < endingIndex; i++) {
+      this.commentsDisplayed.push(this.comments[i]);
+    }
   }
 }

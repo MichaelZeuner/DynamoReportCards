@@ -9,9 +9,9 @@
 </section>
 
 <mat-grid-list cols="6" rowHeight="40px" class="m-1">
-  <div *ngFor="let level of levels">
+  <ng-container *ngFor="let level of levels">
     <ng-container *ngIf="levelGroupsToShow.includes(level.level_groups_id)">
-      <mat-grid-tile [colspan]="4">
+      <mat-grid-tile [colspan]="3">
         <mat-form-field class="levelName w-100">
           <label>{{ level.name }} Level </label>
           <input
@@ -22,6 +22,11 @@
             value="{{ level.level_number }}"
           />
         </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-checkbox [(ngModel)]="level.advanced" (change)="putLevel(level)">
+          Advanced
+        </mat-checkbox>
       </mat-grid-tile>
       <mat-grid-tile>
         <button
@@ -76,21 +81,85 @@
         </mat-grid-tile>
       </div>
 
+      <ng-container *ngIf="level.advanced">
+        <mat-grid-tile [colspan]="6">
+          <h4>Advanced Components</h4>
+        </mat-grid-tile>
+        <ng-container
+          *ngFor="
+            let strengthFlexibilityGroup of level.strengthFlexibilityGroups
+          "
+        >
+          <mat-grid-tile [colspan]="2">
+            <mat-label>Type</mat-label>
+            <mat-select>
+              <mat-option [value]="StrengthTimed">
+                Strength: Timed
+              </mat-option>
+              <mat-option [value]="StrengthPB">
+                Strength: Personal Best
+              </mat-option>
+              <mat-option [value]="Flexibility">
+                Flexibility
+              </mat-option>
+            </mat-select>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2">
+            <input type="number" placeholder="Restriction" />
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2">
+            <input type="text" placeholder="Units" />
+          </mat-grid-tile>
+        </ng-container>
+
+        <mat-grid-tile [colspan]="3">
+          <mat-form-field>
+            <mat-label>Type</mat-label>
+            <mat-select>
+              <mat-option value="StrengthTimed">
+                Strength: Timed
+              </mat-option>
+              <mat-option value="StrengthPB">
+                Strength: Personal Best
+              </mat-option>
+              <mat-option value="Flexibility">
+                Flexibility
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2">
+          <input matInput type="number" placeholder="Restriction" />
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1">
+          <input matInput type="text" placeholder="Units" />
+        </mat-grid-tile>
+      </ng-container>
+
       <mat-grid-tile [colspan]="6">
         <mat-divider style="width: 100%;"></mat-divider>
       </mat-grid-tile>
     </ng-container>
-  </div>
+  </ng-container>
 
   <mat-grid-tile [colspan]="6">
     <h2 class="w-100">Create New Level</h2>
   </mat-grid-tile>
 
-  <mat-grid-tile [colspan]="4">
+  <mat-grid-tile [colspan]="3">
     <mat-form-field class="levelName w-100">
       <label>{{ newLevelGroup.value }} Level </label>
       <input type="number" maxlength="2" #levelNumber matInput />
     </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-checkbox [(ngModel)]="newLevelAdvanced">
+      Advanced
+    </mat-checkbox>
   </mat-grid-tile>
   <mat-grid-tile>
     <button mat-raised-button (click)="changeNewLevelGroup()" color="primary">

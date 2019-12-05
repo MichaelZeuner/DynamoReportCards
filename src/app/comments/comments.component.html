@@ -1,6 +1,6 @@
 <div class="m-1">
   <mat-grid-list cols="12" rowHeight="40px">
-    <div *ngFor="let comment of comments">
+    <div *ngFor="let comment of commentsDisplayed">
       <ng-container *ngIf="comment.id !== -1">
         <mat-grid-tile [colspan]="4">
           <mat-form-field class="w-100">
@@ -209,5 +209,17 @@
         </button>
       </mat-grid-tile>
     </ng-container>
+
+    <mat-grid-tile [colspan]="12">
+      <mat-paginator
+        style="width: 100%;"
+        [length]="comments.length"
+        [pageIndex]="pageinatorIndex"
+        [pageSize]="pageinatorSize"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="pageChanged($event)"
+      >
+      </mat-paginator>
+    </mat-grid-tile>
   </mat-grid-list>
 </div>

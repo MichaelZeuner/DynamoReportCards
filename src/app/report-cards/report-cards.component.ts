@@ -706,6 +706,7 @@ export class ReportCardsComponent implements OnInit {
       );
     } else {
       this.mainNav.displayLoading = true;
+      console.log(this.partialReportCard);
       this.data.putReportCard(this.partialReportCard).subscribe(
         (data: ReportCard) => {
           this.mainNav.displayLoading = false;
