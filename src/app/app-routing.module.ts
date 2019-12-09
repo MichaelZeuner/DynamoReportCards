@@ -16,6 +16,7 @@ import { LevelGroupsComponent } from "./level-groups/level-groups.component";
 import { SentBackReportCardsComponent } from "./sent-back-report-cards/sent-back-report-cards.component";
 import { AthletesComponent } from "./athletes/athletes.component";
 import { CommentsComponent } from "./comments/comments.component";
+import { TestingSheetsComponent } from "./testing-sheets/testing-sheets.component";
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: "", component: ReportCardsComponent },
+      { path: "testing-sheets", component: TestingSheetsComponent },
       { path: "approve", component: ApproveReportCardsComponent },
       { path: "completed", component: CompletedReportCardsComponent },
       { path: "level-groups", component: LevelGroupsComponent },

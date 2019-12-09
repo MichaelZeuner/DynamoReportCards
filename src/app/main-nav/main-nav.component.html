@@ -9,6 +9,10 @@
   >
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
+      <a (click)="closeNav()" mat-list-item routerLink="/testing-sheets">
+        <mat-icon>import_contacts</mat-icon>
+        &nbsp;Testing Sheets
+      </a>
       <a (click)="closeNav()" mat-list-item routerLink="/">
         <mat-icon>assignment</mat-icon>
         &nbsp;Report Cards

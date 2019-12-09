@@ -67,6 +67,7 @@ import { ReportCardModificationPanelComponent } from "./sent-back-report-cards/r
 import { AthletesComponent } from "./athletes/athletes.component";
 import { CommentsComponent } from "./comments/comments.component";
 import { UserSelectComponent } from "./report-cards/user-select.component";
+import { TestingSheetsComponent } from './testing-sheets/testing-sheets.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import { UserSelectComponent } from "./report-cards/user-select.component";
     SentBackReportCardsComponent,
     ReportCardModificationPanelComponent,
     AthletesComponent,
-    CommentsComponent
+    CommentsComponent,
+    TestingSheetsComponent
   ],
   imports: [
     BrowserModule,

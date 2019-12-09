@@ -1,0 +1,51 @@
+<mat-card class="card">
+  <mat-card-title class="w-100">
+    <span>Generate Testing Sheets</span>
+  </mat-card-title>
+  <mat-card-subtitle class="mb-0">Select athlete to continue</mat-card-subtitle>
+  <mat-card-content>
+    <app-athlete-select
+      #athleteSelect
+      (selectedAthleteChange)="updateSelectAthlete($event)"
+    ></app-athlete-select>
+
+    <div class="flexbox w-100" *ngIf="curAthlete != null">
+      <span *ngIf="prevLevel != null"
+        >Previous Level: {{ prevLevel.name }} Level
+        {{ prevLevel.level_number }} - {{ prevLevel.status }}</span
+      >
+      <ng-container *ngIf="prevLevel == null">
+        <mat-form-field class="w-100">
+          <mat-label>Select Level</mat-label>
+          <mat-select [(value)]="selectedLevelId">
+            <mat-optgroup
+              *ngFor="let group of levelGroups"
+              [label]="group.name"
+            >
+              <mat-option *ngFor="let level of group.levels" [value]="level.id">
+                {{ group.name }} Level {{ level.number }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <span class="fill-remaining-space"></span>
+      <button mat-raised-button color="primary" (click)="addAthleteToList()">
+        Add
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="addedAthletes.length > 0" class="m-1">
+  <mat-card-title class="w-100">
+    <span>List of Athlete's</span>
+  </mat-card-title>
+  <mat-card-content>
+    <p *ngFor="let athlete of addedAthletes">
+      <span class="delete" (click)="removeAthlete(athlete)">(x)</span>
+      {{ athlete.name }}: {{ athlete.level.name }} Level
+      {{ athlete.level.level_number }}
+    </p>
+  </mat-card-content>
+</mat-card>

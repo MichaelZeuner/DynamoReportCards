@@ -98,8 +98,8 @@ export class DataService {
     return this.http.delete(this.baseUrl + "/level-groups/" + levelGroup.id);
   }
 
-  getLevels() {
-    return this.http.get(this.baseUrl + "/read-levels");
+  getLevels(): Observable<Level[]> {
+    return this.http.get<Level[]>(this.baseUrl + "/read-levels");
   }
 
   putLevel(level: Level) {
@@ -287,6 +287,12 @@ export class DataService {
   getCoachesInProgressReportCard() {
     return this.http.get<ReportCardCompleted[]>(
       this.baseUrl + "/coaches-in-progress-cards/" + this.authService.user.id
+    );
+  }
+
+  getPreviousAthleteLevel(athleteId: number) {
+    return this.http.get(
+      this.baseUrl + "/get-athlete-previous-level/" + athleteId
     );
   }
 }
