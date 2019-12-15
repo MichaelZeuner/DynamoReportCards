@@ -18,6 +18,7 @@ import { ReportCardComments } from "./interfaces/report-card-comments";
 import { Observable } from "rxjs";
 import { ReportCardCompleted } from "./interfaces/report-card-completed";
 import { RecentSimilarReportCards } from "./recent-similar-report-cards";
+import { stringify } from "querystring";
 
 @Injectable({
   providedIn: "root"
@@ -293,6 +294,13 @@ export class DataService {
   getPreviousAthleteLevel(athleteId: number) {
     return this.http.get(
       this.baseUrl + "/get-athlete-previous-level/" + athleteId
+    );
+  }
+
+  getTestingSheetData(data: any[]) {
+    console.log(JSON.stringify(data));
+    return this.http.get(
+      this.baseUrl + "/get-testing-sheet-data/" + JSON.stringify(data)
     );
   }
 }

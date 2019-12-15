@@ -47,5 +47,14 @@
       {{ athlete.name }}: {{ athlete.level.name }} Level
       {{ athlete.level.level_number }}
     </p>
+
+    <button
+      class="w-100"
+      mat-raised-button
+      color="primary"
+      (click)="generate()"
+    >
+      Generate Testing Sheet
+    </button>
   </mat-card-content>
 </mat-card>

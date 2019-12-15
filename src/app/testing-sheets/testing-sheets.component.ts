@@ -32,7 +32,7 @@ export class TestingSheetsComponent implements OnInit {
 
   public curAthlete: Athlete = null;
   public prevLevel: PreviousLevel = null;
-  public selectedLevelId: number;
+  public selectedLevelId: number = null;
   public addedAthletes: TestingSheetAthlete[] = [];
 
   levelGroups = [];
@@ -130,6 +130,11 @@ export class TestingSheetsComponent implements OnInit {
 
     let level: Level;
     if (this.prevLevel === null) {
+      if (this.selectedLevelId === null) {
+        this.dialog.openSnackBar("Please Select a Level");
+        return;
+      }
+
       let levels: Level[] = await this.data.getLevels().toPromise();
       for (let i = 0; i < levels.length; i++) {
         if (this.selectedLevelId === levels[i].id) {
@@ -170,5 +175,19 @@ export class TestingSheetsComponent implements OnInit {
         return;
       }
     }
+  }
+
+  generate() {
+    console.log(this.addedAthletes);
+    let test: any[] = [];
+    for (let i = 0; i < this.addedAthletes.length; i++) {
+      test.push({
+        athlete_id: this.addedAthletes[i].athlete_id,
+        current_level: this.addedAthletes[i].level.id
+      });
+    }
+    this.data.getTestingSheetData(test).subscribe((data: any[]) => {
+      console.log(data);
+    });
   }
 }
