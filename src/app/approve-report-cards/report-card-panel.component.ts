@@ -96,12 +96,26 @@ interface ChangedComponents {
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field  class="w-100">
+      <mat-form-field  class="w-25">
+        <mat-label>Personality</mat-label>
+        <mat-select [(ngModel)]="selectedPersonalityCategoryComment" name="personalityCategoryComment">
+          <mat-option [value]="-1">None</mat-option>
+          <ng-container *ngFor="let category of personalityCategories">
+            <mat-option [value]="category">{{ category }}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field  class="w-75">
         <mat-label>Personality</mat-label>
         <mat-select [(ngModel)]="selectedPersonalityComment" name="personalityComment">
           <mat-option [value]="-1">None</mat-option>
           <ng-container *ngFor="let commentActive of commentsActive">
-            <mat-option *ngIf="commentActive.type === 'PERSONALITY'" [value]="commentActive.id">{{commentActive.comment}}</mat-option>
+            <mat-option *ngIf="
+				commentActive.type ===
+				('PERSONALITY_' + selectedPersonalityCategoryComment
+				| uppercase)
+			" [value]="commentActive.id">{{commentActive.comment}}</mat-option>
           </ng-container>
         </mat-select>
       </mat-form-field>
@@ -165,6 +179,14 @@ export class ReportCardPanelComponent implements OnInit {
 	public commentsBase: Comments[] = [];
 	public commentsActive: Comments[] = [];
 
+	personalityCategories: String[] = [
+		"Brave",
+		"Energy",
+		"General",
+		"Strength",
+		"Social"
+	  ];
+
 	public events: Event[] = [];
 	public skills: Skill[] = [];
 
@@ -174,6 +196,7 @@ export class ReportCardPanelComponent implements OnInit {
 	selectedSkillCommentSkill: number;
 	selectedPersonalityComment: number;
 	selectedClosingComment: number;
+	selectedPersonalityCategoryComment: String;
 
 	skillsDisabled: boolean;
 
@@ -219,6 +242,18 @@ export class ReportCardPanelComponent implements OnInit {
 		);
 	}
 
+	getPersonalityCommentCategory(commentId: number) {
+		for(let i=0; i<this.commentsBase.length; i++) {
+			if(this.commentsBase[i].id === commentId) {
+				let str = this.commentsBase[i].type.replace("PERSONALITY_", "");
+				let firstLetter = str.substring(0,1);
+				let remainging = str.substring(1, str.length).toLowerCase();
+				return firstLetter + remainging;
+			}
+		}
+		return "";
+	}
+
 	ngOnInit() {
 		this.selectedIntroComment = this.reportCard.card_comments.intro_comment_id;
 		this.selectedSkillComment = this.reportCard.card_comments.skill_comment_id;
@@ -243,8 +278,9 @@ export class ReportCardPanelComponent implements OnInit {
 				//this slight hack of stringify followed by parse is a simiple deep copy
 				this.commentsBase = JSON.parse(JSON.stringify(data));
 				this.commentsActive = JSON.parse(JSON.stringify(data));
-				console.log(this.commentsBase);
 
+				this.selectedPersonalityCategoryComment = this.getPersonalityCommentCategory(this.reportCard.card_comments.personality_comment_id);
+		
 				this.data.getLevelEvents(this.reportCard.level.id).subscribe((data: Event[]) => {
 					this.events = data;
 					this.eventChanged(this.reportCard.card_comments.event_id);

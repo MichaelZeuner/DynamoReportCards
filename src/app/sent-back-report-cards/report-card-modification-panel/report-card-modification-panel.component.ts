@@ -36,6 +36,14 @@ export class ReportCardModificationPanelComponent implements OnInit {
   public commentsBase: Comments[] = [];
   public commentsActive: Comments[] = [];
 
+  personalityCategories: String[] = [
+    "Brave",
+    "Energy",
+    "General",
+    "Strength",
+    "Social"
+  ];
+
   public events: Event[] = [];
   public skills: Skill[] = [];
 
@@ -45,6 +53,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
   selectedSkillCommentSkill: number = this.UNSELECTED;
   selectedPersonalityComment: number = this.UNSELECTED;
   selectedClosingComment: number = this.UNSELECTED;
+  selectedPersonalityCategoryComment: String = "";
 
   prevIntro: string;
   prevEvent: string;
@@ -107,6 +116,18 @@ export class ReportCardModificationPanelComponent implements OnInit {
     );
   }
 
+  getPersonalityCommentCategory(commentId: number) {
+    for (let i = 0; i < this.commentsBase.length; i++) {
+      if (this.commentsBase[i].id === commentId) {
+        let str = this.commentsBase[i].type.replace("PERSONALITY_", "");
+        let firstLetter = str.substring(0, 1);
+        let remainging = str.substring(1, str.length).toLowerCase();
+        return firstLetter + remainging;
+      }
+    }
+    return "";
+  }
+
   ngOnInit() {
     console.log(this.reportCard);
 
@@ -123,6 +144,10 @@ export class ReportCardModificationPanelComponent implements OnInit {
         this.commentsBase = JSON.parse(JSON.stringify(data));
         this.commentsActive = JSON.parse(JSON.stringify(data));
         console.log(this.commentsBase);
+
+        this.selectedPersonalityCategoryComment = this.getPersonalityCommentCategory(
+          this.reportCard.card_comments.personality_comment_id
+        );
 
         this.data.getLevelEvents(this.reportCard.level.id).subscribe(
           (data: Event[]) => {

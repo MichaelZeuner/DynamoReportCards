@@ -140,7 +140,20 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field class="w-100">
+  <mat-form-field class="w-25">
+    <mat-label>Personality Category</mat-label>
+    <mat-select
+      [(ngModel)]="selectedPersonalityCategoryComment"
+      name="personalityCategoryComment"
+    >
+      <mat-option [value]="-1">None</mat-option>
+      <ng-container *ngFor="let category of personalityCategories">
+        <mat-option [value]="category">{{ category }}</mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="w-75">
     <mat-label
       >Personality: <i>{{ prevPersonality }}</i></mat-label
     >
@@ -151,7 +164,10 @@
       <mat-option [value]="-1">None</mat-option>
       <ng-container *ngFor="let commentActive of commentsActive">
         <mat-option
-          *ngIf="commentActive.type === 'PERSONALITY'"
+          *ngIf="
+            commentActive.type ===
+            ('PERSONALITY_' + selectedPersonalityCategoryComment | uppercase)
+          "
           [value]="commentActive.id"
           >{{ commentActive.comment }}</mat-option
         >

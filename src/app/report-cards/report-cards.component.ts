@@ -27,6 +27,7 @@ import { SelectDialogOutput } from "../mat-select-dialog/select-dialog-output";
 import { LevelSelectComponent } from "./level-select.component";
 import { RecentSimilarReportCards } from "../recent-similar-report-cards";
 import { User } from "../interfaces/user";
+import { PreviousLevel } from "../interfaces/previous-level";
 
 @Component({
   selector: "app-report-cards",
@@ -48,6 +49,14 @@ export class ReportCardsComponent implements OnInit {
   public commentsPreviousRemoved: Comments[] = [];
   public commentsActive: Comments[] = [];
 
+  personalityCategories: String[] = [
+    "Brave",
+    "Energy",
+    "General",
+    "Strength",
+    "Social"
+  ];
+
   public events: Event[] = [];
   selectedEvent: number;
   public skills: Skill[] = [];
@@ -61,6 +70,9 @@ export class ReportCardsComponent implements OnInit {
   selectedSkillComment: number = this.UNSELECTED;
   selectedClosingComment: number = this.UNSELECTED;
   selectedPersonalityComment: number = this.UNSELECTED;
+  selectedPersonalityCategoryComment: String = "";
+
+  prevLevels: PreviousLevel[] = [];
 
   constructor(
     private data: DataService,
@@ -247,8 +259,26 @@ export class ReportCardsComponent implements OnInit {
     this.addPutReportCard();
   }
 
+  loadLevel(prevLevel: PreviousLevel) {
+    this.levelSelect.onLevelChange(
+      prevLevel.name + " Level " + prevLevel.next_level_number
+    );
+  }
+
   updateSelectAthlete(newAthlete: Athlete) {
     this.selectedAthlete = newAthlete;
+
+    this.data.getPreviousAthleteLevel(newAthlete.id).subscribe(
+      (data: PreviousLevel[]) => {
+        console.log(data);
+        this.prevLevels = data;
+      },
+      (err: ErrorApi) => {
+        console.error(err);
+        console.log("no previous report card");
+        this.prevLevels = null;
+      }
+    );
   }
 
   updateComments() {
@@ -358,10 +388,10 @@ export class ReportCardsComponent implements OnInit {
                   previousReportCards[x].card_comments.intro_comment_id ||
                 this.commentsPreviousRemoved[i].id ===
                   previousReportCards[x].card_comments.skill_comment_id ||
-                  this.commentsPreviousRemoved[i].id ===
-                    previousReportCards[x].card_comments.personality_comment_id||
-                    this.commentsPreviousRemoved[i].id ===
-                      previousReportCards[x].card_comments.closing_comment_id
+                this.commentsPreviousRemoved[i].id ===
+                  previousReportCards[x].card_comments.personality_comment_id ||
+                this.commentsPreviousRemoved[i].id ===
+                  previousReportCards[x].card_comments.closing_comment_id
               ) {
                 this.commentsPreviousRemoved.splice(i, 1);
                 break;

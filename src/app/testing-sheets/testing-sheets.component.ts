@@ -6,15 +6,7 @@ import { DialogService } from "../shared/dialog.service";
 import { Level } from "../interfaces/level";
 import { MainNavComponent } from "../main-nav/main-nav.component";
 import { AthletesSelectComponent } from "../report-cards/athlete-select.component";
-
-interface PreviousLevel {
-  id: number;
-  name: string;
-  level_number: number;
-  next_level_id: number;
-  next_level_number: number;
-  status: string;
-}
+import { PreviousLevel } from "../interfaces/previous-level";
 
 interface TestingSheetAthlete {
   athlete_id: number;
@@ -107,11 +99,13 @@ export class TestingSheetsComponent implements OnInit {
     this.curAthlete = newAthlete;
     if (newAthlete != null) {
       this.data.getPreviousAthleteLevel(newAthlete.id).subscribe(
-        (data: PreviousLevel) => {
+        (data: PreviousLevel[]) => {
+          //PreviousLevel[]
           console.log(data);
-          this.prevLevel = data;
+          //this.prevLevel = data;
         },
         (err: ErrorApi) => {
+          console.error(err);
           console.log("no previous report card");
           this.prevLevel = null;
         }

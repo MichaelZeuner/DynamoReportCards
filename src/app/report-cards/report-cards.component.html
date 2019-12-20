@@ -23,6 +23,18 @@
         (selectedAthleteChange)="updateSelectAthlete($event)"
       ></app-athlete-select>
     </mat-card-content>
+
+    <p *ngIf="prevLevels.length > 0">
+      Levels {{ selectedAthlete.first_name }} has previously completed:
+    </p>
+    <p
+      class="clickable"
+      *ngFor="let prevLevel of prevLevels"
+      (click)="loadLevel(prevLevel)"
+    >
+      &nbsp;&nbsp;&nbsp;&nbsp;{{ prevLevel.name }} Level
+      {{ prevLevel.level_number }} (click to load next level)
+    </p>
   </mat-card>
 
   <mat-card *ngIf="selectedAthlete">
@@ -74,7 +86,6 @@
   <mat-card *ngIf="level && selectedAthlete && level.isAdvanced">
     <mat-card-content>
       <h4>Advanced</h4>
-
     </mat-card-content>
   </mat-card>
 
@@ -144,16 +155,34 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field class="w-100">
-        <mat-label>Personality</mat-label>
+      <mat-form-field class="w-25">
+        <mat-label>Personality Category</mat-label>
+        <mat-select
+          [(ngModel)]="selectedPersonalityCategoryComment"
+          name="personalityCategoryComment"
+        >
+          <mat-option [value]="-1">None</mat-option>
+          <ng-container *ngFor="let category of personalityCategories">
+            <mat-option [value]="category">{{ category }}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-75">
+        <mat-label>Personality Comment</mat-label>
         <mat-select
           [(ngModel)]="selectedPersonalityComment"
           name="personalityComment"
+          [disabled]="selectedPersonalityCategoryComment === ''"
         >
           <mat-option [value]="-1">None</mat-option>
           <ng-container *ngFor="let commentActive of commentsActive">
             <mat-option
-              *ngIf="commentActive.type === 'PERSONALITY'"
+              *ngIf="
+                commentActive.type ===
+                ('PERSONALITY_' + selectedPersonalityCategoryComment
+                  | uppercase)
+              "
               [value]="commentActive.id"
               >{{ commentActive.comment }}</mat-option
             >
@@ -202,7 +231,7 @@
 
   <mat-card class="spacingForButton" *ngIf="level && selectedAthlete">
     <mat-card-content>
-        <h3>Secondary Coach:</h3>
+      <h3>Secondary Coach:</h3>
       <app-user-select
         #secondaryCoachSelect
         [user]="selectedSecondaryCoach"
