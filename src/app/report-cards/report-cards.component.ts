@@ -28,6 +28,7 @@ import { LevelSelectComponent } from "./level-select.component";
 import { RecentSimilarReportCards } from "../recent-similar-report-cards";
 import { User } from "../interfaces/user";
 import { PreviousLevel } from "../interfaces/previous-level";
+import { UserSelectComponent } from "./user-select.component";
 
 @Component({
   selector: "app-report-cards",
@@ -44,6 +45,7 @@ export class ReportCardsComponent implements OnInit {
   public eventName: string;
   @ViewChild("athleteSelect") athleteSelect: AthletesSelectComponent;
   @ViewChild("levelSelect") levelSelect: LevelSelectComponent;
+  @ViewChild("secondaryCoachSelect") secondaryCoachSelect: UserSelectComponent;
 
   public commentsBase: Comments[] = [];
   public commentsPreviousRemoved: Comments[] = [];

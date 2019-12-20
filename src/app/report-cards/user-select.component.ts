@@ -83,6 +83,9 @@ export class UserSelectComponent implements OnInit {
   }
 
   getUserNameAndAccessLevel(user: User) {
+    if (!user) {
+      return "";
+    }
     return user.first_name + " " + user.last_name + " (" + user.access + ")";
   }
 

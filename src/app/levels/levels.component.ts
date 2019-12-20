@@ -13,22 +13,13 @@ import { SelectDialogInput } from "../mat-select-dialog/select-dialog-input";
 import { count } from "rxjs/operators";
 import { SelectDialogOutput } from "../mat-select-dialog/select-dialog-output";
 import { MainNavComponent } from "../main-nav/main-nav.component";
-import {
-  StrengthFlexibility,
-  StrengthFlexibilityGroup
-} from "../interfaces/strength-flexibility";
 
 interface FullLevel extends Level {
   events: FullEvent[];
-  strengthFlexibilityGroups: FullStrengthFlexibilityGroup[];
 }
 
 interface FullEvent extends Event {
   skills: Skill[];
-}
-
-interface FullStrengthFlexibilityGroup extends StrengthFlexibilityGroup {
-  strengthFlexibilities: StrengthFlexibility[];
 }
 
 const newLevelGroupDefault: SelectDialogOutput = {
@@ -47,8 +38,6 @@ export class LevelsComponent implements OnInit {
   public allEvents: Event[] = [];
   public allLevelGroups: LevelGroups[] = [];
   public levelGroupsToShow: number[] = [];
-
-  newLevelAdvanced: Boolean = false;
 
   constructor(
     private data: DataService,
@@ -95,9 +84,7 @@ export class LevelsComponent implements OnInit {
         name: level.name,
         level_number: level.level_number,
         level_groups_id: level.level_groups_id,
-        advanced: level.advanced,
-        events: [],
-        strengthFlexibilityGroups: []
+        events: []
       });
 
       this.data.getLevelEvents(level.id).subscribe(
@@ -234,8 +221,7 @@ export class LevelsComponent implements OnInit {
     this.data
       .addLevel({
         level_groups_id: this.newLevelGroup.id,
-        level_number: parseInt(levelNumber.value),
-        advanced: this.newLevelAdvanced
+        level_number: parseInt(levelNumber.value)
       })
       .subscribe((data: Level) => {
         console.log(data);
@@ -244,9 +230,7 @@ export class LevelsComponent implements OnInit {
           name: this.newLevelGroup.value,
           level_groups_id: data.level_groups_id,
           level_number: data.level_number,
-          advanced: this.newLevelAdvanced,
-          events: [],
-          strengthFlexibilityGroups: []
+          events: []
         });
         this.newLevelGroup = newLevelGroupDefault;
         this.populateEvents(this.levels.length - 1, []);
