@@ -88,7 +88,7 @@ export class LevelSelectComponent implements OnInit {
   }
 
   getLevelToString(level: Level) {
-    if(level !== null) {
+    if (level !== null) {
       return level.name + " Level " + level.level_number;
     } else {
       return "";
@@ -96,10 +96,6 @@ export class LevelSelectComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.myControlLevel.valueChanges.subscribe(data => {
-      console.log(data);
-    });
-
     this.data.getLevels().subscribe((data: Level[]) => {
       this.levels = data;
       this.filteredLevels = this.myControlLevel.valueChanges.pipe(

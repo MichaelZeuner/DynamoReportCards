@@ -278,7 +278,7 @@ export class ReportCardsComponent implements OnInit {
       (err: ErrorApi) => {
         console.error(err);
         console.log("no previous report card");
-        this.prevLevels = null;
+        this.prevLevels = [];
       }
     );
   }
