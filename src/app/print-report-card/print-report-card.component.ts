@@ -6,6 +6,7 @@ import { ReportCardCompleted } from "../interfaces/report-card-completed";
 import { PrintableReportCard } from "../interfaces/printable-report-card";
 import { ErrorApi } from "../interfaces/error-api";
 import { DialogService } from "../shared/dialog.service";
+import { CommonService } from '../shared/common.service';
 
 @Component({
   selector: "app-print-report-card",
@@ -22,7 +23,8 @@ export class PrintReportCardComponent implements OnInit {
     route: ActivatedRoute,
     private printService: PrintService,
     private data: DataService,
-    private dialog: DialogService
+    private dialog: DialogService,
+    private comm: CommonService
   ) {
     console.log(route.snapshot.params);
     this.printData = route.snapshot.params["printData"].split(",");
@@ -36,6 +38,7 @@ export class PrintReportCardComponent implements OnInit {
         .subscribe(
           (data: PrintableReportCard) => {
             console.log(data);
+
             this.printableReportCard = data;
             this.levelBase = this.printableReportCard.levels[0].name
               .split(" ")[0]
