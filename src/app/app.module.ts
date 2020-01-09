@@ -68,6 +68,7 @@ import { AthletesComponent } from "./athletes/athletes.component";
 import { CommentsComponent } from "./comments/comments.component";
 import { UserSelectComponent } from "./report-cards/user-select.component";
 import { TestingSheetsComponent } from './testing-sheets/testing-sheets.component';
+import { PrintTestingSheetComponent } from './print-testing-sheet/print-testing-sheet.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +101,8 @@ import { TestingSheetsComponent } from './testing-sheets/testing-sheets.componen
     ReportCardModificationPanelComponent,
     AthletesComponent,
     CommentsComponent,
-    TestingSheetsComponent
+    TestingSheetsComponent,
+    PrintTestingSheetComponent
   ],
   imports: [
     BrowserModule,

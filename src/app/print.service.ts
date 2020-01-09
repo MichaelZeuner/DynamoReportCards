@@ -10,6 +10,7 @@ export class PrintService {
   constructor(private router: Router) { }
 
   printDocument(documentName: string, documentData: string[]) {
+    console.log("things:", documentData);
     this.isPrinting = true;
     this.router.navigate(['/',
       { outlets: {

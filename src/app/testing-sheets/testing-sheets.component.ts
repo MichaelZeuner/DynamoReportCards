@@ -7,6 +7,8 @@ import { Level } from "../interfaces/level";
 import { MainNavComponent } from "../main-nav/main-nav.component";
 import { AthletesSelectComponent } from "../report-cards/athlete-select.component";
 import { PreviousLevel } from "../interfaces/previous-level";
+import { PrintService } from '../print.service';
+import { TestingSheet } from '../interfaces/testing-sheet';
 
 interface TestingSheetAthlete {
   athlete_id: number;
@@ -32,7 +34,8 @@ export class TestingSheetsComponent implements OnInit {
   constructor(
     public data: DataService,
     public dialog: DialogService,
-    public nav: MainNavComponent
+    public nav: MainNavComponent,
+    public printService: PrintService
   ) {}
 
   ngOnInit() {
@@ -180,8 +183,7 @@ export class TestingSheetsComponent implements OnInit {
         current_level: this.addedAthletes[i].level.id
       });
     }
-    this.data.getTestingSheetData(test).subscribe((data: any[]) => {
-      console.log(data);
-    });
+
+      this.printService.printDocument("testing-sheet", [JSON.stringify(test)]);
   }
 }

@@ -1,0 +1,36 @@
+.reportCard { page-break-after: always; }
+.reportCard:last-child { page-break-after: avoid; }
+
+//td { border: 1px solid transparent; }
+
+.newPage { page-break-after: always; }
+
+.page { width: 11in; min-width: 11in; height: 8.2in; min-height: 8.2in; max-height: 8.2in; }
+.page2Table { margin: 0.25in; padding: 0; height: 8in; min-height: 8in; max-height: 8in; }
+.pageHeight { height: 7.8in; min-height: 7.8in; max-height: 7.8in; }
+
+.frontPage {
+    height: 100%;
+}
+
+.rankTable { border-collapse: collapse; }
+table.rankTable tr td { border: 1px solid black; }
+.eventName { 
+    white-space: nowrap; 
+    text-align: center;
+    max-width: 0.35in; 
+    width: 0.35in;
+    min-width: 0.35in; 
+}
+td.eventName > div { transform: rotate(180deg); }
+.vertical-text { writing-mode: vertical-rl; }
+
+.shading { background-color: lightgray; -webkit-print-color-adjust: exact; }
+.spacing { min-width: 0.20in; max-width: 0.20in; font-size: x-small; font-weight: bold; text-align: center; }
+.skill { max-height: 0.35in; font-size: xx-small; padding-left: 0.05in; padding-right: 0.05in; }
+.levelName { min-height: 0.35in; height: 0.35in; max-height: 0.35in; font-size: small; font-weight: bold; text-align: center; }
+.athleteName { min-height: 0.25in; height: 0.25in; max-height: 0.25in; font-size: small; font-weight: bold; text-align: center; }
+
+.note { font-size: small; text-align: center; }
+
+div { border: 1px solid transparent;}

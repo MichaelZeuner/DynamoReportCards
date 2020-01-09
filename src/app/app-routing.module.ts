@@ -17,6 +17,7 @@ import { SentBackReportCardsComponent } from "./sent-back-report-cards/sent-back
 import { AthletesComponent } from "./athletes/athletes.component";
 import { CommentsComponent } from "./comments/comments.component";
 import { TestingSheetsComponent } from "./testing-sheets/testing-sheets.component";
+import { PrintTestingSheetComponent } from './print-testing-sheet/print-testing-sheet.component';
 
 const routes: Routes = [
   {
@@ -51,7 +52,8 @@ const routes: Routes = [
     component: PrintLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: "report-card/:printData", component: PrintReportCardComponent }
+      { path: "report-card/:printData", component: PrintReportCardComponent
+    },{path: "testing-sheet/:testData", component: PrintTestingSheetComponent }
     ]
   },
   { path: "**", redirectTo: "" }
