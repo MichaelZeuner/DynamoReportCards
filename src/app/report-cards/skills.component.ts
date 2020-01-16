@@ -3,7 +3,6 @@ import { DataService } from "../data.service";
 import { Skill } from "../interfaces/skill";
 import { Event } from "../interfaces/event";
 import { Level } from "../interfaces/level";
-import { ReportCard } from "../interfaces/report-card";
 import { ReportCardCompleted } from "../interfaces/report-card-completed";
 
 @Component({

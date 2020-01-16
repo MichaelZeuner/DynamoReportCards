@@ -14,7 +14,8 @@ import {
   MatDialogRef,
   MatDialog,
   MatSelect,
-  MAT_DIALOG_DATA
+  MAT_DIALOG_DATA,
+  MatButton
 } from "@angular/material";
 import { PrintService } from "../print.service";
 import { Comments } from "../interfaces/comments";
@@ -30,6 +31,10 @@ import { User } from "../interfaces/user";
 import { PreviousLevel } from "../interfaces/previous-level";
 import { UserSelectComponent } from "./user-select.component";
 
+
+const INCLUDE_NEXT_LEVEL_TEXT: string = "Include Next Level";
+const REMOVE_NEXT_LEVEL_TEXT: string = "Remove Next Level";
+
 @Component({
   selector: "app-report-cards",
   templateUrl: "./report-cards.component.html",
@@ -39,6 +44,7 @@ export class ReportCardsComponent implements OnInit {
   UNSELECTED: number = -1;
 
   public level: Level;
+  public levelSecond: Level = null;
   public selectedAthlete: Athlete;
   public selectedSecondaryCoach: User;
   public skillName: string;
@@ -65,8 +71,9 @@ export class ReportCardsComponent implements OnInit {
   selectedSkill: number;
   public skillsDisabled: Boolean = true;
 
-  newReportCard: boolean = true;
-  partialReportCard: ReportCard = null;
+ newReportCard: boolean = true;
+ partialReportCard: ReportCard = null;
+ partialReportCardSecond: ReportCard = null;
 
   selectedIntroComment: number = this.UNSELECTED;
   selectedSkillComment: number = this.UNSELECTED;
@@ -75,6 +82,8 @@ export class ReportCardsComponent implements OnInit {
   selectedPersonalityCategoryComment: String = "";
 
   prevLevels: PreviousLevel[] = [];
+
+  includeRemoveNextLevelBtnText: string = INCLUDE_NEXT_LEVEL_TEXT;
 
   constructor(
     private data: DataService,
@@ -208,7 +217,7 @@ export class ReportCardsComponent implements OnInit {
         this.mainNav.displayLoading = false;
       }
     );
-
+  
     this.selectedSecondaryCoach = partialReportCard.secondary_coach;
     this.selectedAthlete = partialReportCard.athlete;
     this.partialReportCard = partialReportCard;
@@ -454,7 +463,7 @@ export class ReportCardsComponent implements OnInit {
       this.level.events.push(event);
     }
   }
-
+  
   async setAllMastered() {
     this.mainNav.displayLoading = true;
     console.log("Set all mastered");
@@ -681,7 +690,6 @@ export class ReportCardsComponent implements OnInit {
       }
     }
   }
-
   sessionChanged(newSession: string) {
     this.partialReportCard.session = newSession;
     console.log(this.partialReportCard);
@@ -720,7 +728,6 @@ export class ReportCardsComponent implements OnInit {
     this.level = null;
     this.partialReportCard = null;
   }
-
   addPutReportCard() {
     if (this.newReportCard) {
       this.newReportCard = false;
@@ -759,6 +766,20 @@ export class ReportCardsComponent implements OnInit {
     reportCardData.push(athleteId.toString());
     reportCardData.push(levelGroupId.toString());
     this.printService.printDocument("report-card", reportCardData);
+  }
+
+  async includeRemoveNextLevel(includeRemoveNextLevelBtn: MatButton) {
+    if(this.levelSecond === null) {
+      this.levelSecond = await this.data.getLevelFromNameAndNumber(this.level.name, this.level.level_number + 1).toPromise();
+      includeRemoveNextLevelBtn.color = "warn";
+      this.includeRemoveNextLevelBtnText = REMOVE_NEXT_LEVEL_TEXT;
+    } 
+    else {
+      this.levelSecond = null;
+      includeRemoveNextLevelBtn.color = "primary";
+      this.includeRemoveNextLevelBtnText = INCLUDE_NEXT_LEVEL_TEXT;
+    }
+
   }
 }
 

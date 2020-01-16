@@ -303,4 +303,8 @@ export class DataService {
       this.baseUrl + "/get-testing-sheet-data/" + JSON.stringify(data)
     );
   }
+
+  getLevelFromNameAndNumber(name: string, number: number) {
+    return this.http.get<Level>(this.baseUrl + "/get-level-from-name-number/" + name + "/" + number);
+  }
 }

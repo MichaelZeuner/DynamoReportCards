@@ -73,11 +73,26 @@
       >
         All Mastered
       </button>
+
+      <button
+        #includeRemoveNextLevelBtn
+        *ngIf="level && selectedAthlete"
+        mat-raised-button
+        class="float-right bring-to-front mr-1"
+        color="primary"
+        (click)="includeRemoveNextLevel(includeRemoveNextLevelBtn)"
+      >
+        {{includeRemoveNextLevelBtnText}}
+      </button>
+
       <mat-list *ngIf="level">
         <app-report-card-events
           [level]="level"
+          [levelSecond]="levelSecond"
           [reportCard]="partialReportCard"
-          (events)="onEventsChange($event)"
+          [reportCardSecond]="partialReportCardSecond"
+          (events)="this.reportCard.onEventsChange($event)"
+          (eventsSecond)="this.reportCard.onEventsChange($event)"
         ></app-report-card-events>
       </mat-list>
     </mat-card-content>
