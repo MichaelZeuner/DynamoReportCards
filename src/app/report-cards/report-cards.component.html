@@ -91,8 +91,8 @@
           [levelSecond]="levelSecond"
           [reportCard]="partialReportCard"
           [reportCardSecond]="partialReportCardSecond"
-          (events)="this.reportCard.onEventsChange($event)"
-          (eventsSecond)="this.reportCard.onEventsChange($event)"
+          (events)="onEventsChange($event, level)"
+          (eventsSecond)="onEventsChange($event, levelSecond)"
         ></app-report-card-events>
       </mat-list>
     </mat-card-content>

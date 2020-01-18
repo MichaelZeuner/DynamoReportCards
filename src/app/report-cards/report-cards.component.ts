@@ -72,6 +72,7 @@ export class ReportCardsComponent implements OnInit {
   public skillsDisabled: Boolean = true;
 
  newReportCard: boolean = true;
+ newReportCardSecond: boolean = true;
  partialReportCard: ReportCard = null;
  partialReportCardSecond: ReportCard = null;
 
@@ -418,9 +419,9 @@ export class ReportCardsComponent implements OnInit {
       );
   }
 
-  async addEventComponents(event: Event) {
+  async addEventComponents(event: Event, second: boolean) {
     let currentLoadingState = this.mainNav.displayLoading;
-    if (this.newReportCard) {
+    if (this.newReportCard && second === false) {
       this.newReportCard = false;
       this.mainNav.displayLoading = true;
       this.partialReportCard = await this.data
@@ -429,38 +430,53 @@ export class ReportCardsComponent implements OnInit {
 
       this.mainNav.displayLoading = currentLoadingState;
     }
+    if (this.newReportCardSecond && second === true) {
+      this.newReportCardSecond = false;
+      this.mainNav.displayLoading = true;
+      this.partialReportCardSecond = await this.data
+        .addReportCard(this.partialReportCardSecond)
+        .toPromise();
 
-    await this.addAllComponentsToReportCard(event);
+      this.mainNav.displayLoading = currentLoadingState;
+    }
+
+    await this.addAllComponentsToReportCard(event, second);
   }
 
-  onEventsChange(event: Event) {
-    if (typeof this.level.events !== "undefined") {
-      for (let i = 0; i < this.level.events.length; i++) {
-        if (typeof this.level.events[i].skills !== "undefined") {
-          this.newReportCard = false;
+  onEventsChange(event: Event, second: boolean) {
+    let level = (second) ? this.levelSecond : this.level;
+
+    if (typeof level.events !== "undefined") {
+      for (let i = 0; i < level.events.length; i++) {
+        if (typeof level.events[i].skills !== "undefined") {
+          if(second){
+            this.newReportCardSecond = false;
+          } else {
+            this.newReportCard = false;
+          }
         }
       }
     }
 
-    this.addEventComponents(event);
+    this.addEventComponents(event, second);
 
     let pushEvent = false;
-    if (typeof this.level.events !== "undefined") {
-      for (let i = 0; i < this.level.events.length; i++) {
-        if (this.level.events[i].id === event.id) {
-          this.level.events[i] = event;
+    if (typeof level.events !== "undefined") {
+      for (let i = 0; i < level.events.length; i++) {
+        if (level.events[i].id === event.id) {
+          level.events[i] = event;
           break;
         }
-        if (i === this.level.events.length - 1) {
+        if (i === level.events.length - 1) {
           pushEvent = true;
         }
       }
     } else {
-      this.level.events = [];
+      level.events = [];
       pushEvent = true;
     }
     if (pushEvent) {
-      this.level.events.push(event);
+      level.events.push(event);
     }
   }
   
@@ -479,7 +495,7 @@ export class ReportCardsComponent implements OnInit {
       for (let x = 0; x < this.level.events[i].skills.length; x++) {
         this.level.events[i].skills[x].rank = "MASTERED";
       }
-      await this.addEventComponents(this.level.events[i]);
+      await this.addEventComponents(this.level.events[i], false);
     }
 
     let partialReportCards: ReportCardCompleted[] = await this.data
@@ -670,14 +686,18 @@ export class ReportCardsComponent implements OnInit {
     }
   }
 
-  async addAllComponentsToReportCard(event: any) {
+  async addAllComponentsToReportCard(event: any, second: boolean) {
     let currentLoadingState = this.mainNav.displayLoading;
     if (typeof event.skills !== "undefined") {
       for (let s = 0; s < event.skills.length; s++) {
         const skill = event.skills[s];
         if (typeof skill.rank !== "undefined") {
           let reportCardComponent = {} as ReportCardComponent;
-          reportCardComponent.report_cards_id = this.partialReportCard.id;
+          if(second) {
+            reportCardComponent.report_cards_id = this.partialReportCardSecond.id;
+          } else {
+            reportCardComponent.report_cards_id = this.partialReportCard.id;
+          }
           reportCardComponent.skills_id = skill.id;
           reportCardComponent.rank = skill.rank;
 
