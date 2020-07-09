@@ -216,7 +216,7 @@
         [length]="comments.length"
         [pageIndex]="pageinatorIndex"
         [pageSize]="pageinatorSize"
-        [pageSizeOptions]="[5, 10, 25, 100]"
+        [pageSizeOptions]="[5, 10, 25, comments.length]"
         (page)="pageChanged($event)"
       >
       </mat-paginator>

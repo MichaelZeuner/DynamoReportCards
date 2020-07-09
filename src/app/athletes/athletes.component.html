@@ -121,7 +121,7 @@
         [length]="athletes.length"
         [pageIndex]="pageinatorIndex"
         [pageSize]="pageinatorSize"
-        [pageSizeOptions]="[5, 10, 25, 100]"
+        [pageSizeOptions]="[5, 10, 25, 100, 500, athletes.length]"
         (page)="pageChanged($event)">
       </mat-paginator>
     </mat-grid-tile>
