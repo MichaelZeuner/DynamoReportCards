@@ -66,10 +66,10 @@ interface ChangedComponents {
           <ng-container *ngFor="let commentActive of commentsActive">
             <mat-option *ngIf="commentActive.type === 'INTRO'" [value]="commentActive.id">{{commentActive.comment}}</mat-option>
           </ng-container>
-          
+
         </mat-select>
       </mat-form-field>
-      
+
       <mat-form-field  class="w-25">
         <mat-label>Event</mat-label>
 
@@ -147,17 +147,17 @@ interface ChangedComponents {
         <button mat-raised-button color="primary" class="mr-1" *ngIf="!modifyOnly"
         (click)="generateReportCard(reportCard.athlete.id, reportCard.level.level_groups_id)">Preview Last Report Card</button>
 
-        <button *ngIf="generateUnmodifiedCommentIdString() === generateCurrentCommentIdString() && changedComponents.length === 0" 
+        <button *ngIf="generateUnmodifiedCommentIdString() === generateCurrentCommentIdString() && changedComponents.length === 0"
           mat-raised-button color="accent" class="mr-1"
           (click)="putReportCard()">Complete Report Card</button>
-        <button *ngIf="generateUnmodifiedCommentIdString() !== generateCurrentCommentIdString() || changedComponents.length > 0" 
-          mat-raised-button color="accent" class="mr-1" 
+        <button *ngIf="generateUnmodifiedCommentIdString() !== generateCurrentCommentIdString() || changedComponents.length > 0"
+          mat-raised-button color="accent" class="mr-1"
           (click)="submitReportCard()">Complete Report Card with Changes</button>
-        <button *ngIf="(generateUnmodifiedCommentIdString() !== generateCurrentCommentIdString() || changedComponents.length > 0) && !modifyOnly" 
+        <button *ngIf="(generateUnmodifiedCommentIdString() !== generateCurrentCommentIdString() || changedComponents.length > 0) && !modifyOnly"
           mat-raised-button color="warn" class="mr-1"
           (click)="sendReportCardBackPrepComments()">Send Report Card Back</button>
     </div>
-        
+
   </mat-expansion-panel>
   `,
 	styles: []
@@ -179,7 +179,7 @@ export class ReportCardPanelComponent implements OnInit {
 	public commentsBase: Comments[] = [];
 	public commentsActive: Comments[] = [];
 
-	personalityCategories: String[] = [
+	personalityCategories: string[] = [
 		"Brave",
 		"Energy",
 		"General",
@@ -190,13 +190,13 @@ export class ReportCardPanelComponent implements OnInit {
 	public events: Event[] = [];
 	public skills: Skill[] = [];
 
-	selectedIntroComment: number;
-	selectedSkillComment: number;
-	selectedSkillCommentEvent: number;
-	selectedSkillCommentSkill: number;
-	selectedPersonalityComment: number;
-	selectedClosingComment: number;
-	selectedPersonalityCategoryComment: String;
+	public selectedIntroComment: number;
+	public selectedSkillComment: number;
+	public selectedSkillCommentEvent: number;
+	public selectedSkillCommentSkill: number;
+	public selectedPersonalityComment: number;
+	public selectedClosingComment: number;
+	public selectedPersonalityCategoryComment: string;
 
 	skillsDisabled: boolean;
 
@@ -280,7 +280,7 @@ export class ReportCardPanelComponent implements OnInit {
 				this.commentsActive = JSON.parse(JSON.stringify(data));
 
 				this.selectedPersonalityCategoryComment = this.getPersonalityCommentCategory(this.reportCard.card_comments.personality_comment_id);
-		
+
 				this.data.getLevelEvents(this.reportCard.level.id).subscribe((data: Event[]) => {
 					this.events = data;
 					this.eventChanged(this.reportCard.card_comments.event_id);

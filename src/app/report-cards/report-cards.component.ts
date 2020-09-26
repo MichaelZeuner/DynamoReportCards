@@ -51,7 +51,7 @@ export class ReportCardsComponent implements OnInit {
   public commentsPreviousRemoved: Comments[] = [];
   public commentsActive: Comments[] = [];
 
-  personalityCategories: String[] = [
+  personalityCategories: string[] = [
     "Brave",
     "Energy",
     "General",
@@ -72,7 +72,7 @@ export class ReportCardsComponent implements OnInit {
   selectedSkillComment: number = this.UNSELECTED;
   selectedClosingComment: number = this.UNSELECTED;
   selectedPersonalityComment: number = this.UNSELECTED;
-  selectedPersonalityCategoryComment: String = "";
+  selectedPersonalityCategoryComment: string = "";
 
   prevLevels: PreviousLevel[] = [];
 

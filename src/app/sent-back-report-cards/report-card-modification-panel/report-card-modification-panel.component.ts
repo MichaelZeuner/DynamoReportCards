@@ -36,7 +36,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
   public commentsBase: Comments[] = [];
   public commentsActive: Comments[] = [];
 
-  personalityCategories: String[] = [
+  personalityCategories: string[] = [
     "Brave",
     "Energy",
     "General",
@@ -53,7 +53,7 @@ export class ReportCardModificationPanelComponent implements OnInit {
   selectedSkillCommentSkill: number = this.UNSELECTED;
   selectedPersonalityComment: number = this.UNSELECTED;
   selectedClosingComment: number = this.UNSELECTED;
-  selectedPersonalityCategoryComment: String = "";
+  selectedPersonalityCategoryComment: string = "";
 
   prevIntro: string;
   prevEvent: string;
