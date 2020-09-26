@@ -39,6 +39,7 @@ export class AuthService {
   }
 
   attemptLogin(isErrorDisplayed: boolean) {
+    console.log(this.baseUrl);
     this.http.get(`${this.baseUrl}/login`).subscribe(
       (result: User) => {
         console.log(result.access);
