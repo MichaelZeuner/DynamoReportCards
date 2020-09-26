@@ -270,17 +270,21 @@ export class ReportCardsComponent implements OnInit {
   updateSelectAthlete(newAthlete: Athlete) {
     this.selectedAthlete = newAthlete;
 
-    this.data.getPreviousAthleteLevel(newAthlete.id).subscribe(
-      (data: PreviousLevel[]) => {
-        console.log(data);
-        this.prevLevels = data;
-      },
-      (err: ErrorApi) => {
-        console.error(err);
-        console.log("no previous report card");
-        this.prevLevels = [];
-      }
-    );
+    if(newAthlete !== null) {
+      this.data.getPreviousAthleteLevel(newAthlete.id).subscribe(
+        (data: PreviousLevel[]) => {
+          console.log(data);
+          this.prevLevels = data;
+        },
+        (err: ErrorApi) => {
+          console.error(err);
+          console.log("no previous report card");
+          this.prevLevels = [];
+        }
+      );
+    } else {
+      this.prevLevels = [];
+    }
   }
 
   updateComments() {
@@ -463,19 +467,25 @@ export class ReportCardsComponent implements OnInit {
     this.level.events = await this.data
       .getLevelEvents(this.level.id)
       .toPromise();
+    this.mainNav.displayLoading = true;
+
     for (let i = 0; i < this.level.events.length; i++) {
       this.level.events[i].skills = await this.data
         .getEventSkills(this.level.id, this.level.events[i].id)
         .toPromise();
+      this.mainNav.displayLoading = true;
+
       for (let x = 0; x < this.level.events[i].skills.length; x++) {
         this.level.events[i].skills[x].rank = "MASTERED";
       }
       await this.addEventComponents(this.level.events[i]);
+      this.mainNav.displayLoading = true;
     }
 
     let partialReportCards: ReportCardCompleted[] = await this.data
       .getCoachesInProgressReportCard()
       .toPromise();
+    this.mainNav.displayLoading = true;
 
     for (let i = 0; i < partialReportCards.length; i++) {
       if (partialReportCards[i].id === this.partialReportCard.id) {
