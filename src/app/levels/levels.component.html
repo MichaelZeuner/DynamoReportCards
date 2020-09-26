@@ -1,11 +1,13 @@
 <section class="level-groups-section">
-  <mat-checkbox
-    *ngFor="let levelGroup of allLevelGroups"
-    class="level-groups-margin"
-    (change)="adjustDisplayedLevelGroups(levelGroup.id)"
-  >
-    {{ levelGroup.name }}
-  </mat-checkbox>
+  <mat-radio-group (change)="adjustDisplayedLevelGroups($event)">
+    <mat-radio-button
+      *ngFor="let levelGroup of allLevelGroups"
+      class="level-groups-margin"
+      [value]="levelGroup.id"
+    >
+      {{ levelGroup.name }}
+    </mat-radio-button>
+</mat-radio-group>
 </section>
 
 <mat-grid-list cols="6" rowHeight="40px" class="m-1">

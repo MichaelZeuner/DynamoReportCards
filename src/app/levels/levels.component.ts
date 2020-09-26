@@ -6,7 +6,7 @@ import { Skill } from "../interfaces/skill";
 import { ReportCardSkill } from "../interfaces/report-card-skill";
 import { DialogService } from "../shared/dialog.service";
 import { Input } from "@angular/compiler/src/core";
-import { MatInput } from "@angular/material";
+import { MatInput, MatRadioChange } from "@angular/material";
 import { ErrorApi } from "../interfaces/error-api";
 import { LevelGroups } from "../interfaces/level-groups";
 import { SelectDialogInput } from "../mat-select-dialog/select-dialog-input";
@@ -46,7 +46,7 @@ export class LevelsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.nav.displayLoading = true;
+    this.nav.displayLoading = false;
     this.data.getLevelGroups().subscribe((levelGroups: LevelGroups[]) => {
       this.allLevelGroups = levelGroups;
       console.log(this.allLevelGroups);
@@ -55,25 +55,21 @@ export class LevelsComponent implements OnInit {
     this.data.getEvents().subscribe((events: Event[]) => {
       this.allEvents = events;
       console.log(this.allEvents);
-
-      this.data.getLevels().subscribe((levels: Level[]) => {
-        console.log(levels);
-        this.populateLevels(levels);
-      });
     });
   }
 
-  adjustDisplayedLevelGroups(id: number) {
-    console.log("toggle display " + id);
-    for (let i = 0; i < this.levelGroupsToShow.length; i++) {
-      if (this.levelGroupsToShow[i] === id) {
-        this.levelGroupsToShow.splice(i, 1);
-        console.log(this.levelGroupsToShow);
-        return;
-      }
-    }
-    this.levelGroupsToShow.push(id);
-    console.log(this.levelGroupsToShow);
+  adjustDisplayedLevelGroups(event: MatRadioChange) {
+    console.log(event);
+    console.log("toggle display " + event.value);
+
+    this.nav.displayLoading = true;
+    this.data.getLevelsForGroupFull(event.value).subscribe((levels: FullLevel[]) => {
+      console.log(levels);
+      this.levels = levels;
+      this.nav.displayLoading = false;
+    });
+
+    this.levelGroupsToShow = [event.value];
   }
 
   populateLevels(levels: Level[]) {

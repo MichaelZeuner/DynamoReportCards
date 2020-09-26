@@ -56,7 +56,8 @@ const routes: Routes = [
     },{path: "testing-sheet/:testData", component: PrintTestingSheetComponent }
     ]
   },
-  { path: "**", redirectTo: "" }
+  { path: "**", redirectTo: "" },
+  { path: "*", redirectTo: "" }
 ];
 
 @NgModule({

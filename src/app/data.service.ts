@@ -103,6 +103,14 @@ export class DataService {
     return this.http.get<Level[]>(this.baseUrl + "/read-levels");
   }
 
+  getLevelsForGroupFull(groupId: number): Observable<Level[]> {
+    return this.http.get<Level[]>(this.baseUrl + "/read-levels-group-full/" + groupId);
+  }
+
+  getLevelsForGroup(groupId: number): Observable<Level[]> {
+    return this.http.get<Level[]>(this.baseUrl + "/read-levels-group/" + groupId);
+  }
+
   putLevel(level: Level) {
     return this.http.put(this.baseUrl + "/levels/" + level.id, level);
   }
