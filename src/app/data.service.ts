@@ -160,9 +160,16 @@ export class DataService {
   getComments() {
     return this.http.get(this.baseUrl + "/get-comments");
   }
+  getCommentsForGroup(groupId: number) {
+    return this.http.get(this.baseUrl + "/get-comments-group/" + groupId);
+  }
 
   putComment(comment: Comments) {
     return this.http.put(this.baseUrl + "/put-comments", comment);
+  }
+
+  deleteComment(commentId: number) {
+    return this.http.delete(this.baseUrl + "/comments/" + commentId);
   }
 
   addComment(comment: Comments) {

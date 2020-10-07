@@ -8,7 +8,8 @@ import { element } from "@angular/core/src/render3";
 import { Comments } from "../interfaces/comments";
 import { CommonService } from "../shared/common.service";
 import { MainNavComponent } from "../main-nav/main-nav.component";
-import { PageEvent } from "@angular/material";
+import { MatRadioChange, PageEvent } from "@angular/material";
+import { LevelGroups } from '../interfaces/level-groups';
 
 @Component({
   selector: "app-comments",
@@ -44,6 +45,7 @@ export class CommentsComponent implements OnInit {
 
   public pageinatorIndex: number = 0;
   public pageinatorSize: number = 10;
+  public allLevelGroups: LevelGroups[] = [];
 
   constructor(
     public data: DataService,
@@ -55,6 +57,12 @@ export class CommentsComponent implements OnInit {
   ngOnInit() {
     this.createLevelGroupArray();
     this.nav.displayLoading = true;
+
+    this.data.getLevelGroups().subscribe((levelGroups: LevelGroups[]) => {
+      this.allLevelGroups = levelGroups;
+      console.log(this.allLevelGroups);
+    });
+
     this.data.getComments().subscribe(
       (data: Comments[]) => {
         this.nav.displayLoading = false;
@@ -70,6 +78,25 @@ export class CommentsComponent implements OnInit {
         this.dialog.openSnackBar(err.error.message);
       }
     );
+  }
+
+
+  adjustDisplayedLevelGroups(event: MatRadioChange) {
+    console.log(event);
+    console.log("toggle display " + event.value);
+
+    this.nav.displayLoading = true;
+    this.data.getCommentsForGroup(event.value).subscribe((comments: Comments[]) => {
+      console.log(comments);
+      this.comments = [];
+      this.comments.push(this.comm.deepCopy(this.NEW_COMMENT_OBJ));
+      for (let i = 0; i < comments.length; i++) {
+        this.comments.push(comments[i]);
+      }
+      console.log(this.comments);
+      this.refreshPage();
+      this.nav.displayLoading = false;
+    });
   }
 
   createLevelGroupArray() {
@@ -193,6 +220,22 @@ export class CommentsComponent implements OnInit {
             this.dialog.openSnackBar(err.message);
           }
         );
+      }
+    }
+  }
+
+  async deleteComment(commentId: number) {
+    console.log('delte ' + commentId);
+    let confirm = await this.dialog.openConfirmDialog("Are you sure you wish to delete the comment?").afterClosed().toPromise()
+    if(confirm) {
+      let res = await this.data.deleteComment(commentId).toPromise();
+      console.log('deteled', res);
+
+      for (let i = 0; i < this.commentsDisplayed.length; i++) {
+        if(this.commentsDisplayed[i].id == commentId) {
+          this.commentsDisplayed.splice(i, 1);
+          return;
+        }
       }
     }
   }

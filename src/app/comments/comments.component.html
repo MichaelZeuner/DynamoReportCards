@@ -1,5 +1,17 @@
+<section class="level-groups-section">
+  <mat-radio-group (change)="adjustDisplayedLevelGroups($event)">
+    <mat-radio-button
+      *ngFor="let levelGroup of allLevelGroups"
+      class="level-groups-margin"
+      [value]="levelGroup.id"
+    >
+      {{ levelGroup.name }}
+    </mat-radio-button>
+</mat-radio-group>
+</section>
+
 <div class="m-1">
-  <mat-grid-list cols="12" rowHeight="40px">
+  <mat-grid-list cols="13" rowHeight="40px">
     <div *ngFor="let comment of commentsDisplayed">
       <ng-container *ngIf="comment.id !== -1">
         <mat-grid-tile [colspan]="4">
@@ -76,7 +88,17 @@
           </button>
         </mat-grid-tile>
 
-        <mat-grid-tile [colspan]="12">
+        <mat-grid-tile>
+          <button
+            (click)="deleteComment(comment.id)"
+            mat-raised-button
+            color="warn"
+          >
+            Delete
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="13">
           <mat-form-field class="w-100">
             <input
               #commentInput
@@ -97,17 +119,17 @@
           </mat-grid-tile>
         </div>
 
-        <mat-grid-tile [colspan]="12" *ngIf="comment.levels.length === 0">
+        <mat-grid-tile [colspan]="13" *ngIf="comment.levels.length === 0">
           <p>Applied to all Levels</p>
         </mat-grid-tile>
 
-        <mat-grid-tile [colspan]="12">
+        <mat-grid-tile [colspan]="13">
           <mat-divider class="w-100"></mat-divider>
         </mat-grid-tile>
       </ng-container>
     </div>
 
-    <mat-grid-tile [colspan]="12">
+    <mat-grid-tile [colspan]="13">
       <h3>New Comment</h3>
     </mat-grid-tile>
     <ng-container *ngIf="comments.length > 0">
@@ -199,18 +221,18 @@
         </mat-grid-tile>
       </div>
 
-      <mat-grid-tile [colspan]="12" *ngIf="comments[0].levels.length === 0">
+      <mat-grid-tile [colspan]="13" *ngIf="comments[0].levels.length === 0">
         <p>Applied to all Levels</p>
       </mat-grid-tile>
 
-      <mat-grid-tile [colspan]="12">
+      <mat-grid-tile [colspan]="13">
         <button (click)="addNewComment()" mat-raised-button color="primary">
           Add Comment
         </button>
       </mat-grid-tile>
     </ng-container>
 
-    <mat-grid-tile [colspan]="12">
+    <mat-grid-tile [colspan]="13">
       <mat-paginator
         style="width: 100%;"
         [length]="comments.length"
