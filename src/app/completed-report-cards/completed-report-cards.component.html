@@ -1,3 +1,52 @@
+<mat-grid-list cols="8" rowHeight="40px">
+
+  <mat-grid-tile></mat-grid-tile>
+  <mat-grid-tile></mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-form-field class="w-100">
+      <input placeholder="First Name" #firstNameSearch matInput>
+    </mat-form-field>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-form-field class="w-100">
+      <input placeholder="Last Name" #lastNameSearch matInput>
+    </mat-form-field>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-form-field class="w-100">
+      <input placeholder="Year" #yearSearch matInput type="number">
+    </mat-form-field>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-form-field>
+      <mat-label>Season</mat-label>
+      <mat-select #seasonSearch>
+        <mat-option value=""><i>None</i></mat-option>
+        <mat-option value="WINTER">Winter</mat-option>
+        <mat-option value="SPRING">Spring</mat-option>
+        <mat-option value="SUMMER">Summer</mat-option>
+        <mat-option value="FALL">Fall</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+      <button mat-raised-button color="primary" (click)="search(firstNameSearch.value, lastNameSearch.value, yearSearch.value, seasonSearch.value)">Search</button>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+      <button mat-raised-button color="warn" (click)="search('', '', '', '')">Clear</button>
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="6">
+    <mat-divider style="width: 100%;"></mat-divider>
+  </mat-grid-tile>
+</mat-grid-list>
+
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   <ng-container matColumnDef="athlete">
     <th mat-header-cell *matHeaderCellDef>Athlete</th>
@@ -51,16 +100,34 @@
       authService.user.access === 'SUPERVISOR'
     "
   >
-    <th mat-header-cell *matHeaderCellDef>Modify Report Card</th>
-    <td mat-cell *matCellDef="let element">
-      <button
-        mat-raised-button
-        (click)="modifyReportCard(element)"
-        color="accent"
-      >
-        Modify
-      </button>
-    </td>
+  <th mat-header-cell *matHeaderCellDef>Modify Report Card</th>
+  <td mat-cell *matCellDef="let element">
+    <button
+      mat-raised-button
+      (click)="modifyReportCard(element)"
+      color="accent"
+    >
+      Modify
+    </button>
+  </td>
+  </ng-container>
+  <ng-container
+    matColumnDef="delete_btn"
+    *ngIf="
+      authService.user.access === 'ADMIN' ||
+      authService.user.access === 'SUPERVISOR'
+    "
+  >
+  <th mat-header-cell *matHeaderCellDef>Delete Report Card</th>
+  <td mat-cell *matCellDef="let element">
+    <button
+      mat-raised-button
+      (click)="deleteReportCard(element)"
+      color="warn"
+    >
+      Delete
+    </button>
+  </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

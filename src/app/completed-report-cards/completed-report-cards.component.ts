@@ -11,6 +11,7 @@ import { MatTableDataSource } from "@angular/material";
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from "@angular/material";
 import { DialogService } from "../shared/dialog.service";
 import { MainNavComponent } from "../main-nav/main-nav.component";
+import { first } from 'rxjs/operators';
 
 export interface Tile {
   color: string;
@@ -44,7 +45,8 @@ export class CompletedReportCardsComponent implements OnInit {
     public printService: PrintService,
     public authService: AuthService,
     public matDialog: MatDialog,
-    private nav: MainNavComponent
+    private nav: MainNavComponent,
+    private dialog: DialogService,
   ) {
     this.displayedColumns = [
       "athlete",
@@ -59,11 +61,27 @@ export class CompletedReportCardsComponent implements OnInit {
       this.authService.user.access === "SUPERVISOR"
     ) {
       this.displayedColumns.push("modify_btn");
+      this.displayedColumns.push("delete_btn");
     }
   }
 
   ngOnInit() {
     this.updateReportCards();
+  }
+
+  search(firstName: string, lastName: string, year: string, season: string) {
+    console.log(firstName, lastName);
+    let newData = [];
+    for(let i=0; i<this.reportCards.length; i++) {
+      console.log(this.reportCards[i].athlete.first_name.indexOf(firstName), this.reportCards[i].athlete.last_name.indexOf(lastName))
+      console.log(year, this.reportCards[i].created_date, this.reportCards[i].session);
+      if(this.reportCards[i].athlete.first_name.indexOf(firstName) >= 0 && this.reportCards[i].athlete.last_name.indexOf(lastName) >= 0
+      && this.reportCards[i].created_date.toString().indexOf(year.toString()) >= 0 && (season == null || this.reportCards[i].session.indexOf(season) >= 0)){
+        newData.push(this.reportCards[i]);
+      }
+    }
+    console.log(newData);
+    this.dataSource.data = newData;
   }
 
   updateReportCards() {
@@ -102,6 +120,17 @@ export class CompletedReportCardsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.updateReportCards();
     });
+  }
+
+  async deleteReportCard(reportCard: ReportCardCompleted) {
+    console.log("Delete This Report Card:", reportCard);
+
+    if(await this.dialog.openConfirmDialog("Are you sure you wish to delete this report card? CANNOT BE UNDONE!").afterClosed().toPromise())
+    {
+      let res = await this.data.deleteReportCard(reportCard.id).toPromise();
+      console.log(res);
+      this.updateReportCards();
+    }
   }
 }
 
