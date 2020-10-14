@@ -75,6 +75,7 @@ export class ReportCardsComponent implements OnInit {
   selectedPersonalityCategoryComment: string = "";
 
   prevLevels: PreviousLevel[] = [];
+  prevLevelsInProgress: PreviousLevel[] = [];
 
   constructor(
     private data: DataService,
@@ -261,9 +262,15 @@ export class ReportCardsComponent implements OnInit {
     this.addPutReportCard();
   }
 
-  loadLevel(prevLevel: PreviousLevel) {
+  loadNextLevel(prevLevel: PreviousLevel) {
     this.levelSelect.onLevelChange(
       prevLevel.name + " Level " + prevLevel.next_level_number
+    );
+  }
+
+  loadLevel(prevLevel: PreviousLevel) {
+    this.levelSelect.onLevelChange(
+      prevLevel.name + " Level " + prevLevel.level_number
     );
   }
 
@@ -274,16 +281,24 @@ export class ReportCardsComponent implements OnInit {
       this.data.getPreviousAthleteLevel(newAthlete.id).subscribe(
         (data: PreviousLevel[]) => {
           console.log(data);
-          this.prevLevels = data;
+          for(let i=0; i<data.length; i++) {
+            if(data[i].status == "Completed") {
+              this.prevLevels.push(data[i]);
+            } else {
+              this.prevLevelsInProgress.push(data[i]);
+            }
+          }
         },
         (err: ErrorApi) => {
           console.error(err);
           console.log("no previous report card");
           this.prevLevels = [];
+          this.prevLevelsInProgress = [];
         }
       );
     } else {
       this.prevLevels = [];
+      this.prevLevelsInProgress = [];
     }
   }
 

@@ -30,10 +30,21 @@
     <p
       class="clickable"
       *ngFor="let prevLevel of prevLevels"
-      (click)="loadLevel(prevLevel)"
+      (click)="loadNextLevel(prevLevel)"
     >
       &nbsp;&nbsp;&nbsp;&nbsp;{{ prevLevel.name }} Level
       {{ prevLevel.level_number }} (click to load next level)
+    </p>
+    <p *ngIf="prevLevelsInProgress.length > 0">
+      Levels {{ selectedAthlete.first_name }} has in progress:
+    </p>
+    <p
+      class="clickable"
+      *ngFor="let prevLevel of prevLevelsInProgress"
+      (click)="loadLevel(prevLevel)"
+    >
+      &nbsp;&nbsp;&nbsp;&nbsp;{{ prevLevel.name }} Level
+      {{ prevLevel.level_number }} (click to load level)
     </p>
   </mat-card>
 
