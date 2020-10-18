@@ -15,7 +15,7 @@ h3.coachCommentsTop { margin: 0; }
     height: 100%;
 }
 
-.tableThingy { 
+.tableThingy {
     height: 100%
 }
 
@@ -45,7 +45,7 @@ h3.coachCommentsTop { margin: 0; }
     margin: 0;
     margin-left: 0.25in;
     color: black;
-    font-size: 1.25rem; 
+    font-size: 1.25rem;
 }
 
 .gender {
@@ -53,7 +53,7 @@ h3.coachCommentsTop { margin: 0; }
     min-width: 1in;
     max-width: 1in;
     height: 100%;
-    border-right: 2px solid green;
+    border-right: 2px solid rgb(0, 0, 0);
 }
 
 .mainDisplay {
@@ -74,7 +74,7 @@ h3.coachCommentsTop { margin: 0; }
     width: 100%;
   }
 
-.title { 
+.title {
     --webkit-print-color-adjust: exact;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: white;
@@ -83,7 +83,7 @@ h3.coachCommentsTop { margin: 0; }
     text-align: center;
 }
 
-.athleteName { 
+.athleteName {
     position: absolute;
     width: 100%;
     color: black;
@@ -100,12 +100,12 @@ td.commentRow { height: 100%; width: 100%; }
 
 .rankTable { border-collapse: collapse; }
 table.rankTable tr td { border: 1px solid black; }
-.eventName { 
-    white-space: nowrap; 
+.eventName {
+    white-space: nowrap;
     text-align: center;
-    max-width: 0.35in; 
+    max-width: 0.35in;
     width: 0.35in;
-    min-width: 0.35in; 
+    min-width: 0.35in;
 }
 td.eventName > div { transform: rotate(180deg); }
 .vertical-text { writing-mode: vertical-rl; }
