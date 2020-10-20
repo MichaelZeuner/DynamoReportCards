@@ -81,6 +81,11 @@ export class CommentsComponent implements OnInit {
   }
 
   search(searchText: string) {
+    if(searchText == '') {
+      this.pageChanged(null);
+      return;
+    }
+
     console.log(searchText);
     let newData = [];
     this.nav.displayLoading = true;
