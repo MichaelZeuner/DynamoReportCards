@@ -75,7 +75,7 @@ export class CompletedReportCardsComponent implements OnInit {
     for(let i=0; i<this.reportCards.length; i++) {
       console.log(this.reportCards[i].athlete.first_name.indexOf(firstName), this.reportCards[i].athlete.last_name.indexOf(lastName))
       console.log(year, this.reportCards[i].created_date, this.reportCards[i].session);
-      if(this.reportCards[i].athlete.first_name.indexOf(firstName) >= 0 && this.reportCards[i].athlete.last_name.indexOf(lastName) >= 0
+      if(this.reportCards[i].athlete.first_name.toLowerCase().indexOf(firstName.toLowerCase()) >= 0 && this.reportCards[i].athlete.last_name.toLowerCase().indexOf(lastName.toLowerCase()) >= 0
       && this.reportCards[i].created_date.toString().indexOf(year.toString()) >= 0 && (season == null || this.reportCards[i].session.indexOf(season) >= 0)){
         newData.push(this.reportCards[i]);
       }
