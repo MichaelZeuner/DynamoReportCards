@@ -80,6 +80,20 @@ export class CommentsComponent implements OnInit {
     );
   }
 
+  search(searchText: string) {
+    console.log(searchText);
+    let newData = [];
+    this.nav.displayLoading = true;
+    for(let i=0; i<this.comments.length; i++) {
+      if(this.comments[i].comment.toLowerCase().indexOf(searchText.toLowerCase()) >= 0 ){
+        newData.push(this.comments[i]);
+      }
+    }
+    console.log(newData);
+    this.commentsDisplayed = newData;
+    this.nav.displayLoading = false;
+
+  }
 
   adjustDisplayedLevelGroups(event: MatRadioChange) {
     console.log(event);

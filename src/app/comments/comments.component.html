@@ -10,6 +10,17 @@
 </mat-radio-group>
 </section>
 
+<section class="level-groups-section">
+  <mat-form-field class="w-100">
+    <input placeholder="Search" #searchText matInput>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="search(searchText.value)">Search</button>
+
+  <button mat-raised-button color="warn" (click)="search('')">Clear</button>
+</section>
+
+
 <div class="m-1">
   <mat-grid-list cols="13" rowHeight="40px">
     <div *ngFor="let comment of commentsDisplayed">
