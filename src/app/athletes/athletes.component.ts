@@ -282,26 +282,17 @@ export class AthletesComponent implements OnInit {
     this.records = [];
   }
 
-  uploadAthletes() {
+  async uploadAthletes() {
     if (this.records.length === 0) {
       this.dialog.openSnackBar("Please select a CSV file first");
       return;
     }
 
-    this.uploadingCsv = true;
-    let counter = 0;
-    for (let i = 0; i < this.records.length; i++) {
-      this.data
-        .addAthleteIfNew(this.records[i])
-        .subscribe((inserted: Boolean) => {
-          counter++;
-          this.percentageUploaded = (counter / this.records.length) * 100;
-          console.log("Current Percent: " + this.percentageUploaded);
-
-          if (this.percentageUploaded > 99.5) {
-            this.uploadingCsv = false;
-          }
-        });
-    }
+    this.nav.displayLoading = true;
+    let res: any = await this.data.uploadCsvAthletes(this.records).toPromise();
+    console.log(res);
+    this.dialog.openSnackBar("Created: " + res.created);
+    this.nav.displayLoading = false;
+    return;
   }
 }

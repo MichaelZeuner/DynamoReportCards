@@ -318,4 +318,8 @@ export class DataService {
       this.baseUrl + "/get-testing-sheet-data/" + JSON.stringify(data)
     );
   }
+
+  uploadCsvAthletes(data: any[]) {
+    return this.http.post(this.baseUrl + "/post-athlete-csv", data);
+  }
 }
