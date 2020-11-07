@@ -110,41 +110,50 @@ export class ApproveReportCardsComponent implements OnInit {
     }
   }
 
+  public somethingChecked: boolean = false;
   adjustDisplayedCards() {
     this.reportCards = [];
+    this.somethingChecked = false;
     for (let i = 0; i < this.reportCardsFull.length; i++) {
       if (this.sunChecked && this.reportCardsFull[i].day_of_week === "SUN") {
         this.reportCards.push(this.reportCardsFull[i]);
+        this.somethingChecked = true;
       } else if (
         this.monChecked &&
         this.reportCardsFull[i].day_of_week === "MON"
       ) {
         this.reportCards.push(this.reportCardsFull[i]);
+        this.somethingChecked = true;
       } else if (
         this.tueChecked &&
         this.reportCardsFull[i].day_of_week === "TUE"
       ) {
         this.reportCards.push(this.reportCardsFull[i]);
+        this.somethingChecked = true;
       } else if (
         this.wedChecked &&
         this.reportCardsFull[i].day_of_week === "WED"
       ) {
         this.reportCards.push(this.reportCardsFull[i]);
+        this.somethingChecked = true;
       } else if (
         this.thuChecked &&
         this.reportCardsFull[i].day_of_week === "THU"
       ) {
         this.reportCards.push(this.reportCardsFull[i]);
+        this.somethingChecked = true;
       } else if (
         this.friChecked &&
         this.reportCardsFull[i].day_of_week === "FRI"
       ) {
         this.reportCards.push(this.reportCardsFull[i]);
+        this.somethingChecked = true;
       } else if (
         this.satChecked &&
         this.reportCardsFull[i].day_of_week === "SAT"
       ) {
         this.reportCards.push(this.reportCardsFull[i]);
+        this.somethingChecked = true;
       }
     }
   }

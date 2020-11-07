@@ -9,11 +9,14 @@
 </section>
 
 <mat-accordion>
-    <div *ngIf="reportCards.length === 0" class="w-100">
+    <div *ngIf="reportCards.length === 0 && somethingChecked" class="w-100">
         <h1>No Report Cards waiting to be Approved!</h1>
     </div>
-    <app-report-card-panel 
-        *ngFor="let reportCard of reportCards" 
+
+    <h1 *ngIf="somethingChecked == false">Please select a day of the week to view report cards waiting for approval.</h1>
+
+    <app-report-card-panel
+        *ngFor="let reportCard of reportCards"
         [reportCard]="reportCard"
         (reportCardApprovedChanged)="reportCardApproved($event)">
     </app-report-card-panel>
