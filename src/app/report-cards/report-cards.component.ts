@@ -40,11 +40,13 @@ export class ReportCardsComponent implements OnInit {
 
   public level: Level;
   public selectedAthlete: Athlete;
+  public selectedPrimaryCoach: User;
   public selectedSecondaryCoach: User;
   public skillName: string;
   public eventName: string;
   @ViewChild("athleteSelect") athleteSelect: AthletesSelectComponent;
   @ViewChild("levelSelect") levelSelect: LevelSelectComponent;
+  @ViewChild("primaryCoachSelect") primaryCoachSelect: UserSelectComponent;
   @ViewChild("secondaryCoachSelect") secondaryCoachSelect: UserSelectComponent;
 
   public commentsBase: Comments[] = [];
@@ -81,13 +83,25 @@ export class ReportCardsComponent implements OnInit {
     private data: DataService,
     public matDialog: MatDialog,
     private mainNav: MainNavComponent,
-    private auth: AuthService,
+    public auth: AuthService,
     private dialog: DialogService,
     public printService: PrintService,
     private comm: CommonService
   ) {}
 
   ngOnInit() {
+    this.partialReportCard = {
+      submitted_by: this.auth.user.id,
+      athletes_id: null,
+      comment: null,
+      day_of_week: null,
+      levels_id: null,
+      secondary_coach_id: null,
+      session: null,
+      status: null,
+    };
+
+    this.selectedPrimaryCoach = this.auth.user;
     this.mainNav.displayLoading = true;
     this.data.getComments().subscribe(
       (data: Comments[]) => {
@@ -210,6 +224,13 @@ export class ReportCardsComponent implements OnInit {
       }
     );
 
+    this.selectedPrimaryCoach = {
+      id: partialReportCard.submitted_by,
+      access: null,
+      email: null,
+      first_name: partialReportCard.submitted_first_name,
+      last_name: partialReportCard.submitted_last_name
+    }
     this.selectedSecondaryCoach = partialReportCard.secondary_coach;
     this.selectedAthlete = partialReportCard.athlete;
     this.partialReportCard = partialReportCard;
@@ -254,6 +275,12 @@ export class ReportCardsComponent implements OnInit {
 
   submitForApproval() {
     console.log("SUBMITTED");
+  }
+
+  updateSelectPrimaryCoach(newPrimaryCoach: User) {
+    this.selectedPrimaryCoach = newPrimaryCoach;
+    this.partialReportCard.submitted_by = newPrimaryCoach.id;
+    this.addPutReportCard();
   }
 
   updateSelectSecondaryCoach(newSecondaryCoach: User) {
@@ -367,7 +394,7 @@ export class ReportCardsComponent implements OnInit {
 
     let levelId: number = this.level === null ? -1 : this.level.id;
     this.partialReportCard = {
-      submitted_by: this.auth.user.id,
+      submitted_by: this.selectedPrimaryCoach.id,
       secondary_coach_id: null,
       athletes_id: this.selectedAthlete.id,
       levels_id: levelId,
@@ -692,11 +719,11 @@ export class ReportCardsComponent implements OnInit {
       for (let s = 0; s < event.skills.length; s++) {
         const skill = event.skills[s];
         if (typeof skill.rank !== "undefined") {
-          let reportCardComponent = {} as ReportCardComponent;
-          reportCardComponent.report_cards_id = this.partialReportCard.id;
-          reportCardComponent.skills_id = skill.id;
-          reportCardComponent.rank = skill.rank;
-
+          let reportCardComponent: ReportCardComponent = {
+            rank: skill.rank,
+            report_cards_id: this.partialReportCard.id,
+            skills_id: skill.id
+          };
           this.mainNav.displayLoading = true;
           await this.data
             .addOrUpdateReportCardComponent(reportCardComponent)

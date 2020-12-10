@@ -212,7 +212,7 @@
     <mat-button-toggle-group
       class="w-100"
       #group="matButtonToggleGroup"
-      [value]="partialReportCard.session"
+      [value]="partialReportCard?.session"
       (click)="sessionChanged(group.value)"
       name="session"
       aria-label="Session"
@@ -228,6 +228,17 @@
       >
       <mat-button-toggle value="FALL" class="btnToggle">Fall</mat-button-toggle>
     </mat-button-toggle-group>
+  </mat-card>
+
+  <mat-card class="spacingForButton" *ngIf="level && selectedAthlete && auth.user.access === 'ADMIN'">
+    <mat-card-content>
+      <h3>Primary Coach:</h3>
+      <app-user-select
+        #primaryCoachSelect
+        [user]="selectedPrimaryCoach"
+        (selectedUserChange)="updateSelectPrimaryCoach($event)"
+      ></app-user-select>
+    </mat-card-content>
   </mat-card>
 
   <mat-card class="spacingForButton" *ngIf="level && selectedAthlete">
