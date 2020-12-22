@@ -136,12 +136,19 @@ interface ChangedComponents {
         <mat-button-toggle value="Completed" class="btnToggle w-50">Completed</mat-button-toggle>
     </mat-button-toggle-group>
 
+    <h4>Primary Coach</h4>
+    <app-user-select
+    #primaryCoachSelect
+    [user]="primaryCoach"
+    (selectedUserChange)="updateSelectPrimaryCoach($event)"
+    ></app-user-select>
+
     <h4>Secondary Coach</h4>
-	<app-user-select
-		#secondaryCoachSelect
-		[user]="reportCard.secondary_coach"
-		(selectedUserChange)="updateSelectSecondaryCoach($event)"
-	></app-user-select>
+    <app-user-select
+    #secondaryCoachSelect
+    [user]="reportCard.secondary_coach"
+    (selectedUserChange)="updateSelectSecondaryCoach($event)"
+    ></app-user-select>
 
     <div class="center">
         <button mat-raised-button color="primary" class="mr-1" *ngIf="!modifyOnly"
@@ -197,6 +204,8 @@ export class ReportCardPanelComponent implements OnInit {
 	public selectedPersonalityComment: number;
 	public selectedClosingComment: number;
 	public selectedPersonalityCategoryComment: string;
+
+  public primaryCoach: User;
 
 	skillsDisabled: boolean;
 
@@ -261,6 +270,14 @@ export class ReportCardPanelComponent implements OnInit {
 		this.selectedSkillCommentSkill = this.reportCard.card_comments.skill_id;
 		this.selectedPersonalityComment = this.reportCard.card_comments.personality_comment_id;
 		this.selectedClosingComment = this.reportCard.card_comments.closing_comment_id;
+
+    this.primaryCoach = {
+      id: this.reportCard.submitted_by,
+      first_name: this.reportCard.submitted_first_name,
+      last_name: this.reportCard.submitted_last_name,
+      access: null,
+      email: null
+    };
 
 		console.log('report card in panel');
 		console.log(this.reportCard);
@@ -330,6 +347,11 @@ export class ReportCardPanelComponent implements OnInit {
 		  );
 	}
 
+	updateSelectPrimaryCoach(newPrimaryCoach: User) {
+    if(newPrimaryCoach !== null) {
+      this.reportCard.submitted_by = newPrimaryCoach.id;
+    }
+	}
 	updateSelectSecondaryCoach(newSecondaryCoach: User) {
     if(newSecondaryCoach !== null) {
       this.reportCard.secondary_coach_id = newSecondaryCoach.id;
@@ -436,20 +458,12 @@ export class ReportCardPanelComponent implements OnInit {
 		}
 	}
 
-	putReportCard() {
+	async putReportCard() {
 		if (this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) {
-			if (this.generateUnmodifiedCommentIdString() !== this.generateCurrentCommentIdString()) {
-				let newComment: ReportCardComments = this.generateReportCurrentCardComment();
-				this.data.addReportCardComment(newComment).subscribe(
-					(data: ReportCardComments) => {
-						this.reportCard.comment = data.id;
-					},
-					(err: ErrorApi) => {
-						console.error(err.error.message);
-						this.dialog.openSnackBar(err.error.message);
-					}
-				);
-			}
+      let newComment: ReportCardComments = this.generateReportCurrentCardComment();
+
+      let newCommentResult = await this.data.addReportCardComment(newComment).toPromise();
+      this.reportCard.comment = newCommentResult.id;
 		}
 
     this.reportCard.approved = this.auth.user.id;
