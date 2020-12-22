@@ -185,8 +185,8 @@ export class DataService {
     );
   }
 
-  addReportCardComment(reportCardComment: ReportCardComments) {
-    return this.http.post(
+  addReportCardComment(reportCardComment: ReportCardComments): Observable<ReportCardComments> {
+    return this.http.post<ReportCardComments>(
       this.baseUrl + "/report-cards-comments",
       reportCardComment
     );

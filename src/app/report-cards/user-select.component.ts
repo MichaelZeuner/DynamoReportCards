@@ -86,7 +86,7 @@ export class UserSelectComponent implements OnInit {
     if (!user) {
       return "";
     }
-    return user.first_name + " " + user.last_name + " (" + user.access + ")";
+    return user.first_name + " " + user.last_name;
   }
 
   ngOnInit() {
@@ -106,7 +106,6 @@ export class UserSelectComponent implements OnInit {
 
     console.log(this._user);
     if (this._user !== null && <any>this._user !== false) {
-      console.log("setting value!!!");
       this.myControlUser.setValue(this.getUserNameAndAccessLevel(this._user));
     }
   }
@@ -130,6 +129,7 @@ export class UserSelectComponent implements OnInit {
 
   onUserChange(searchValue: string) {
     const currentUser = this._user;
+    console.log(searchValue);
     for (let i = 0; i < this.users.length; i++) {
       const user = this.users[i];
       if (this.getUserNameAndAccessLevel(user) === searchValue) {

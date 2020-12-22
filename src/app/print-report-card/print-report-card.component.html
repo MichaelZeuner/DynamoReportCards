@@ -18,7 +18,7 @@
               <ng-container *ngIf="comment.level_name !== 'empty'">
                 <p>LEVEL: {{comment.level_name}} Level {{comment.level_number}} ({{comment.status}})</p>
                 <p>Session: {{comment.session}} {{comment.updated_date.split('-')[0]}}</p>
-                <p>Coach: {{comment.first_name}} {{comment.last_name[0]}} <span *ngIf="comment.s_first_name !== null"> + {{comment.s_first_name}} {{comment.s_last_name}}</span></p>
+                <p>Coach: {{comment.first_name}} {{comment.last_name[0]}} <span *ngIf="comment.s_first_name !== null"> + {{comment.s_first_name}} {{comment.s_last_name[0]}}</span></p>
                 <p>COMMENTS: {{comment.comment}}</p>
               </ng-container>
             </td>
@@ -29,7 +29,7 @@
         <table class="tableThingy">
           <tr class="rowThingy">
             <td class="gender">
-              
+
 <!-- SVGs are used for the front page text to allow for outlined text and easier rotation -->
                 <svg
                 id="svg8"
@@ -77,7 +77,7 @@
              </svg>
             </td>
             <td class="mainDisplay">
-              
+
               <div class="starWrapper">
                 <img src="assets/star.png" class="star">
                 <svg><defs id="defs2"><linearGradient id="linearGradient823"><stop id="stop819" offset="0" style="stop-color:#000000;stop-opacity:1;" />
@@ -182,7 +182,7 @@
                 <p>info@dynamogymnastics.ca</p>
                 <p>www.dynamogymnastics.ca</p>
               </div>
-              
+
             </td>
           </tr>
         </table>
