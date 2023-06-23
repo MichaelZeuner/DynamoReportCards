@@ -38,6 +38,9 @@ export class CompletedReportCardsComponent implements OnInit {
 
   displayedColumns: string[];
   dataSource = new MatTableDataSource();
+
+  pageIndex = 0;
+  pageSize = 10;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -84,9 +87,15 @@ export class CompletedReportCardsComponent implements OnInit {
     this.dataSource.data = newData;
   }
 
+  handlePage(event: any) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updateReportCards();
+  }
+
   updateReportCards() {
     this.nav.displayLoading = true;
-    this.data.getReportCardsCompleted().subscribe(
+    this.data.getReportCardsCompleted(this.pageSize, this.pageIndex + 1).subscribe(
       (data: ReportCardCompleted[]) => {
         this.nav.displayLoading = false;
         this.dataSource.data = data;

@@ -288,9 +288,9 @@ export class DataService {
     );
   }
 
-  getReportCardsCompleted(): Observable<ReportCardCompleted[]> {
+  getReportCardsCompleted(limit: number, page: number): Observable<ReportCardCompleted[]> {
     return this.http.get<ReportCardCompleted[]>(
-      this.baseUrl + "/report-cards-completed/" + this.authService.user.id
+      this.baseUrl + "/report-cards-completed/" + this.authService.user.id + '/' + limit + '/' + page
     );
   }
 
