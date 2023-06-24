@@ -110,30 +110,35 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async"
-      >
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span
-        >Welcome {{ user.first_name }} {{ user.last_name }} to Dynamo Report
-        Cards</span
-      >
-      <span class="fill-remaining-space"></span>
-      <button mat-raised-button color="primary" (click)="onLogout()">
-        Logout
-      </button>
-    </mat-toolbar>
+    <div class="fixed-header">
+      <mat-toolbar color="primary">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async"
+        >
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <span
+          >Welcome {{ user.first_name }} {{ user.last_name }} to Dynamo Report
+          Cards</span
+        >
+        <span class="fill-remaining-space"></span>
+        <button mat-raised-button color="primary" (click)="onLogout()">
+          Logout
+        </button>
+      </mat-toolbar>
 
-    <mat-progress-bar
-      mode="indeterminate"
-      *ngIf="displayLoading"
-    ></mat-progress-bar>
-    <ng-content></ng-content>
+      <mat-progress-bar
+        class="fixed-progress-bar"
+        mode="indeterminate"
+        *ngIf="displayLoading"
+      ></mat-progress-bar>
+    </div>
+    <div class="content-below-header">
+      <ng-content></ng-content>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

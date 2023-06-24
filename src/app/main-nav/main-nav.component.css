@@ -11,3 +11,18 @@
   top: 0;
   z-index: 1;
 }
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; 
+}
+
+.fixed-progress-bar {
+  width: 100%; 
+}
+
+.content-below-header {
+  margin-top: 70px;
+}
