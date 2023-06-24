@@ -288,6 +288,12 @@ export class DataService {
     );
   }
 
+  countReportCardsCompleted(): Observable<any> {
+    return this.http.get<any>(
+      this.baseUrl + "/report-cards-count/" + this.authService.user.id + '/completed'
+    );
+  }
+
   getReportCardsCompleted(limit: number, page: number): Observable<ReportCardCompleted[]> {
     return this.http.get<ReportCardCompleted[]>(
       this.baseUrl + "/report-cards-completed/" + this.authService.user.id + '/' + limit + '/' + page

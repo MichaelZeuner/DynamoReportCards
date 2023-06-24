@@ -33,7 +33,7 @@ export interface CompletedReportCardElement {
   templateUrl: "./completed-report-cards.component.html",
   styleUrls: ["./completed-report-cards.component.scss"]
 })
-export class CompletedReportCardsComponent implements OnInit {
+export class CompletedReportCardsComponent implements OnInit  {
   public reportCards: ReportCardCompleted[] = [];
 
   displayedColumns: string[];
@@ -41,6 +41,7 @@ export class CompletedReportCardsComponent implements OnInit {
 
   pageIndex = 0;
   pageSize = 10;
+  totalItems = 0;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -69,6 +70,7 @@ export class CompletedReportCardsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.updateTotalReportCards();
     this.updateReportCards();
   }
 
@@ -93,13 +95,21 @@ export class CompletedReportCardsComponent implements OnInit {
     this.updateReportCards();
   }
 
+  updateTotalReportCards() {
+    this.data.countReportCardsCompleted().subscribe(
+      (data: any) => {
+        this.totalItems = data.count;
+        this.paginator.length = this.totalItems;
+      }
+    )
+  }
+
   updateReportCards() {
     this.nav.displayLoading = true;
     this.data.getReportCardsCompleted(this.pageSize, this.pageIndex + 1).subscribe(
       (data: ReportCardCompleted[]) => {
         this.nav.displayLoading = false;
         this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
         this.reportCards = data;
         console.log(this.reportCards);
       },
