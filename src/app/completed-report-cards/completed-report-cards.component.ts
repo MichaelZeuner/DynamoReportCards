@@ -39,6 +39,10 @@ export class CompletedReportCardsComponent implements OnInit  {
   displayedColumns: string[];
   dataSource = new MatTableDataSource();
 
+  firstName = '';
+  lastName = '';
+  year = '';
+  season = '';
   pageIndex = 0;
   pageSize = 10;
   totalItems = 0;
@@ -75,18 +79,14 @@ export class CompletedReportCardsComponent implements OnInit  {
   }
 
   search(firstName: string, lastName: string, year: string, season: string) {
-    console.log(firstName, lastName);
-    let newData = [];
-    for(let i=0; i<this.reportCards.length; i++) {
-      console.log(this.reportCards[i].athlete.first_name.indexOf(firstName), this.reportCards[i].athlete.last_name.indexOf(lastName))
-      console.log(year, this.reportCards[i].created_date, this.reportCards[i].session);
-      if(this.reportCards[i].athlete.first_name.toLowerCase().indexOf(firstName.toLowerCase()) >= 0 && this.reportCards[i].athlete.last_name.toLowerCase().indexOf(lastName.toLowerCase()) >= 0
-      && this.reportCards[i].created_date.toString().indexOf(year.toString()) >= 0 && (season == null || this.reportCards[i].session.indexOf(season) >= 0)){
-        newData.push(this.reportCards[i]);
-      }
-    }
-    console.log(newData);
-    this.dataSource.data = newData;
+    this.pageIndex = 0;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.year = year;
+    season = (typeof season == 'undefined') ? '' : season;
+    this.season = season;
+    this.updateTotalReportCards();
+    this.updateReportCards();
   }
 
   handlePage(event: any) {
@@ -96,7 +96,7 @@ export class CompletedReportCardsComponent implements OnInit  {
   }
 
   updateTotalReportCards() {
-    this.data.countReportCardsCompleted().subscribe(
+    this.data.countReportCardsCompleted(this.firstName, this.lastName, this.year, this.season).subscribe(
       (data: any) => {
         this.totalItems = data.count;
         this.paginator.length = this.totalItems;
@@ -105,8 +105,9 @@ export class CompletedReportCardsComponent implements OnInit  {
   }
 
   updateReportCards() {
+    console.log('update report cards')
     this.nav.displayLoading = true;
-    this.data.getReportCardsCompleted(this.pageSize, this.pageIndex + 1).subscribe(
+    this.data.getReportCardsCompleted(this.pageSize, this.pageIndex + 1, this.firstName, this.lastName, this.year, this.season).subscribe(
       (data: ReportCardCompleted[]) => {
         this.nav.displayLoading = false;
         this.dataSource.data = data;

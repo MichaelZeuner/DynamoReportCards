@@ -288,15 +288,16 @@ export class DataService {
     );
   }
 
-  countReportCardsCompleted(): Observable<any> {
+  countReportCardsCompleted(firstName: string, lastName: string, year: string, season: string): Observable<any> {
     return this.http.get<any>(
-      this.baseUrl + "/report-cards-count/" + this.authService.user.id + '/completed'
+      this.baseUrl + "/report-cards-count/" + this.authService.user.id + '/completed'+ '?firstName=' + firstName + '&lastName=' + lastName + '&year=' + year + '&season=' + season
     );
   }
 
-  getReportCardsCompleted(limit: number, page: number): Observable<ReportCardCompleted[]> {
+  getReportCardsCompleted(limit: number, page: number, firstName: string, lastName: string, year: string, season: string): Observable<ReportCardCompleted[]> {
+    console.log(this.baseUrl + "/report-cards-completed/" + this.authService.user.id + '?limit=' + limit + '&page=' + page + '&firstName=' + firstName + '&lastName=' + lastName + '&year=' + year + '&season=' + season)
     return this.http.get<ReportCardCompleted[]>(
-      this.baseUrl + "/report-cards-completed/" + this.authService.user.id + '/' + limit + '/' + page
+      this.baseUrl + "/report-cards-completed/" + this.authService.user.id + '?limit=' + limit + '&page=' + page + '&firstName=' + firstName + '&lastName=' + lastName + '&year=' + year + '&season=' + season
     );
   }
 
