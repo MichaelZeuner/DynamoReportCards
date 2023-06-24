@@ -116,6 +116,8 @@ export class CompletedReportCardsComponent implements OnInit  {
       },
       (err: ErrorApi) => {
         this.nav.displayLoading = false;
+        this.dataSource.data = [];
+        this.reportCards = [];
       }
     );
   }

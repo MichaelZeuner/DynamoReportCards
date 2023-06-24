@@ -39,7 +39,7 @@
   </mat-grid-tile>
 
   <mat-grid-tile>
-      <button mat-raised-button color="warn" (click)="search('', '', '', '')">Clear</button>
+      <button mat-raised-button color="warn" (click)="firstNameSearch.value = ''; lastNameSearch.value = ''; yearSearch.value = ''; seasonSearch.value = 'All'; search('','','','')">Clear</button>
   </mat-grid-tile>
 
   <mat-grid-tile [colspan]="6">
