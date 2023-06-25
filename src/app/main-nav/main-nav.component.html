@@ -107,6 +107,11 @@
         <mat-icon>message</mat-icon>
         <span>&nbsp;Comments</span>
       </a>
+      <div class="center">
+        <button mat-raised-button color="primary" class="w-75" (click)="onLogout()">
+          Logout
+        </button>
+      </div>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -123,12 +128,7 @@
         </button>
         <span
           >Welcome {{ user.first_name }} {{ user.last_name }} to Dynamo Report
-          Cards</span
-        >
-        <span class="fill-remaining-space"></span>
-        <button mat-raised-button color="primary" (click)="onLogout()">
-          Logout
-        </button>
+          Cards</span>
       </mat-toolbar>
 
       <mat-progress-bar
