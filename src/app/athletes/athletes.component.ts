@@ -23,6 +23,10 @@ export class AthletesComponent implements OnInit {
   public pageinatorIndex: number = 0;
   public pageinatorSize: number = 10;
 
+  public dob_failure_catch = new Date(
+    new Date('1900-01-01').getTime() + 86400000
+  ).toISOString();
+
   constructor(
     private data: DataService,
     private dialog: DialogService,
@@ -30,6 +34,10 @@ export class AthletesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadAthletes();
+  }
+
+  loadAthletes() {
     this.nav.displayLoading = true;
     this.data.getAthletes().subscribe((data: Athlete[]) => {
       this.nav.displayLoading = false;
@@ -41,7 +49,11 @@ export class AthletesComponent implements OnInit {
         let dob: Date = new Date(
           new Date(this.athletesBase[i].date_of_birth).getTime() + 86400000
         );
-        this.athletesBase[i].date_of_birth = dob.toISOString();
+        try {
+          this.athletesBase[i].date_of_birth = dob.toISOString();
+        } catch {
+          this.athletesBase[i].date_of_birth = this.dob_failure_catch;
+        }
       }
 
       this.athletes = this.athletesBase;
@@ -187,6 +199,7 @@ export class AthletesComponent implements OnInit {
         this.nav.displayLoading = false;
         console.log(data);
         this.dialog.openSnackBar("Athlete Updated!");
+        this.loadAthletes();
       },
       (error: ErrorApi) => {
         console.log(error);
