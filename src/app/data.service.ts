@@ -28,8 +28,8 @@ export class DataService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getUsers() {
-    return this.http.get(this.baseUrl + "/users");
+  getUsers(onlyActive: boolean) {
+    return this.http.get(this.baseUrl + "/users?onlyActive=" + onlyActive);
   }
 
   putUser(user: User) {
@@ -49,6 +49,10 @@ export class DataService {
 
   deleteUser(id: number) {
     return this.http.delete(this.baseUrl + "/users/" + id);
+  }
+
+  reactivateUser(id: number) {
+    return this.http.get(this.baseUrl + "/reativate-users/" + id);
   }
 
   getAthletes() {

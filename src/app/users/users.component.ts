@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { DataService } from "../data.service";
 import { User } from "../interfaces/user";
 import { ErrorApi } from "../interfaces/error-api";
+import { MatPaginator } from '@angular/material/paginator';
 import {
   MatInput,
   MatButtonToggle,
@@ -17,11 +18,13 @@ import { MainNavComponent } from "../main-nav/main-nav.component";
   styleUrls: ["./users.component.scss"]
 })
 export class UsersComponent implements OnInit {
+  @ViewChild('paginator') paginator: MatPaginator;
+
   public usersBase: User[] = [];
   public users: User[] = [];
   public usersDisplayed: User[] = [];
-  public pageinatorIndex: number = 0;
-  public pageinatorSize: number = 10;
+  pageinatorIndex: number = 0;
+  pageinatorSize: number = 10;
 
   constructor(
     private data: DataService,
@@ -30,19 +33,7 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.mainNav.displayLoading = true;
-    this.data.getUsers().subscribe(
-      (data: User[]) => {
-        this.mainNav.displayLoading = false;
-        this.usersBase = data;
-        this.users = this.usersBase;
-        console.log(this.users);
-        this.refreshPage();
-      },
-      () => {
-        this.mainNav.displayLoading = false;
-      }
-    );
+    this.refreshPage();
   }
 
   deleteUser(id: number, firstName: string, lastName: string) {
@@ -65,7 +56,39 @@ export class UsersComponent implements OnInit {
                 const currentUser = this.usersBase[i];
                 if (currentUser.id === id) {
                   this.dialog.openSnackBar("User deleted!");
-                  this.usersBase.splice(i, 1);
+                  this.refreshPage();
+                  return;
+                }
+              }
+            },
+            () => {
+              this.mainNav.displayLoading = false;
+            }
+          );
+        }
+      });
+  }
+
+  reactivateUser(id: number, firstName: string, lastName: string) {
+    this.dialog
+      .openConfirmDialog(
+        'Are you sure you wish to reactivate the user "' +
+          firstName +
+          " " +
+          lastName +
+          '"?'
+      )
+      .afterClosed()
+      .subscribe(res => {
+        if (res) {
+          this.mainNav.displayLoading = true;
+          this.data.reactivateUser(id).subscribe(
+            () => {
+              this.mainNav.displayLoading = false;
+              for (let i = 0; i < this.usersBase.length; i++) {
+                const currentUser = this.usersBase[i];
+                if (currentUser.id === id) {
+                  this.dialog.openSnackBar("User reactivated!");
                   this.refreshPage();
                   return;
                 }
@@ -247,7 +270,24 @@ export class UsersComponent implements OnInit {
 
   refreshPage() {
     this.pageinatorIndex = 0;
-    this.pageChanged(null);
+    if (this.paginator) {
+      console.log('do stuff with the page index')
+      this.paginator.pageIndex = this.pageinatorIndex;
+    }
+
+    this.mainNav.displayLoading = true;
+    this.data.getUsers(false).subscribe(
+      (data: User[]) => {
+        this.mainNav.displayLoading = false;
+        this.usersBase = data;
+        this.users = this.usersBase;
+        console.log(this.users);
+        this.pageChanged(null);
+      },
+      () => {
+        this.mainNav.displayLoading = false;
+      }
+    );
   }
 
   pageChanged(event: PageEvent) {

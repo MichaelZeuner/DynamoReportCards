@@ -90,13 +90,14 @@ export class UserSelectComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data.getUsers().subscribe((data: User[]) => {
+    this.data.getUsers(true).subscribe((data: User[]) => {
       this.users = [];
       for (let i = 0; i < data.length; i++) {
         if (data[i].id !== this.auth.user.id) {
           this.users.push(data[i]);
         }
       }
+      console.log("USER SELECT", this.users);
 
       this.filteredUsers = this.myControlUser.valueChanges.pipe(
         startWith(""),

@@ -97,13 +97,26 @@
         Update User
       </button>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="1">
+    
+    <!-- Delete button for active users -->
+    <mat-grid-tile [colspan]="1" *ngIf="user.active === 1">
       <button
         mat-raised-button
         color="warn"
         (click)="deleteUser(user.id, firstName.value, lastName.value)"
       >
         Delete User
+      </button>
+    </mat-grid-tile>
+
+    <!-- Reactivate button for inactive users -->
+    <mat-grid-tile [colspan]="1" *ngIf="user.active === 0">
+      <button
+        mat-raised-button
+        color="secondary"
+        (click)="reactivateUser(user.id, firstName.value, lastName.value)"
+      >
+        Reactivate User
       </button>
     </mat-grid-tile>
 
@@ -185,6 +198,7 @@
 
   <mat-grid-tile [colspan]="6">
     <mat-paginator
+      #paginator
       style="width: 100%;"
       [length]="users.length"
       [pageIndex]="pageinatorIndex"
