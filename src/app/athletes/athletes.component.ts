@@ -238,14 +238,22 @@ export class AthletesComponent implements OnInit {
       reader.onload = () => {
         let csvData = reader.result;
         let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
+        var results = this.isValidCharacters(csvRecordsArray); 
+        if (results != -1) {
+          if(results == -2) {
+            alert("Unknown error, send the file you were trying to upload to michaelzeuner1996@gmail.com");
+          } else {
+            alert("Line: " + csvRecordsArray[results] + " cannot be uploaded.");
+          }
+        } else {
+          let headersRow = this.getHeaderArray(csvRecordsArray);
 
-        let headersRow = this.getHeaderArray(csvRecordsArray);
-
-        this.records = this.getDataRecordsArrayFromCSVFile(
-          csvRecordsArray,
-          headersRow.length
-        );
-        console.log(this.records);
+          this.records = this.getDataRecordsArrayFromCSVFile(
+            csvRecordsArray,
+            headersRow.length
+          );
+          console.log(this.records);
+        }
       };
 
       reader.onerror = function() {
@@ -257,20 +265,44 @@ export class AthletesComponent implements OnInit {
     }
   }
 
+  isValidCharacters(lines: string[]) {
+    try {
+      for(let i=0; i<lines.length; i++) {
+        for(let x=0; x<lines[i].length; x++) {
+          console.log(lines[i].charCodeAt(x))
+          if(lines[i].charCodeAt(x) == 65533) {
+            this.fileReset();
+            return i;
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err)
+      this.fileReset();
+      return -2;
+    }
+    return -1;
+  }
+
   getDataRecordsArrayFromCSVFile(
     csvRecordsArray: any,
     headerLength: any
   ): Athlete[] {
     let csvArr: Athlete[] = [];
 
-    for (let i = 1; i < csvRecordsArray.length; i++) {
+    console.log(csvRecordsArray);
+    for (let i = 0; i < csvRecordsArray.length; i++) {
       let curruntRecord = (<string>csvRecordsArray[i]).split(",");
+
       if (curruntRecord.length == headerLength) {
         let csvRecord: Athlete = {
-          first_name: curruntRecord[0].trim(),
-          last_name: curruntRecord[1].trim(),
+          first_name:  curruntRecord[0].trim().normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, ''),
+          last_name: curruntRecord[1].trim().normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, ''),
           date_of_birth: curruntRecord[2].trim()
         };
+        for(let x=0; x<curruntRecord[0].trim().length; x++) {
+          console.log(parseInt(curruntRecord[0].trim()[x]))
+        }
         csvArr.push(csvRecord);
       }
     }
