@@ -27,10 +27,12 @@
     "ng": "0.0.0",
     "ng-cli": "^0.7.0",
     "popper": "^1.0.1",
+    "remove-accents": "^0.4.4",
     "rxjs": "~6.3.3",
     "sass": "^1.63.6",
     "select2": "^4.0.11",
     "tslib": "^1.10.0",
+    "unidecode": "^0.1.8",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
