@@ -29,7 +29,7 @@ interface ChangedComponents {
 @Component({
 	selector: 'app-report-card-panel',
 	template: `
-  <mat-expansion-panel #panel [expanded]="modifyOnly">
+  <mat-expansion-panel #panel [expanded]="modifyOnly" (opened)="onPanelOpen()">
     <mat-expansion-panel-header>
     <mat-panel-title>
         {{reportCard.athlete.first_name}} {{reportCard.athlete.last_name}} ({{reportCard.athlete.date_of_birth}})
@@ -140,6 +140,7 @@ interface ChangedComponents {
     <app-user-select
     #primaryCoachSelect
     [user]="primaryCoach"
+	[users]="users"
     (selectedUserChange)="updateSelectPrimaryCoach($event)"
     ></app-user-select>
 
@@ -147,6 +148,7 @@ interface ChangedComponents {
     <app-user-select
     #secondaryCoachSelect
     [user]="reportCard.secondary_coach"
+	[users]="users"
     (selectedUserChange)="updateSelectSecondaryCoach($event)"
     ></app-user-select>
 
@@ -205,7 +207,8 @@ export class ReportCardPanelComponent implements OnInit {
 	public selectedClosingComment: number;
 	public selectedPersonalityCategoryComment: string;
 
-  public primaryCoach: User;
+	public primaryCoach: User;
+	public users: User[];
 
 	skillsDisabled: boolean;
 
@@ -263,7 +266,18 @@ export class ReportCardPanelComponent implements OnInit {
 		return "";
 	}
 
-	ngOnInit() {
+	ngOnInit() { 
+		this.data.getUsers(true).subscribe((data: User[]) => {
+			this.users = [];
+			for (let i = 0; i < data.length; i++) {
+				if (data[i].id !== this.auth.user.id) {
+					this.users.push(data[i]);
+				}
+			}
+		});
+	}
+
+	onPanelOpen() {
 		this.selectedIntroComment = this.reportCard.card_comments.intro_comment_id;
 		this.selectedSkillComment = this.reportCard.card_comments.skill_comment_id;
 		this.selectedSkillCommentEvent = this.reportCard.card_comments.event_id;
@@ -271,13 +285,13 @@ export class ReportCardPanelComponent implements OnInit {
 		this.selectedPersonalityComment = this.reportCard.card_comments.personality_comment_id;
 		this.selectedClosingComment = this.reportCard.card_comments.closing_comment_id;
 
-    this.primaryCoach = {
-      id: this.reportCard.submitted_by,
-      first_name: this.reportCard.submitted_first_name,
-      last_name: this.reportCard.submitted_last_name,
-      access: null,
-      email: null
-    };
+		this.primaryCoach = {
+			id: this.reportCard.submitted_by,
+			first_name: this.reportCard.submitted_first_name,
+			last_name: this.reportCard.submitted_last_name,
+			access: null,
+			email: null
+		};
 
 		console.log('report card in panel');
 		console.log(this.reportCard);
@@ -313,6 +327,7 @@ export class ReportCardPanelComponent implements OnInit {
 			}
 		);
 	}
+	
 
 	updateComments() {
 		let skillName: string, eventName: string;

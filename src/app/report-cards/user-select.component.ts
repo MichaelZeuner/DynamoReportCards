@@ -5,7 +5,8 @@ import {
   Input,
   Output,
   EventEmitter,
-  ViewChild
+  ViewChild,
+  SimpleChanges
 } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -52,16 +53,23 @@ export class UserSelectComponent implements OnInit {
   public myControlUser = new FormControl();
   public filteredUsers: Observable<User[]>;
 
-  protected users: User[];
+  protected _users: User[];
 
-  constructor(private data: DataService, private auth: AuthService) {}
+  @Input()
+  set users(users: User[]) {
+    this._users = users || null;
+  }
+
+  constructor(private data: DataService, private auth: AuthService) {
+    
+  }
 
   protected previousUser: User = null;
   protected _user: User = null;
 
   @Input()
   set user(user: User) {
-    console.log("USER:", user);
+    //console.log("USER:", user);
     this.previousUser = this._user;
     if (typeof user === "undefined") {
       this._user = null;
@@ -90,32 +98,30 @@ export class UserSelectComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data.getUsers(true).subscribe((data: User[]) => {
-      this.users = [];
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].id !== this.auth.user.id) {
-          this.users.push(data[i]);
-        }
-      }
-      console.log("USER SELECT", this.users);
-
-      this.filteredUsers = this.myControlUser.valueChanges.pipe(
-        startWith(""),
-        map(value => this._filter(value))
-      );
-    });
-
-    console.log(this._user);
     if (this._user !== null && <any>this._user !== false) {
       this.myControlUser.setValue(this.getUserNameAndAccessLevel(this._user));
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes['users']) {
+      if (changes['users'].currentValue) {
+        this._users = changes['users'].currentValue;
+
+        this.filteredUsers = this.myControlUser.valueChanges.pipe(
+          startWith(""),
+          map(value => this._filter(value))
+        );
+      }
+    }
+  }
+  
+
   private _filter(value: string): User[] {
     const filterValue = value !== null ? value.toLowerCase() : "";
     console.log("filter value", filterValue);
 
-    return this.users.filter(
+    return this._users.filter(
       option =>
         this.getUserNameAndAccessLevel(option)
           .toLowerCase()
@@ -131,8 +137,8 @@ export class UserSelectComponent implements OnInit {
   onUserChange(searchValue: string) {
     const currentUser = this._user;
     console.log(searchValue);
-    for (let i = 0; i < this.users.length; i++) {
-      const user = this.users[i];
+    for (let i = 0; i < this._users.length; i++) {
+      const user = this._users[i];
       if (this.getUserNameAndAccessLevel(user) === searchValue) {
         this._user = user;
         break;

@@ -42,6 +42,7 @@ export class ReportCardsComponent implements OnInit {
   public selectedAthlete: Athlete;
   public selectedPrimaryCoach: User;
   public selectedSecondaryCoach: User;
+	public users: User[];
   public skillName: string;
   public eventName: string;
   @ViewChild("athleteSelect") athleteSelect: AthletesSelectComponent;
@@ -100,6 +101,15 @@ export class ReportCardsComponent implements OnInit {
       session: null,
       status: null,
     };
+
+    this.data.getUsers(true).subscribe((data: User[]) => {
+			this.users = [];
+			for (let i = 0; i < data.length; i++) {
+				if (data[i].id !== this.auth.user.id) {
+					this.users.push(data[i]);
+				}
+			}
+		});
 
     this.selectedPrimaryCoach = this.auth.user;
     this.mainNav.displayLoading = true;

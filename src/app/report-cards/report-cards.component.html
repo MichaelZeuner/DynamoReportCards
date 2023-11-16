@@ -236,6 +236,7 @@
       <app-user-select
         #primaryCoachSelect
         [user]="selectedPrimaryCoach"
+        [users]="users"
         (selectedUserChange)="updateSelectPrimaryCoach($event)"
       ></app-user-select>
     </mat-card-content>
@@ -247,6 +248,7 @@
       <app-user-select
         #secondaryCoachSelect
         [user]="selectedSecondaryCoach"
+        [users]="users"
         (selectedUserChange)="updateSelectSecondaryCoach($event)"
       ></app-user-select>
     </mat-card-content>
